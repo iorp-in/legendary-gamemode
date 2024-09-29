@@ -1,0 +1,22 @@
+// EXAMPLE_RUN
+call addColumn("iorp", "playerdata", "hud_patch", "boolean", 'default ("0")')
+
+
+// START_SCRIPT
+
+DELIMITER //
+CREATE PROCEDURE addColumn(IN x_database text, IN x_table text, IN x_column text, IN x_type text, IN x_default text)
+BEGIN
+    DECLARE isExist int;
+    SELECT count(*) into isExist FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = x_database AND TABLE_NAME = x_table AND COLUMN_NAME = x_column;
+    IF isExist = 0 THEN
+        SET @query = CONCAT('ALTER TABLE ', x_database, '.', x_table, ' ADD COLUMN ', x_column, ' ', x_type, ' ', x_default);
+        PREPARE stmt FROM @query;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    END IF;
+END
+//
+DELIMITER ;
+
+// END_SCRIPT
