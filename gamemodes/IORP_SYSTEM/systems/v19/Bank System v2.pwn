@@ -617,43 +617,43 @@ hook OnAccountDelete(const AccountName[]) {
     return 1;
 }
 
-DC_CMD:setbankpassword(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new accountid, newpassword[100];
-    if (sscanf(params, "ds[100]", accountid, newpassword)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !setbankpassword [AccountID] [new password]");
-    if (!Bank:IsAccountAcitve(accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid bank account id");
-    new query[512];
-    mysql_format(Database, query, sizeof(query), "UPDATE bankAccounts SET Password=md5(\"%s\") WHERE ID=%d", RemoveMalChars(newpassword), accountid);
-    mysql_tquery(Database, query);
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("account id %d password has been set to ``%s``", accountid, newpassword));
-    return 1;
-}
+// DC_CMD:setbankpassword(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new accountid, newpassword[100];
+//     if (sscanf(params, "ds[100]", accountid, newpassword)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !setbankpassword [AccountID] [new password]");
+//     if (!Bank:IsAccountAcitve(accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid bank account id");
+//     new query[512];
+//     mysql_format(Database, query, sizeof(query), "UPDATE bankAccounts SET Password=md5(\"%s\") WHERE ID=%d", RemoveMalChars(newpassword), accountid);
+//     mysql_tquery(Database, query);
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("account id %d password has been set to ``%s``", accountid, newpassword));
+//     return 1;
+// }
 
-DC_CMD:enablebankaccount(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new accountid;
-    if (sscanf(params, "d", accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !enablebankaccount [AccountID]");
-    if (!Bank:IsValidAccountID(accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid bank account id");
-    mysql_tquery(Database, sprintf("update bankAccounts SET Disabled = 0 WHERE ID=%d", accountid));
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("account id %d has been enabled", accountid));
-    return 1;
-}
+// DC_CMD:enablebankaccount(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new accountid;
+//     if (sscanf(params, "d", accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !enablebankaccount [AccountID]");
+//     if (!Bank:IsValidAccountID(accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid bank account id");
+//     mysql_tquery(Database, sprintf("update bankAccounts SET Disabled = 0 WHERE ID=%d", accountid));
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("account id %d has been enabled", accountid));
+//     return 1;
+// }
 
-DC_CMD:disablebankaccount(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new accountid;
-    if (sscanf(params, "d", accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !disablebankaccount [AccountID]");
-    if (!Bank:IsValidAccountID(accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid bank account id");
-    mysql_tquery(Database, sprintf("update bankAccounts SET Disabled = 1 WHERE ID=%d", accountid));
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("account id %d has been disabled", accountid));
-    return 1;
-}
+// DC_CMD:disablebankaccount(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new accountid;
+//     if (sscanf(params, "d", accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !disablebankaccount [AccountID]");
+//     if (!Bank:IsValidAccountID(accountid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid bank account id");
+//     mysql_tquery(Database, sprintf("update bankAccounts SET Disabled = 1 WHERE ID=%d", accountid));
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("account id %d has been disabled", accountid));
+//     return 1;
+// }
 
 stock Bank:ShowMenu(playerid) {
     new IsUsingAtm = Bank:IsUsingAtm(playerid);

@@ -23,7 +23,7 @@
 #include "IORP_SYSTEM/core/includes/GPS"
 #include "IORP_SYSTEM/core/includes/sscanf2"
 #include "IORP_SYSTEM/core/includes/streamer"
-#include "IORP_SYSTEM/core/includes/discord-connector"
+// #include "IORP_SYSTEM/core/includes/discord-connector"
 #include "IORP_SYSTEM/core/includes/evi"
 #include "IORP_SYSTEM/core/includes/gl_common"
 #include "IORP_SYSTEM/core/includes/WeaponData"

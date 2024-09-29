@@ -945,70 +945,70 @@ stock MasterAdminCommand(playerid) {
     return 1;
 }
 
-DC_CMD:setmasteradmin(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new Account[50], bool:status;
-    if (sscanf(params, "s[50]b", Account, status)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !setmasteradminlist [Account] [true/false]");
-    if (!IsValidAccount(RemoveMalChars(Account))) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
+// DC_CMD:setmasteradmin(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new Account[50], bool:status;
+//     if (sscanf(params, "s[50]b", Account, status)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !setmasteradminlist [Account] [true/false]");
+//     if (!IsValidAccount(RemoveMalChars(Account))) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
 
-    new playerid = GetPlayerIDByName(Account);
-    if (playerid != -1) {
-        MasterAdminCommand(playerid);
-    } else {
-        mysql_tquery(Database, sprintf("UPDATE `players` set MasterAdmin = %d WHERE `Username` = \"%s\" LIMIT 1", status, Account));
-    }
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s MasterAdmin status updated to %d", Account, status));
-    return 1;
-}
+//     new playerid = GetPlayerIDByName(Account);
+//     if (playerid != -1) {
+//         MasterAdminCommand(playerid);
+//     } else {
+//         mysql_tquery(Database, sprintf("UPDATE `players` set MasterAdmin = %d WHERE `Username` = \"%s\" LIMIT 1", status, Account));
+//     }
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s MasterAdmin status updated to %d", Account, status));
+//     return 1;
+// }
 
-DC_CMD:setadmin(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new Account[50], level;
-    if (sscanf(params, "s[50]i", Account, level)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Usage]:!setadmin [Player] [level 0-10]");
-    if (!IsValidAccount(RemoveMalChars(Account))) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
-    if (level < 0 || level > 10) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid Admin Level:0-10");
+// DC_CMD:setadmin(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new Account[50], level;
+//     if (sscanf(params, "s[50]i", Account, level)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Usage]:!setadmin [Player] [level 0-10]");
+//     if (!IsValidAccount(RemoveMalChars(Account))) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
+//     if (level < 0 || level > 10) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid Admin Level:0-10");
 
-    mysql_tquery(Database, sprintf("UPDATE `players` SET `adminLevel`=\"%d\"  WHERE `Username`=\"%s\"", level, Account));
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("You have set %s Admin level to %i", Account, level));
+//     mysql_tquery(Database, sprintf("UPDATE `players` SET `adminLevel`=\"%d\"  WHERE `Username`=\"%s\"", level, Account));
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("You have set %s Admin level to %i", Account, level));
 
-    new playerid = GetPlayerIDByName(Account);
-    if (playerid != -1) {
-        SetPlayerAdminLevel(playerid, level);
-        AlexaMsg(playerid, sprintf("Your Admin level has been set to {FF0033}%i {FFFFFF}by {FFCC66} %s", level, user));
-    }
-    return 1;
-}
+//     new playerid = GetPlayerIDByName(Account);
+//     if (playerid != -1) {
+//         SetPlayerAdminLevel(playerid, level);
+//         AlexaMsg(playerid, sprintf("Your Admin level has been set to {FF0033}%i {FFFFFF}by {FFCC66} %s", level, user));
+//     }
+//     return 1;
+// }
 
-DC_CMD:setvip(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new Account[50], level, days;
-    if (sscanf(params, "s[50]id", Account, level, days)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Usage]:!setvip [PlayerID] [level 0-3] [Days]");
-    if (!IsValidAccount(RemoveMalChars(Account))) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
-    if (level < 0 || level > 3) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid Admin Level:0-3");
-    if (days < 0 || days > 365) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid Days: 0-365");
+// DC_CMD:setvip(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new Account[50], level, days;
+//     if (sscanf(params, "s[50]id", Account, level, days)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Usage]:!setvip [PlayerID] [level 0-3] [Days]");
+//     if (!IsValidAccount(RemoveMalChars(Account))) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
+//     if (level < 0 || level > 3) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid Admin Level:0-3");
+//     if (days < 0 || days > 365) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid Days: 0-365");
 
-    new DB_Query[512];
-    format(DB_Query, sizeof DB_Query, "UPDATE playerdata SET vipLevel = %d, vipLevelExpireAt = %d  WHERE Username = \"%s\"", level, gettime() + days * 24 * 60 * 60, Account);
-    mysql_tquery(Database, DB_Query);
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]:You have set %s VIP level to %i", Account, level));
+//     new DB_Query[512];
+//     format(DB_Query, sizeof DB_Query, "UPDATE playerdata SET vipLevel = %d, vipLevelExpireAt = %d  WHERE Username = \"%s\"", level, gettime() + days * 24 * 60 * 60, Account);
+//     mysql_tquery(Database, DB_Query);
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]:You have set %s VIP level to %i", Account, level));
 
-    new playerid = GetPlayerIDByName(Account);
-    if (playerid != -1) {
-        SetPlayerVIPLevel(playerid, level);
-        AlexaMsg(playerid, sprintf("Your VIP level has been set to {FF0033}%i {FFFFFF}by {FFCC66} %s", level, user));
-    } else {
-        Email:Send(ALERT_TYPE_ACCOUNT, Account, "VIP Alert", sprintf(
-            "you account has been upgraded to vip level %d for %d days.", level, days
-        ));
-    }
-    return 1;
-}
+//     new playerid = GetPlayerIDByName(Account);
+//     if (playerid != -1) {
+//         SetPlayerVIPLevel(playerid, level);
+//         AlexaMsg(playerid, sprintf("Your VIP level has been set to {FF0033}%i {FFFFFF}by {FFCC66} %s", level, user));
+//     } else {
+//         Email:Send(ALERT_TYPE_ACCOUNT, Account, "VIP Alert", sprintf(
+//             "you account has been upgraded to vip level %d for %d days.", level, days
+//         ));
+//     }
+//     return 1;
+// }
 
 cmd:setvip(DCC_Message:message, playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;

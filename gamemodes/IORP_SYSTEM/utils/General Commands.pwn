@@ -584,31 +584,31 @@ stock fix_screen(playerid) {
     return 1;
 }
 
-DC_CMD:unbug(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+// DC_CMD:unbug(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
 
-    new account[50];
-    if (sscanf(params, "s[50]", account)) {
-        return DCC_SendChannelMessage(DCC_Channel:channel, "```:unbug [Player Name]```");
-    }
+//     new account[50];
+//     if (sscanf(params, "s[50]", account)) {
+//         return DCC_SendChannelMessage(DCC_Channel:channel, "```:unbug [Player Name]```");
+//     }
 
-    if (!IsValidAccount(account)) {
-        return DCC_SendChannelMessage(DCC_Channel:channel, "invalid player account");
-    }
+//     if (!IsValidAccount(account)) {
+//         return DCC_SendChannelMessage(DCC_Channel:channel, "invalid player account");
+//     }
 
-    new playerid = GetPlayerIDByName(account);
-    if (IsPlayerConnected(playerid)) {
-        unbug(playerid, true);
-        AlexaMsg(playerid, "Management has forcely unbugged you, if this does not work then relog");
-        DCC_SendChannelMessage(DCC_Channel:channel, sprintf("%s has been online unbugged", account));
-    } else {
-        mysql_tquery(Database, sprintf("update players set LastPosX = -160.00, LastPosY = 396.00, LastPosZ = 13.00 where username = \"%s\"", account));
-        DCC_SendChannelMessage(DCC_Channel:channel, sprintf("%s has been offline unbugged", account));
-    }
-    return 1;
-}
+//     new playerid = GetPlayerIDByName(account);
+//     if (IsPlayerConnected(playerid)) {
+//         unbug(playerid, true);
+//         AlexaMsg(playerid, "Management has forcely unbugged you, if this does not work then relog");
+//         DCC_SendChannelMessage(DCC_Channel:channel, sprintf("%s has been online unbugged", account));
+//     } else {
+//         mysql_tquery(Database, sprintf("update players set LastPosX = -160.00, LastPosY = 396.00, LastPosZ = 13.00 where username = \"%s\"", account));
+//         DCC_SendChannelMessage(DCC_Channel:channel, sprintf("%s has been offline unbugged", account));
+//     }
+//     return 1;
+// }
 
 stock unbug(playerid, bool:force = false) {
     if (!force) {

@@ -57,16 +57,16 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
-DC_CMD:stream(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new streamurl[128];
-    if (sscanf(params, "s[128]", streamurl)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]:!stream [URL]");
-    foreach(new i:Player) if (DJ:GetStatusTTS(i)) PlayAudioStreamForPlayer(i, streamurl);
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("playing:%s", streamurl));
-    return 1;
-}
+// DC_CMD:stream(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new streamurl[128];
+//     if (sscanf(params, "s[128]", streamurl)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]:!stream [URL]");
+//     foreach(new i:Player) if (DJ:GetStatusTTS(i)) PlayAudioStreamForPlayer(i, streamurl);
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("playing:%s", streamurl));
+//     return 1;
+// }
 
 hook OnGameModeInit() {
     Database:AddColumn("playerdata", "isDJ", "int", "0");

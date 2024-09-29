@@ -120,18 +120,18 @@ cmd:helpergoto(playerid, const params[]) {
     return 1;
 }
 
-DC_CMD:hsay(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel, user_name[DCC_USERNAME_SIZE], DCC_User:author;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    DCC_GetMessageAuthor(DCC_Message:message, DCC_User:author);
-    DCC_GetUserName(DCC_User:author, user_name);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new playerid, msg[512];
-    if (sscanf(params, "us[128]", playerid, msg)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: :hsay [playerid] [Message]");
-    if (!IsPlayerConnected(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid playerid");
-    // if (!IsPlayerAskedForHelp(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: player did not asked for help");
-    SendClientMessage(playerid, -1, sprintf("{FF9A6F}[Helper] %s replied: {ffffff}%s", user_name, FormatMention(msg)));
-    Discord:SendHelper(sprintf(":envelope:**%s replied %s:** %s", user_name, GetPlayerNameEx(playerid), FormatMention(msg)));
-    // DCC_SendChannelMessage(DCC_Channel:channel, sprintf("Helper Message Sent to %s: %s", GetPlayerNameEx(playerid), FormatMention(msg)));
-    return 1;
-}
+// DC_CMD:hsay(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel, user_name[DCC_USERNAME_SIZE], DCC_User:author;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     DCC_GetMessageAuthor(DCC_Message:message, DCC_User:author);
+//     DCC_GetUserName(DCC_User:author, user_name);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new playerid, msg[512];
+//     if (sscanf(params, "us[128]", playerid, msg)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: :hsay [playerid] [Message]");
+//     if (!IsPlayerConnected(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: invalid playerid");
+//     // if (!IsPlayerAskedForHelp(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: player did not asked for help");
+//     SendClientMessage(playerid, -1, sprintf("{FF9A6F}[Helper] %s replied: {ffffff}%s", user_name, FormatMention(msg)));
+//     Discord:SendHelper(sprintf(":envelope:**%s replied %s:** %s", user_name, GetPlayerNameEx(playerid), FormatMention(msg)));
+//     // DCC_SendChannelMessage(DCC_Channel:channel, sprintf("Helper Message Sent to %s: %s", GetPlayerNameEx(playerid), FormatMention(msg)));
+//     return 1;
+// }

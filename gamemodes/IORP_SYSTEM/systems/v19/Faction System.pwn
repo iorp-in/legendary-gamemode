@@ -697,63 +697,63 @@ hook OnPlayerRequestShop(playerid, shopid) {
     return 1;
 }
 
-DC_CMD:removefaction(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new Account[50];
-    if (sscanf(params, "s[50]", Account)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !removefaction [Account]");
-    if (!IsValidAccount(Account)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
-    new factionid = Faction:GetAccountFaction(Account);
-    if (factionid == -1) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player is not in any faction");
-    if (!IsPlayerInServerByName(Account)) {
-        Email:Send(ALERT_TYPE_FACTION, Account, "You are removed from faction by server management", "update from your faction.-n--n-you have been removed from faction by your server management. you can contact server management for further informations.-n--n-Thank you!!");
-    }
-    foreach(new playerid:Player) {
-        if (IsStringSame(GetPlayerNameEx(playerid), Account)) {
-            if (Faction:GetPlayerFID(playerid) == -1) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player does not have any faction");
-            Faction:SetPlayer(playerid, -1, -1);
-            AlexaMsg(playerid, "your faction has been removed");
-            return DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s removed from his faction", Account));
-        }
-    }
-    Faction:SetAccount(Account, -1, -1);
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s offline removed from his faction", Account));
-    return 1;
-}
+// DC_CMD:removefaction(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new Account[50];
+//     if (sscanf(params, "s[50]", Account)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !removefaction [Account]");
+//     if (!IsValidAccount(Account)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
+//     new factionid = Faction:GetAccountFaction(Account);
+//     if (factionid == -1) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player is not in any faction");
+//     if (!IsPlayerInServerByName(Account)) {
+//         Email:Send(ALERT_TYPE_FACTION, Account, "You are removed from faction by server management", "update from your faction.-n--n-you have been removed from faction by your server management. you can contact server management for further informations.-n--n-Thank you!!");
+//     }
+//     foreach(new playerid:Player) {
+//         if (IsStringSame(GetPlayerNameEx(playerid), Account)) {
+//             if (Faction:GetPlayerFID(playerid) == -1) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player does not have any faction");
+//             Faction:SetPlayer(playerid, -1, -1);
+//             AlexaMsg(playerid, "your faction has been removed");
+//             return DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s removed from his faction", Account));
+//         }
+//     }
+//     Faction:SetAccount(Account, -1, -1);
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s offline removed from his faction", Account));
+//     return 1;
+// }
 
-DC_CMD:setfaction(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new Account[50], factionid, rankid;
-    if (sscanf(params, "s[50]dd", Account, factionid, rankid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !setfaction [Account] [factionid] [rankid]");
-    if (!IsValidAccount(Account)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
-    if (!Iter_Contains(factions, factionid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: invalid factionid");
-    new oFactionId = Faction:GetAccountFaction(Account);
-    new oRankId = Faction:GetAccountFactionRank(Account);
-    if (oFactionId == factionid && oRankId == rankid) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Player is already in this faction and rank");
-    if (rankid < 1 || rankid > Faction:Data[factionid][RankLimit]) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: invalid rankid");
-    if (oFactionId != factionid && Faction:GetMemberCount(factionid) == Faction:Data[factionid][Members_Limit]) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Faction Reached it's maximum Limit");
-    if (!IsPlayerInServerByName(Account)) {
-        Email:Send(ALERT_TYPE_FACTION, Account, sprintf("Welcome to %s", Faction:GetName(factionid)),
-            sprintf("Welcome to %s.-n--n-server management has assigned you %s rank. you can now sign in your faction.-n--n-Thank you!!", Faction:GetName(factionid), Faction:GetRankName(factionid, rankid)));
-    }
-    foreach(new playerid:Player) {
-        if (IsStringSame(GetPlayerNameEx(playerid), Account)) {
-            if (Faction:PlayerData[playerid][FactionID] == factionid) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Player Already in this Faction");
-            Faction:SetPlayer(playerid, factionid, rankid);
-            AlexaMsg(
-                playerid,
-                sprintf("your faction now {FFCC66}%s{FFFFFF} with rank {FFCC66}%s", Faction:GetName(factionid), Faction:GetRankName(factionid, rankid))
-            );
-            return DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s faction updated to %s [%d] with rank %s", Account, Faction:GetName(factionid), factionid, Faction:GetRankName(factionid, rankid)));
-        }
-    }
-    Faction:SetAccount(Account, factionid, rankid);
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s offline faction updated to %s [%d] with rank %s", Account, Faction:GetName(factionid), factionid, Faction:GetRankName(factionid, rankid)));
-    return 1;
-}
+// DC_CMD:setfaction(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new Account[50], factionid, rankid;
+//     if (sscanf(params, "s[50]dd", Account, factionid, rankid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !setfaction [Account] [factionid] [rankid]");
+//     if (!IsValidAccount(Account)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Account not Found");
+//     if (!Iter_Contains(factions, factionid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: invalid factionid");
+//     new oFactionId = Faction:GetAccountFaction(Account);
+//     new oRankId = Faction:GetAccountFactionRank(Account);
+//     if (oFactionId == factionid && oRankId == rankid) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Player is already in this faction and rank");
+//     if (rankid < 1 || rankid > Faction:Data[factionid][RankLimit]) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: invalid rankid");
+//     if (oFactionId != factionid && Faction:GetMemberCount(factionid) == Faction:Data[factionid][Members_Limit]) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Faction Reached it's maximum Limit");
+//     if (!IsPlayerInServerByName(Account)) {
+//         Email:Send(ALERT_TYPE_FACTION, Account, sprintf("Welcome to %s", Faction:GetName(factionid)),
+//             sprintf("Welcome to %s.-n--n-server management has assigned you %s rank. you can now sign in your faction.-n--n-Thank you!!", Faction:GetName(factionid), Faction:GetRankName(factionid, rankid)));
+//     }
+//     foreach(new playerid:Player) {
+//         if (IsStringSame(GetPlayerNameEx(playerid), Account)) {
+//             if (Faction:PlayerData[playerid][FactionID] == factionid) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: Player Already in this Faction");
+//             Faction:SetPlayer(playerid, factionid, rankid);
+//             AlexaMsg(
+//                 playerid,
+//                 sprintf("your faction now {FFCC66}%s{FFFFFF} with rank {FFCC66}%s", Faction:GetName(factionid), Faction:GetRankName(factionid, rankid))
+//             );
+//             return DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s faction updated to %s [%d] with rank %s", Account, Faction:GetName(factionid), factionid, Faction:GetRankName(factionid, rankid)));
+//         }
+//     }
+//     Faction:SetAccount(Account, factionid, rankid);
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s offline faction updated to %s [%d] with rank %s", Account, Faction:GetName(factionid), factionid, Faction:GetRankName(factionid, rankid)));
+//     return 1;
+// }
 
 stock Faction:ShowDirectJoin(playerid, factionid) {
     if (Faction:Data[factionid][AllowJoining] == 0) return AlexaMsg(playerid, "We are not accepting direct applications. contact faction leader.", Faction:GetName(factionid));

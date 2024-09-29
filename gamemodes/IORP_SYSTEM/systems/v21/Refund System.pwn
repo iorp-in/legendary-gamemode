@@ -1,30 +1,30 @@
-DC_CMD:refund(DCC_Message:message, const user[], const params[]) {
-    new DCC_Channel:channel;
-    DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-    if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-    new username[50], amount, reason[100];
-    if (
-        sscanf(RemoveMalChars(params), "s[50]ds[100]", username, amount, reason) ||
-        !IsValidAccount(username) || amount < 1 || amount > 9900000 || strlen(reason) < 5
-    ) return DCC_SendChannelMessage(DCC_Channel:channel, "```:refund [playername] [amount] [reason]\nNote: the email alert will be sent if player is not in server```");
-    mysql_tquery(Database, sprintf(
-        "insert into refunds (username, amount, reason, givenby, createdat) values (\"%s\", %d, \"%s\", \"%s\", %d)",
-        username, amount, reason, user, gettime()
-    ));
-    DCC_SendChannelMessage(DCC_Channel:channel, sprintf("```$%s refund has been added for %s\n\nreason: %s```", FormatCurrency(amount), username, reason));
+// DC_CMD:refund(DCC_Message:message, const user[], const params[]) {
+//     new DCC_Channel:channel;
+//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
+//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+//     new username[50], amount, reason[100];
+//     if (
+//         sscanf(RemoveMalChars(params), "s[50]ds[100]", username, amount, reason) ||
+//         !IsValidAccount(username) || amount < 1 || amount > 9900000 || strlen(reason) < 5
+//     ) return DCC_SendChannelMessage(DCC_Channel:channel, "```:refund [playername] [amount] [reason]\nNote: the email alert will be sent if player is not in server```");
+//     mysql_tquery(Database, sprintf(
+//         "insert into refunds (username, amount, reason, givenby, createdat) values (\"%s\", %d, \"%s\", \"%s\", %d)",
+//         username, amount, reason, user, gettime()
+//     ));
+//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("```$%s refund has been added for %s\n\nreason: %s```", FormatCurrency(amount), username, reason));
 
-    new playerid = GetPlayerIDByName(username);
-    if (IsPlayerConnected(playerid)) AlexaMsg(playerid, sprintf("refund for $%s available at cityhall, you can collect it", FormatCurrency(amount)));
-    else {
-        Email:Send(
-            ALERT_TYPE_ACCOUNT, username, sprintf("Refund of $%s!!", FormatCurrency(amount)),
-            sprintf("San Andreas Government Department initiated refund of $%s for reason: %s-n--n-you can visit cityhall to collect it.",
-                FormatCurrency(amount), reason
-            )
-        );
-    }
-    return 1;
-}
+//     new playerid = GetPlayerIDByName(username);
+//     if (IsPlayerConnected(playerid)) AlexaMsg(playerid, sprintf("refund for $%s available at cityhall, you can collect it", FormatCurrency(amount)));
+//     else {
+//         Email:Send(
+//             ALERT_TYPE_ACCOUNT, username, sprintf("Refund of $%s!!", FormatCurrency(amount)),
+//             sprintf("San Andreas Government Department initiated refund of $%s for reason: %s-n--n-you can visit cityhall to collect it.",
+//                 FormatCurrency(amount), reason
+//             )
+//         );
+//     }
+//     return 1;
+// }
 
 hook OnPlayerRequestShop(playerid, shopid) {
     if (shopid != 38) return 1;
