@@ -1,4 +1,4 @@
-# Indian Ocean Roleplay (IORP) Gamemode
+# Indian Ocean Roleplay (IORP 2018-2024) Gamemode
 
 As promised, the game mode has been released to the public under the Apache License 2.0. IORP will always hold a special place in our hearts as one of the best memories of our lives. We sincerely thank you for playing with us. You can find all of our cherished moments on our Instagram account. Thank you!
 
