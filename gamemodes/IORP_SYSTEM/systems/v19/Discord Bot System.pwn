@@ -96,6 +96,7 @@ stock Discord:LogMultiAccount(const message[]) {
 }
 
 stock Discord:LogJoinLeave(const message[]) {
+    #pragma unused message
     // DCC_SendChannelMessage(Discord:IDManagement, message);
     return 1;
 }
