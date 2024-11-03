@@ -31,10 +31,10 @@ public OnGameModeInit() {
 
 stock OnGameModeInitEx() {
     if (GetServerVarAsInt("port") == 7778) SendRconCommand("mapname SA|VC|LC");
-    SendRconCommand("hostname Indian Ocean Roleplay TM [PC/Android] [Voice]");
+    SendRconCommand("hostname Indian Ocean Roleplay - Open Sourced");
     SetPreciseTimer("RemovePassword", 60 * 1000, false);
     // SendRconCommand("hostname IORP TM [Phase 5] - Maintenance Mode");
-    SendRconCommand("language #Hindi #English");
+    SendRconCommand("language English");
     new year, month, day;
     getdate(year, month, day);
     SetGameModeText(sprintf("v%d.%d.%d", year, month, day));
