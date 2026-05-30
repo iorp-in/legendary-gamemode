@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2021 katursis
+ * Copyright (c) 2016-2023 katursis
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
         #define PACK_PLUGIN_VERSION(%0,%1,%2) (((%0) << 16) | ((%1) << 8) | (%2))
     #endif
 
-    #define PAWNRAKNET_VERSION PACK_PLUGIN_VERSION(1, 5, 1)
+    #define PAWNRAKNET_VERSION PACK_PLUGIN_VERSION(1, 6, 0)
     #define PAWNRAKNET_INCLUDE_VERSION PAWNRAKNET_VERSION // backward compatibility
 
     #define PR_MAX_HANDLERS 256
