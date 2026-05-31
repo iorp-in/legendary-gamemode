@@ -60,7 +60,7 @@ stock PersonalVehicle:GetPlayerVehicleLimit(playerid) {
     if (IsPlayerMasterAdmin(playerid)) return 100;
     else if (GetPlayerVIPLevel(playerid) == 1) return 6;
     else if (GetPlayerVIPLevel(playerid) == 2) return 9;
-    else if (GetPlayerVIPLevel(playerid) == 3) return 12;
+    else if (GetPlayerVIPLevel(playerid) >= 3) return 12;
     else return MAX_Buyable_Limit;
 }
 
