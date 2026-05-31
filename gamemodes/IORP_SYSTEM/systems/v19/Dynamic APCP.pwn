@@ -45,7 +45,6 @@ stock APCP:AddCommand(playerid, const command[], bool:top = false) {
     }
     return 1;
 }
-
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     if (IsStringContainWords(text, "aplayer") && GetPlayerAdminLevel(playerid) > 0) {
         new targetid;
@@ -56,5 +55,15 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     }
     return 1;
 }
+
+cmd:aplayer(playerid, const params[]) {
+    if (GetPlayerAdminLevel(playerid) < 1) return 0;
+    new targetid;
+    if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "[USAGE]: /aplayer [PlayerName/PlayerID]");
+    if (!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "[Alexa]: player is not connected to server");
+    APCP:Init(playerid, targetid);
+    return 1;
+}
+
 
 //#snippet init_apcp hook ApcpOnInit(playerid, targetid, page) {\n\tif(page != 0) return 1;\n\tAPCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nhook ApcpOnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}

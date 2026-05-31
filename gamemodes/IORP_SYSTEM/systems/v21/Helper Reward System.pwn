@@ -8,6 +8,7 @@ cmd:rewardhelper(playerid, const params[]) {
     if (GetPlayerScore(playerid) > 10) return 0;
     new helperid;
     if (sscanf(params, "u", helperid)) return SyntaxMSG(playerid, "/rewardhelper [PlayerID]");
+    if (!IsPlayerConnected(helperid)) return SendClientMessage(playerid, -1, "[Alexa]: player is not connected to server");
     if (!IsPlayerHelper(helperid)) return AlexaMsg(playerid, "mentioned player is not a helper.");
     if (!GetPlayerHelperStatus(helperid)) return AlexaMsg(playerid, "mentioned helper is not on active duty.");
     new lastTime = Database:GetInt(GetPlayerNameEx(playerid), "username", LastHelperRewardTimeTable);
