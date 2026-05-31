@@ -289,3 +289,42 @@ public OnAccountDisabled(const Account[]) {
 //     }
 //     return 1;
 // }
+
+
+cmd:changepassword(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+
+    new AccountName[50], newpass[50];
+    if (sscanf(params, "s[50]s[50]", AccountName, newpass)) return SendClientMessage(playerid, -1, "Usage: /changepassword [AccountName] [Password]");
+    if (!IsValidAccount(AccountName)) return SendClientMessage(playerid, -1, "[Alexa]: Account not Found");
+    if (strlen(newpass) < 8) return SendClientMessage(playerid, -1, "[Alexa]: Passwords must be at least 8 characters long.");
+
+    new nPassword[65], nSalt[11];
+    for (new i = 0; i < 10; i++) nSalt[i] = random(79) + 47;
+    nSalt[10] = 0;
+    SHA256_PassHash(newpass, nSalt, nPassword, sizeof(nPassword));
+
+    new DB_Query[512];
+    mysql_format(
+        Database,
+        DB_Query,
+        sizeof(DB_Query),
+        "UPDATE `players` SET `Password`='%s', `Salt`='%s' WHERE `Username`='%s'",
+        RemoveMalChars(nPassword),
+        RemoveMalChars(nSalt),
+        AccountName
+    );
+
+    new Cache:result = mysql_query(Database, DB_Query, true);
+
+    if (cache_affected_rows()) {
+        new str[144];
+        format(str, sizeof(str), "[Alexa]: You have changed %s's password to %s.", AccountName, newpass);
+        SendClientMessage(playerid, -1, str);
+    } else {
+        SendClientMessage(playerid, -1, "[Error]: Something went wrong or account does not exist.");
+    }
+
+    cache_delete(result);
+    return 1;
+}

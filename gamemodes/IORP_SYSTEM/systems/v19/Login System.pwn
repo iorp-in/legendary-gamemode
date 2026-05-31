@@ -1010,11 +1010,11 @@ stock MasterAdminCommand(playerid) {
 //     return 1;
 // }
 
-cmd:setvip(DCC_Message:message, playerid, const params[]) {
+cmd:setvip(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
     new pID, level, days;
     if (sscanf(params, "uid", pID, level, days)) return SendClientMessage(playerid, -1, "[Usage]:!setvip [PlayerID] [level 1-10] [Days]");
-    else if (level < 0 || level > 10) return SendClientMessage(playerid, -1, "[Error]:Invalid Admin Level:0-10");
+    else if (level < 0 || level > 10) return SendClientMessage(playerid, -1, "[Error]:Invalid level:0-10");
     else if (days < 1 || days > 365) return SendClientMessage(playerid, -1, "[Error]:Invalid Days:0-365");
     else if (pID == INVALID_PLAYER_ID) return SendClientMessage(playerid, -1, "[Error]:Invalid PlayerID");
     else if (GetPlayerVIPLevel(pID) == level) return SendClientMessage(playerid, -1, "[Error]:Player already on this level");
