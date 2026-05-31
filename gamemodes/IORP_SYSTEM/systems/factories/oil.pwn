@@ -476,6 +476,18 @@ hook OnPlayerLeaveDynamicCP(playerid, STREAMER_TAG_CP:checkpointid) {
     return 1;
 }
 
+ASCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "Fuel Factory");
+    return 1;
+}
+
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response) return 1;
+    if (IsStringSame("Fuel Factory", inputtext)) OilCompany:admin(playerid);
+    return 1;
+}
+
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     if (IsStringContainWords(text, "fuel factory") && GetPlayerAdminLevel(playerid) >= 8) {
         return OilCompany:admin(playerid);

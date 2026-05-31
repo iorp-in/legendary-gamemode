@@ -71,23 +71,18 @@ cmd:bitcoin(playerid, const params[]) {
 //#snippet init_bitcoin hook BitCoin@OnInit(playerid, page){if(page != 0) return 1;BitCoin:AddCommand(playerid, "Command");return 1;}hook BitCoin@OnResponse(playerid, page, response, listitem, const inputtext[]) {if(!response) return 1;if(IsStringSame("Command", inputtext)) {return ~1;} return 1;}
 //#function GetVehicleName(vehicleid);
 
-// DC_CMD:givebitcoin(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new pID, bitcoin, reason[50];
-//     if (sscanf(params, "uis[50]", pID, bitcoin, reason)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Usage]:!givebitcoin [PlayerID] [bitcoins] [reason]");
-//     else if (bitcoin < -500 || bitcoin > 500) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid bitcoins -500 > bitcoins < 500 ");
-//     else if (pID == INVALID_PLAYER_ID) return DCC_SendChannelMessage(DCC_Channel:channel, "[Error]:Invalid PlayerID");
-//     new DCC_User:author, discordUser[DCC_USERNAME_SIZE];
-//     DCC_GetMessageAuthor(DCC_Message:message, DCC_User:author);
-//     DCC_GetUserName(DCC_User:author, discordUser);
-//     BitCoin:GiveOrTake(pID, bitcoin, sprintf("given by admin %s, reason: %s", discordUser, reason));
-//     SendClientMessage(pID, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s given you %d bitcoins", discordUser, bitcoin));
-//     SendClientMessage(pID, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} for Reason: %s", reason));
-//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %d bitcoins given to %s", bitcoin, GetPlayerNameEx(pID)));
-//     return 1;
-// }
+cmd:givebitcoin(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new targetid, bitcoin, reason[50];
+    if (sscanf(params, "uis[50]", targetid, bitcoin, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /givebitcoin [PlayerID] [bitcoins] [reason]");
+    if (bitcoin < -500 || bitcoin > 500) return SendClientMessage(playerid, -1, "[ERROR]: Invalid bitcoins (-500 to 500)");
+    if (targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid PlayerID");
+    BitCoin:GiveOrTake(targetid, bitcoin, sprintf("given by admin %s, reason: %s", GetPlayerNameEx(playerid), reason));
+    SendClientMessage(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s given you %d bitcoins", GetPlayerNameEx(playerid), bitcoin));
+    SendClientMessage(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} for Reason: %s", reason));
+    SendClientMessage(playerid, -1, sprintf("[Alexa]: %d bitcoins given to %s", bitcoin, GetPlayerNameEx(targetid)));
+    return 1;
+}
 
 UCP:OnInit(playerid, page) {
     if (page != 0) return 1;

@@ -484,7 +484,7 @@ stock secondsToDHM(seconds) {
 
 stock SendClientMessageByName(const playerName[], const msg[]) {
     foreach(new playerid:Player) {
-        if (!strcmp(playerName, GetPlayerNameEx(playerid))) return SendClientMessage(playerid, -1, msg);
+        if (!IsStringSame(playerName, GetPlayerNameEx(playerid))) return SendClientMessage(playerid, -1, msg);
     }
     return 1;
 }

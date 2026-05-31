@@ -33,14 +33,16 @@ stock bool:Doc:IsValidID(id) {
 
 enum Doc:StringEnum {
     HCP_page,
+    HCP_AdminLevel,
     hcp_Title[100],
     hcp_body[2000]
 };
 new Doc:String[MAX_HELP_DOC_ID][Doc:StringEnum];
 
-stock Doc:Add(page, docid, const DocTitle[], const DocData[]) {
+stock Doc:Add(page, docid, const DocTitle[], const DocData[], adminlevel = 0) {
     if (!Doc:IsValidID(docid)) return printf("Invalid DocID: %d", docid);
     Doc:String[docid][HCP_page] = page;
+    Doc:String[docid][HCP_AdminLevel] = adminlevel;
     format(Doc:String[docid][hcp_Title], 100, "%s", DocTitle);
     format(Doc:String[docid][hcp_body], 2000, "%s", DocData);
     return 1;
@@ -48,6 +50,7 @@ stock Doc:Add(page, docid, const DocTitle[], const DocData[]) {
 
 stock Doc:View(playerid, docid) {
     if (!Doc:IsValidID(docid)) return SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE} Invalid DocID: %d", docid));
+    if (GetPlayerAdminLevel(playerid) < Doc:String[docid][HCP_AdminLevel]) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}You are not authorized to view this document.");
     return FlexPlayerDialog(
         playerid, "DocView", DIALOG_STYLE_MSGBOX,
         sprintf("{4286f4}[Documentation]: {FFFFEE} %s", Doc:String[docid][hcp_Title]), Doc:String[docid][hcp_body],
@@ -64,6 +67,7 @@ stock Doc:Init(playerid, page = 0) {
     foreach(new docid:HelpDocIds) {
         if (!Doc:IsValidID(docid)) continue;
         if (Doc:String[docid][HCP_page] != page) continue;
+        if (GetPlayerAdminLevel(playerid) < Doc:String[docid][HCP_AdminLevel]) continue;
         strcat(string, sprintf("%d\t%s\n", docid, Doc:String[docid][hcp_Title]));
     }
     if (!strlen(string)) format(string, sizeof string, "Nothing On This Page\n");

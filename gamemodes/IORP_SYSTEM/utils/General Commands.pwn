@@ -481,14 +481,7 @@ cmd:admins(playerid, const params[]) {
     return 1;
 }
 
-new general_docid;
-new roleplay_docid;
-new autoroleplay_docid;
-
 hook OnGameModeInit() {
-    general_docid = Doc:GetFreeID();
-    roleplay_docid = Doc:GetFreeID();
-    autoroleplay_docid = Doc:GetFreeID();
     new string[2000];
     strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     strcat(string, "{db6600}/forum: {FFFFEE}link to: https://forum.iorp.in\n");
@@ -509,7 +502,8 @@ hook OnGameModeInit() {
     strcat(string, "{db6600}/bitcoin: {FFFFEE}open premium player shop\n");
     strcat(string, "{db6600}/phelp: {FFFFEE}show pong cmds\n");
     strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    Doc:Add(0, general_docid, "General Commands", string);
+    Doc:Add(0, Doc:GetFreeID(), "General Commands", string);
+
     format(string, sizeof string, "");
     strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     strcat(string, "{db6600}/me: {FFFFEE}Displays an action or emote your character is performing.\n");
@@ -528,7 +522,8 @@ hook OnGameModeInit() {
     strcat(string, "{db6600}/pu: {FFFFEE}Pull Over.\n");
     strcat(string, "{db6600}/fchat: {FFFFEE}Faction chat.\n");
     strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    Doc:Add(0, roleplay_docid, "Roleplay Commands", string);
+    Doc:Add(0, Doc:GetFreeID(), "Roleplay Commands", string);
+
     format(string, sizeof string, "");
     strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     strcat(string, "{db6600}/rpgun: {FFFFEE}use it when you are ready to engage a fight.\n");
@@ -546,7 +541,37 @@ hook OnGameModeInit() {
     strcat(string, "{db6600}/rpbodycheck: {FFFFEE}use it to for body search (for cops).\n");
     strcat(string, "{db6600}/rpapproach: {FFFFEE}use it to approach a suspect (for cops).\n");
     strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    Doc:Add(0, autoroleplay_docid, "Auto Roleplay Commands (VIP Only)", string);
+    Doc:Add(0, Doc:GetFreeID(), "Auto Roleplay Commands (VIP Only)", string);
+
+    format(string, sizeof string, "");
+    strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    strcat(string, "{db6600}/setadmin: {FFFFEE}set player's admin level.\n");
+    strcat(string, "{db6600}/setvip: {FFFFEE}set player's VIP level.\n");
+    strcat(string, "{db6600}/setmasteradmin: {FFFFEE}grant or revoke master admin access.\n");
+    strcat(string, "{db6600}/ban: {FFFFEE}temporarily ban an account.\n");
+    strcat(string, "{db6600}/unban: {FFFFEE}remove account ban.\n");
+    strcat(string, "{db6600}/enableaccount: {FFFFEE}reactivate an account.\n");
+    strcat(string, "{db6600}/disableaccount: {FFFFEE}permanently disable an account.\n");
+    strcat(string, "{db6600}/changepassword: {FFFFEE}change account password.\n");
+    strcat(string, "{db6600}/updatename: {FFFFEE}rename an account.\n");
+    strcat(string, "{db6600}/approvename: {FFFFEE}approve a name change request.\n");
+    strcat(string, "{db6600}/rejectname: {FFFFEE}reject a name change request.\n");
+    strcat(string, "{db6600}/refund: {FFFFEE}issue a refund to a player.\n");
+    strcat(string, "{db6600}/unbug: {FFFFEE}unstuck a player account.\n");
+    strcat(string, "{db6600}/givebitcoin: {FFFFEE}give or remove bitcoins.\n");
+    strcat(string, "{db6600}/getadmins: {FFFFEE}view all admins.\n");
+    strcat(string, "{db6600}/getmasteradmins: {FFFFEE}view all master admins.\n");
+    strcat(string, "{db6600}/getalldebt: {FFFFEE}view all players with debt.\n");
+    strcat(string, "{db6600}/getplayerdebt: {FFFFEE}view a player's debt history.\n");
+    strcat(string, "{db6600}/giveplayerdebt: {FFFFEE}assign debt to a player.\n");
+    strcat(string, "{db6600}/resetplayerdebt: {FFFFEE}reset a player's debt.\n");
+    strcat(string, "{db6600}/setbankpassword: {FFFFEE}change bank account password.\n");
+    strcat(string, "{db6600}/enablebankaccount: {FFFFEE}enable a bank account.\n");
+    strcat(string, "{db6600}/disablebankaccount: {FFFFEE}disable a bank account.\n");
+    strcat(string, "{db6600}/setfaction: {FFFFEE}assign faction and rank.\n");
+    strcat(string, "{db6600}/removefaction: {FFFFEE}remove player from faction.\n");
+    strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    Doc:Add(0, Doc:GetFreeID(), "Management Commands", string, 10);
     return 1;
 }
 
@@ -584,31 +609,25 @@ stock fix_screen(playerid) {
     return 1;
 }
 
-// DC_CMD:unbug(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
+cmd:unbug(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
 
-//     new account[50];
-//     if (sscanf(params, "s[50]", account)) {
-//         return DCC_SendChannelMessage(DCC_Channel:channel, "```:unbug [Player Name]```");
-//     }
+    new account[50];
+    if (sscanf(params, "s[50]", account)) return SendClientMessage(playerid, -1, "[USAGE]: /unbug [Player Name]");
+    if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
 
-//     if (!IsValidAccount(account)) {
-//         return DCC_SendChannelMessage(DCC_Channel:channel, "invalid player account");
-//     }
+    new targetid = GetPlayerIDByName(account);
+    if (IsPlayerConnected(targetid)) {
+        unbug(targetid, true);
+        AlexaMsg(targetid, "Management has forcely unbugged you, if this does not work then relog");
+        SendClientMessage(playerid, -1, sprintf("%s has been online unbugged", account));
+    } else {
+        mysql_tquery(Database, sprintf("UPDATE players SET LastPosX = -160.00, LastPosY = 396.00, LastPosZ = 13.00 WHERE username = \"%s\"", account));
+        SendClientMessage(playerid, -1, sprintf("%s has been offline unbugged", account));
+    }
 
-//     new playerid = GetPlayerIDByName(account);
-//     if (IsPlayerConnected(playerid)) {
-//         unbug(playerid, true);
-//         AlexaMsg(playerid, "Management has forcely unbugged you, if this does not work then relog");
-//         DCC_SendChannelMessage(DCC_Channel:channel, sprintf("%s has been online unbugged", account));
-//     } else {
-//         mysql_tquery(Database, sprintf("update players set LastPosX = -160.00, LastPosY = 396.00, LastPosZ = 13.00 where username = \"%s\"", account));
-//         DCC_SendChannelMessage(DCC_Channel:channel, sprintf("%s has been offline unbugged", account));
-//     }
-//     return 1;
-// }
+    return 1;
+}
 
 stock unbug(playerid, bool:force = false) {
     if (!force) {

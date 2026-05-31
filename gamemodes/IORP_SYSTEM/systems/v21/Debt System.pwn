@@ -70,140 +70,119 @@ FlexDialog:MenuPayDebtConfirm(playerid, response, listitem, const inputtext[], e
     return 1;
 }
 
-// DC_CMD:getalldebt(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new Cache:cache_id = Cache:mysql_query(Database, "select username, debt from playerdata where debt > 0 order by debt desc");
-//     new total = cache_num_rows();
-//     if (total == 0) {
-//         cache_delete(Cache:cache_id);
-//         DCC_SendChannelMessage(DCC_Channel:channel, "No player have debt, all are clear.");
-//         return 1;
-//     }
-//     new string[2000], name[100], debt, count = 0;
-//     strcat(string, "```");
-//     for (new i; i < total; i++) {
-//         cache_get_value_name(i, "username", name);
-//         cache_get_value_name_int(i, "debt", debt);
-//         strcat(string, sprintf("username: %s\nDebt: $%s\n\n", name, FormatCurrency(debt)));
-//         count++;
-//         if (count >= 20) {
-//             count = 0;
-//             strcat(string, "```");
-//             cache_delete(Cache:cache_id);
-//             DCC_SendChannelMessage(DCC_Channel:channel, string);
-//             format(string, sizeof string, "```");
-//             return 1;
-//         }
-//     }
-//     strcat(string, "```");
-//     cache_delete(Cache:cache_id);
-//     DCC_SendChannelMessage(DCC_Channel:channel, string);
-//     return 1;
-// }
+cmd:getalldebt(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new Cache:cache_id = mysql_query(Database, "SELECT username, debt FROM playerdata WHERE debt > 0 ORDER BY debt DESC");
+    new total = cache_num_rows();
+    if (total == 0) {
+        cache_delete(cache_id);
+        return SendClientMessage(playerid, -1, "No player have debt, all are clear.");
+    }
 
-// DC_CMD:getplayerdebt(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new account[100];
-//     if (sscanf(params, "s[100]", account)) return DCC_SendChannelMessage(DCC_Channel:channel, "```:getplayerdebt [player name]```");
-//     if (!IsValidAccount(account)) return DCC_SendChannelMessage(DCC_Channel:channel, "invalid player id");
+    new string[2000], name[100], debt, count;
+    for (new i; i < total; i++) {
+        cache_get_value_name(i, "username", name);
+        cache_get_value_name_int(i, "debt", debt);
+        strcat(string, sprintf("Username: %s | Debt: $%s\n", name, FormatCurrency(debt)));
+        count++;
 
-//     // check debt amount
-//     new Cache:cache_id = Cache:mysql_query(Database, sprintf("select debt from playerdata where username = \"%s\" and debt > 0 order by debt desc", account));
-//     new total = cache_num_rows();
-//     if (total == 0) {
-//         cache_delete(Cache:cache_id);
-//         DCC_SendChannelMessage(DCC_Channel:channel, "player don't have any debt.");
-//         return 1;
-//     }
+        if (count >= 20) {
+            SendClientMessage(playerid, -1, string);
+            count = 0;
+            string[0] = EOS;
+        }
+    }
 
-//     new debt;
-//     cache_get_value_name_int(0, "debt", debt);
-//     cache_delete(Cache:cache_id);
+    if (strlen(string)) SendClientMessage(playerid, -1, string);
+    cache_delete(cache_id);
+    return 1;
+}
 
-//     // load last 10 records
-//     new Cache:rcache_id = Cache:mysql_query(Database, sprintf("select * from playerLogDebts where username = \"%s\" order by id desc limit 10", account));
-//     new rtotal = cache_num_rows();
+cmd:getplayerdebt(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new account[100];
+    if (sscanf(params, "s[100]", account)) return SendClientMessage(playerid, -1, "[USAGE]: /getplayerdebt [player name]");
+    if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
+    new Cache:cache_id = mysql_query(Database, sprintf("SELECT debt FROM playerdata WHERE username = \"%s\" AND debt > 0", account));
+    if (!cache_num_rows()) {
+        cache_delete(cache_id);
+        return SendClientMessage(playerid, -1, "Player doesn't have any debt.");
+    }
 
-//     new string[2000], rdebt, transaction[100], created[30];
-//     for (new i; i < rtotal; i++) {
-//         cache_get_value_name_int(i, "amount", rdebt);
-//         cache_get_value_name(i, "transaction", transaction);
-//         cache_get_value_name(i, "created", created);
-//         strcat(string, sprintf("> %s: $%s: %s\n", created, FormatCurrency(rdebt), transaction));
-//     }
-//     cache_delete(Cache:rcache_id);
+    new debt;
+    cache_get_value_name_int(0, "debt", debt);
+    cache_delete(cache_id);
 
-//     // prepare final message
-//     new finalMessage[2000];
-//     format(finalMessage, sizeof finalMessage, "```\n\
-//     Player: %s\n\
-//     Debt: $%s\n\n\
-//     Recent Logs\n\
-//     %s```", account, FormatCurrency(debt), string);
-//     DCC_SendChannelMessage(DCC_Channel:channel, finalMessage);
-//     return 1;
-// }
+    new Cache:rcache_id = mysql_query(Database, sprintf("SELECT * FROM playerLogDebts WHERE username = \"%s\" ORDER BY id DESC LIMIT 10", account));
+    new rtotal = cache_num_rows();
+    new string[1024], rdebt, transaction[100], created[30];
 
-// DC_CMD:giveplayerdebt(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new account[100], debt, reason[100];
-//     if (sscanf(params, "s[100]ds[100]", account, debt, reason) || debt < 1) return DCC_SendChannelMessage(DCC_Channel:channel, "```:giveplayerdebt [player name] [amount] [reason]```");
-//     if (!IsValidAccount(account)) return DCC_SendChannelMessage(DCC_Channel:channel, "invalid player id");
-//     mysql_tquery(Database, sprintf("UPDATE `playerdata` SET Debt = Debt + %d WHERE `Username` = \"%s\" LIMIT 1", debt, account));
-//     AddDebtLogOffline(account, debt, reason);
-//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("assigned debt of $%s to %s for %s", FormatCurrency(debt), account, reason));
-//     new playerid = GetPlayerIDByName(account);
-//     if (IsPlayerConnected(playerid)) {
-//         AlexaMsg(playerid, sprintf("Management assigned $%s amount of debt on your account", FormatCurrency(debt)));
-//         AlexaMsg(playerid, sprintf("Reason: %s", reason));
-//     } else {
-//         new mail[1024];
-//         strcat(mail, "Management has assigned debt on your account-n--n-");
-//         strcat(mail, sprintf("Debt: $%s-n-", FormatCurrency(debt)));
-//         strcat(mail, sprintf("Reason: %s-n--n-", reason));
-//         strcat(mail, "you can raise complain against this debt on forum.iorp.in");
-//         Email:Send(ALERT_TYPE_ACCOUNT, account, sprintf("Management assigned debt of $%s", FormatCurrency(debt)), mail);
-//     }
+    format(string, sizeof(string), "Player: %s | Debt: $%s\nRecent Logs:\n", account, FormatCurrency(debt));
 
-//     return 1;
-// }
+    for (new i; i < rtotal; i++) {
+        cache_get_value_name_int(i, "amount", rdebt);
+        cache_get_value_name(i, "transaction", transaction);
+        cache_get_value_name(i, "created", created);
+        strcat(string, sprintf("%s | $%s | %s\n", created, FormatCurrency(rdebt), transaction));
+    }
 
-// DC_CMD:resetplayerdebt(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new account[100], reason[1000];
-//     if (sscanf(params, "s[100]s[100]", account, reason)) return DCC_SendChannelMessage(DCC_Channel:channel, "```:resetplayerdebt [player name] [reason]```");
-//     if (!IsValidAccount(account)) return DCC_SendChannelMessage(DCC_Channel:channel, "invalid player id");
+    cache_delete(rcache_id);
+    SendClientMessage(playerid, -1, string);
+    return 1;
+}
 
-//     // check debt amount
-//     new Cache:cache_id = Cache:mysql_query(Database, sprintf("select debt from playerdata where username = \"%s\" and debt > 0 order by debt desc", account));
-//     new total = cache_num_rows();
-//     if (total == 0) {
-//         cache_delete(Cache:cache_id);
-//         DCC_SendChannelMessage(DCC_Channel:channel, "player don't have any debt.");
-//         return 1;
-//     }
+cmd:giveplayerdebt(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new account[100], debt, reason[100];
+    if (sscanf(params, "s[100]ds[100]", account, debt, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /giveplayerdebt [player name] [amount] [reason]");
+    if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
+    if (debt < 1) return SendClientMessage(playerid, -1, "[ERROR]: Debt amount must be greater than 0.");
+    mysql_tquery(Database, sprintf("UPDATE `playerdata` SET Debt = Debt + %d WHERE `Username` = \"%s\" LIMIT 1", debt, account));
+    AddDebtLogOffline(account, debt, reason);
+    SendClientMessage(playerid, -1, sprintf("Assigned debt of $%s to %s for %s", FormatCurrency(debt), account, reason));
+    new targetid = GetPlayerIDByName(account);
+    if (IsPlayerConnected(targetid)) {
+        AlexaMsg(targetid, sprintf("Management assigned $%s amount of debt on your account", FormatCurrency(debt)));
+        AlexaMsg(targetid, sprintf("Reason: %s", reason));
+    } else {
+        new mail[1024];
+        strcat(mail, "Management has assigned debt on your account-n--n-");
+        strcat(mail, sprintf("Debt: $%s-n-", FormatCurrency(debt)));
+        strcat(mail, sprintf("Reason: %s-n--n-", reason));
+        strcat(mail, "you can raise complain against this debt on forum.iorp.in");
+        Email:Send(ALERT_TYPE_ACCOUNT, account, sprintf("Management assigned debt of $%s", FormatCurrency(debt)), mail);
+    }
+    return 1;
+}
 
-//     mysql_tquery(Database, sprintf("UPDATE `playerdata` SET Debt = 0 WHERE `Username` = \"%s\" LIMIT 1", account));
-//     AddDebtLogOffline(account, 0, sprintf("debt reseted by %s: %s", user, reason));
-//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("reseted debt of %s", account));
-//     new playerid = GetPlayerIDByName(account);
-//     if (IsPlayerConnected(playerid)) {
-//         AlexaMsg(playerid, "Management has reseted debt of your account");
-//         AlexaMsg(playerid, sprintf("Reason: %s", reason));
-//     } else {
-//         new mail[1024];
-//         strcat(mail, "Management has reseted debt of your account-n--n-");
-//         strcat(mail, sprintf("Reason: %s-n--n-", reason));
-//         strcat(mail, "you can raise complain against this debt reset on forum.iorp.in");
-//         Email:Send(ALERT_TYPE_ACCOUNT, account, "Management has reseted debt of your account", mail);
-//     }
-//     return 1;
-// }
+cmd:resetplayerdebt(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new account[100], reason[1000];
+    if (sscanf(params, "s[100]s[1000]", account, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /resetplayerdebt [player name] [reason]");
+    if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
+
+    new Cache:cache_id = mysql_query(Database, sprintf("SELECT debt FROM playerdata WHERE username = \"%s\" AND debt > 0", account));
+    if (!cache_num_rows()) {
+        cache_delete(cache_id);
+        return SendClientMessage(playerid, -1, "Player doesn't have any debt.");
+    }
+
+    cache_delete(cache_id);
+    mysql_tquery(Database, sprintf("UPDATE `playerdata` SET Debt = 0 WHERE `Username` = \"%s\" LIMIT 1", account));
+    AddDebtLogOffline(account, 0, sprintf("debt reseted by %s: %s", GetPlayerNameEx(playerid), reason));
+    SendClientMessage(playerid, -1, sprintf("Reseted debt of %s", account));
+
+    new targetid = GetPlayerIDByName(account);
+    if (IsPlayerConnected(targetid)) {
+        AlexaMsg(targetid, "Management has reseted debt of your account");
+        AlexaMsg(targetid, sprintf("Reason: %s", reason));
+    } else {
+        new mail[1024];
+        strcat(mail, "Management has reseted debt of your account-n--n-");
+        strcat(mail, sprintf("Reason: %s-n--n-", reason));
+        strcat(mail, "you can raise complain against this debt reset on forum.iorp.in");
+        Email:Send(ALERT_TYPE_ACCOUNT, account, "Management has reseted debt of your account", mail);
+    }
+
+    return 1;
+}

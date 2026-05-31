@@ -40,30 +40,26 @@ cmd:changename(playerid, const params[]) {
     return 1;
 }
 
-// DC_CMD:approvename(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new playerid;
-//     if (sscanf(params, "u", playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !approvename [PlayerName/PlayerID]");
-//     if (!IsPlayerConnected(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player is not connected to server");
-//     if (!IsPlayerRequestNameChange(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player did not requested name change");
-//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s name has been changed to %s", GetPlayerNameEx(playerid), PlayerAcpData[playerid][requestedName]));
-//     return 1;
-// }
+cmd:approvename(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new targetid;
+    if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "[USAGE]: /approvename [PlayerName/PlayerID]");
+    if (!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "[Alexa]: player is not connected to server");
+    if (!IsPlayerRequestNameChange(targetid)) return SendClientMessage(playerid, -1, "[Alexa]: player did not requested name change");
+    SendClientMessage(playerid, -1, sprintf("[Alexa]: %s name has been changed to %s", GetPlayerNameEx(targetid), PlayerAcpData[targetid][requestedName]));
+    return 1;
+}
 
-// DC_CMD:rejectname(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new playerid;
-//     if (sscanf(params, "u", playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[USAGE]: !approvename [PlayerName/PlayerID]");
-//     if (!IsPlayerConnected(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player is not connected to server");
-//     if (!IsPlayerRequestNameChange(playerid)) return DCC_SendChannelMessage(DCC_Channel:channel, "[Alexa]: player did not requested name change");
-//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("[Alexa]: %s name has been rejected", GetPlayerNameEx(playerid)));
-//     RejectNameChange(playerid);
-//     return 1;
-// }
+cmd:rejectname(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new targetid;
+    if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "[USAGE]: /rejectname [PlayerName/PlayerID]");
+    if (!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "[Alexa]: player is not connected to server");
+    if (!IsPlayerRequestNameChange(targetid)) return SendClientMessage(playerid, -1, "[Alexa]: player did not requested name change");
+    SendClientMessage(playerid, -1, sprintf("[Alexa]: %s name has been rejected", GetPlayerNameEx(targetid)));
+    RejectNameChange(targetid);
+    return 1;
+}
 
 stock RejectNameChange(playerid) {
     SetPlayerRequestNameChange(playerid, false);

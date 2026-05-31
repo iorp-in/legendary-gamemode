@@ -1,30 +1,37 @@
-// DC_CMD:refund(DCC_Message:message, const user[], const params[]) {
-//     new DCC_Channel:channel;
-//     DCC_GetMessageChannel(DCC_Message:message, DCC_Channel:channel);
-//     if (DCC_Channel:channel != DCC_Channel:Discord:IDManagement) return 0;
-//     new username[50], amount, reason[100];
-//     if (
-//         sscanf(RemoveMalChars(params), "s[50]ds[100]", username, amount, reason) ||
-//         !IsValidAccount(username) || amount < 1 || amount > 9900000 || strlen(reason) < 5
-//     ) return DCC_SendChannelMessage(DCC_Channel:channel, "```:refund [playername] [amount] [reason]\nNote: the email alert will be sent if player is not in server```");
-//     mysql_tquery(Database, sprintf(
-//         "insert into refunds (username, amount, reason, givenby, createdat) values (\"%s\", %d, \"%s\", \"%s\", %d)",
-//         username, amount, reason, user, gettime()
-//     ));
-//     DCC_SendChannelMessage(DCC_Channel:channel, sprintf("```$%s refund has been added for %s\n\nreason: %s```", FormatCurrency(amount), username, reason));
+cmd:refund(playerid, const params[]) {
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
+    new username[50], amount, reason[100];
+    if (sscanf(params, "s[50]ds[100]", username, amount, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /refund [playername] [amount] [reason]");
+    if (!IsValidAccount(username)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid account.");
+    if (amount < 1) return SendClientMessage(playerid, -1, "[ERROR]: Refund amount must be greater than $0.");
+    if (amount > 9900000) return SendClientMessage(playerid, -1, "[ERROR]: Refund amount cannot exceed $9,900,000.");
+    if (strlen(reason) < 5) return SendClientMessage(playerid, -1, "[ERROR]: Reason must be at least 5 characters long.");
 
-//     new playerid = GetPlayerIDByName(username);
-//     if (IsPlayerConnected(playerid)) AlexaMsg(playerid, sprintf("refund for $%s available at cityhall, you can collect it", FormatCurrency(amount)));
-//     else {
-//         Email:Send(
-//             ALERT_TYPE_ACCOUNT, username, sprintf("Refund of $%s!!", FormatCurrency(amount)),
-//             sprintf("San Andreas Government Department initiated refund of $%s for reason: %s-n--n-you can visit cityhall to collect it.",
-//                 FormatCurrency(amount), reason
-//             )
-//         );
-//     }
-//     return 1;
-// }
+    mysql_tquery(Database, sprintf(
+        "INSERT INTO refunds (username, amount, reason, givenby, createdat) VALUES (\"%s\", %d, \"%s\", \"%s\", %d)",
+        username,
+        amount,
+        reason,
+        GetPlayerNameEx(playerid),
+        gettime()
+    ));
+
+    SendClientMessage(playerid, -1, sprintf("$%s refund has been added for %s | Reason: %s", FormatCurrency(amount), username, reason));
+
+    new targetid = GetPlayerIDByName(username);
+    if (IsPlayerConnected(targetid)) {
+        AlexaMsg(targetid, sprintf("refund for $%s available at cityhall, you can collect it", FormatCurrency(amount)));
+    } else {
+        Email:Send(
+            ALERT_TYPE_ACCOUNT,
+            username,
+            sprintf("Refund of $%s!!", FormatCurrency(amount)),
+            sprintf("San Andreas Government Department initiated refund of $%s for reason: %s-n--n-you can visit cityhall to collect it.", FormatCurrency(amount), reason)
+        );
+    }
+
+    return 1;
+}
 
 hook OnPlayerRequestShop(playerid, shopid) {
     if (shopid != 38) return 1;

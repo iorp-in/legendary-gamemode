@@ -23,7 +23,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             SendClientMessage(playerid, -1, "{4286f4}[Faction System]:{FFFFFF} you are not eligible to claim reward. Try after increasing your score by +1");
         } else {
             new count = GetPlayerScore(playerid) - lastscore;
-            new cash = Random(800, 1500) * count;
+            new cash = 222000 * count;
             vault:PlayerVault(playerid, cash, sprintf("got citizen relief fund at score %d", GetPlayerScore(playerid)), Vault_ID_Government, -cash, sprintf("%s got citizen relief fund at score %d", GetPlayerNameEx(playerid), GetPlayerScore(playerid)));
             Database:UpdateInt(GetPlayerScore(playerid), GetPlayerNameEx(playerid), "username", "LastRewardClaimScore");
             SendClientMessage(playerid, -1, sprintf("{4286f4}[Faction System]:{FFFFFF} Congratulations, you have received $%s from SAGD for being citizen of IORP. Enjoy!", FormatCurrency(cash)));
