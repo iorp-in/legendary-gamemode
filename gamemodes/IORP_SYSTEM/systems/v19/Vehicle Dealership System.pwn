@@ -2,8 +2,7 @@
 #define XVEHICLE_TABLE "xVehicle"
 #define VEHICLE_RESET_DAY           (180)
 
-#define MAX_Buyable_Limit	        (3)	// Maximum car amount that one player can buy.
-#define MAX_Garage_Vehicle_Limit	(3)	// Maximum car amount that one player can put into the garage.
+#define DEFAULT_Buyable_Limit       (3)
 
 
 new ImpoundDriveTest[MAX_PLAYERS];
@@ -58,10 +57,10 @@ stock PersonalVehicle:GetTotalVehicleOnSale() {
 
 stock PersonalVehicle:GetPlayerVehicleLimit(playerid) {
     if (IsPlayerMasterAdmin(playerid)) return 100;
-    else if (GetPlayerVIPLevel(playerid) == 1) return 6;
-    else if (GetPlayerVIPLevel(playerid) == 2) return 9;
-    else if (GetPlayerVIPLevel(playerid) >= 3) return 12;
-    else return MAX_Buyable_Limit;
+    if (GetPlayerVIPLevel(playerid) == 1) return 6;
+    if (GetPlayerVIPLevel(playerid) == 2) return 9;
+    if (GetPlayerVIPLevel(playerid) >= 3) return 12;
+    return DEFAULT_Buyable_Limit;
 }
 
 stock PersonalVehicle:IsPlayerOwner(playerid, xid) {

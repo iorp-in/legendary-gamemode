@@ -9,7 +9,7 @@
 #define     MAX_INT_NAME                (32)
 #define     INVALID_HOUSE_ID            (-1)
 #define     HOUSE_COOLDOWN              (10)
-#define     LIMIT_HOUSE_PER_PLAYER      (1)
+#define     DEFAULT_HOUSE_LIMIT         (1)
 #define     HOUSE_RESET_DAY             (180)
 
 enum _:e_lockmodes {
@@ -400,10 +400,10 @@ stock House:TakeKey(playerid, houseid) {
 
 stock House:GetLimit(playerid) {
     if (IsPlayerMasterAdmin(playerid)) return 100;
-    else if (GetPlayerVIPLevel(playerid) == 1) return 3;
-    else if (GetPlayerVIPLevel(playerid) == 2) return 5;
-    else if (GetPlayerVIPLevel(playerid) == 3) return 10;
-    else return LIMIT_HOUSE_PER_PLAYER;
+    if (GetPlayerVIPLevel(playerid) == 1) return 3;
+    if (GetPlayerVIPLevel(playerid) == 2) return 5;
+    if (GetPlayerVIPLevel(playerid) >= 3) return 10;
+    return DEFAULT_HOUSE_LIMIT;
 }
 
 stock House:GetOwnedCount(playerid) {

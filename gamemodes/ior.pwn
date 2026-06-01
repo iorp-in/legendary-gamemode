@@ -7,7 +7,7 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/core/color_definations.pwn"
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/utils/Useful Funcitons.pwn" /////===== Useful Functions Locator =====/////
+#include "IORP_SYSTEM/core/Useful Functions.pwn" /////===== Useful Functions Locator =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/core/Server Side Functions.pwn" /////===== Server Side Functions =====/////
 #include <YSI_Coding\y_hooks>

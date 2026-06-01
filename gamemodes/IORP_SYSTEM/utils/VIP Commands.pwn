@@ -196,7 +196,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         if (VehicleID < 400 || VehicleID > 611) { GameTextForPlayer(playerid, "~w~Invalid Vehicle Name", 1000, 3); return ~1; }
         new resvlist[] = { 470, 472, 435, 450, 584, 591, 606, 607, 608, 610, 611, 592, 594, 601, 596, 597, 598, 599, 582, 577, 573, 574, 571, 570, 569, 564, 563, 557, 556, 552, 553, 548, 544, 539, 537, 538, 532, 528, 530, 524, 520, 523, 519, 512, 513, 514, 515, 511, 504, 502, 503, 501, 497, 488, 586, 476, 464, 465, 460, 455, 449, 448, 443, 441, 437, 435, 432, 433, 430, 431, 427, 425, 417, 416, 408, 407, 406, 403 };
         if (IsArrayContainNumber(resvlist, VehicleID)) { GameTextForPlayer(playerid, "~w~This vehicle can not be spawned", 1000, 3); return ~1; }
-        if (!IsTimePassedForPlayer(playerid, "vip spawn", 10 * 60)) { SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}you can use this command after ten minute"); return ~1; }
+        if (!IsTimePassedForPlayer(playerid, "vip spawn", 3 * 60)) { SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}you can use this command after 3 minute"); return ~1; }
         if (GetPlayerCash(playerid) < VIP_PRICE_SPAWN) { SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa VIP]: {FFFFFF}you need $%s money to spawn vehicles, vip ain't that free.", FormatCurrency(VIP_PRICE_SPAWN))); return ~1; }
         // check if player is eligible to spawn requested vehicle
         new resvlist1[] = { 481, 509, 510, 448, 461, 462, 463, 468, 521, 522, 523, 581, 586 };
