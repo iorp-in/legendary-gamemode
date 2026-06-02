@@ -983,23 +983,24 @@ cmd:setadmin(playerid, const params[]) {
     return 1;
 }
 
-cmd:setvip(playerid, const params[]) {
+CMD:setvip(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
-    new pID, level, days;
-    if (sscanf(params, "uid", pID, level, days)) return SendClientMessage(playerid, -1, "[Usage]:!setvip [PlayerID] [level 1-10] [Days]");
-    else if (level < 0 || level > 10) return SendClientMessage(playerid, -1, "[Error]:Invalid level:0-10");
-    else if (days < 1 || days > 365) return SendClientMessage(playerid, -1, "[Error]:Invalid Days:0-365");
-    else if (pID == INVALID_PLAYER_ID) return SendClientMessage(playerid, -1, "[Error]:Invalid PlayerID");
-    else if (GetPlayerVIPLevel(pID) == level) return SendClientMessage(playerid, -1, "[Error]:Player already on this level");
-    SetPlayerVIPLevel(pID, level);
-    new DB_Query[512];
-    format(DB_Query, sizeof DB_Query, "UPDATE playerdata SET vipLevel = %d, vipLevelExpireAt = %d  WHERE Username = \"%s\"", level, gettime() + days * 24 * 60 * 60, GetPlayerNameEx(pID));
-    mysql_tquery(Database, DB_Query);
-    new string[512];
-    format(string, sizeof string, "[Alexa]:You have set %s VIP level to %i", GetPlayerNameEx(pID), level);
-    SendClientMessage(playerid, -1, string);
-    format(string, sizeof string, "{4286f4}[Alexa]:{FFFFEE}Your VIP level has been set to {FF0033}%i {FFFFFF}by {FFCC66} %s", level, GetPlayerNameEx(playerid));
-    SendClientMessageEx(pID, COLOR_GREY, string);
+
+    new Account[50], level, days;
+    if (sscanf(params, "s[50]ii", Account, level, days)) return SendClientMessage(playerid, -1, "[USAGE]: /setvip [PlayerName] [level 0-10] [Days]");
+    if (!IsValidAccount(RemoveMalChars(Account))) return SendClientMessage(playerid, -1, "[Alexa]: Account not Found");
+    if (level < 0 || level > 10) return SendClientMessage(playerid, -1, "[ERROR]: Invalid VIP Level: 0-10");
+    if (days < 1 || days > 365) return SendClientMessage(playerid, -1, "[ERROR]: Invalid Days: 1-365");
+
+    new expireAt = gettime() + (days * 24 * 60 * 60);
+    mysql_tquery(Database, sprintf("UPDATE `playerdata` SET `vipLevel` = %d, `vipLevelExpireAt` = %d WHERE `Username` = \"%s\"", level, expireAt, Account));
+    SendClientMessage(playerid, -1, sprintf("You have set %s VIP level to %i for %d days", Account, level, days));
+
+    new targetid = GetPlayerIDByName(Account);
+    if (targetid != INVALID_PLAYER_ID) {
+        SetPlayerVIPLevel(targetid, level);
+        AlexaMsg(targetid, sprintf("Your VIP level has been set to {FF0033}%i {FFFFFF}for %d days by {FFCC66}%s", level, days, GetPlayerNameEx(playerid)));
+    }
     return 1;
 }
 
