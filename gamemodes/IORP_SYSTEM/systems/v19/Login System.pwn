@@ -987,9 +987,9 @@ CMD:setvip(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
 
     new Account[50], level, days;
-    if (sscanf(params, "s[50]ii", Account, level, days)) return SendClientMessage(playerid, -1, "[USAGE]: /setvip [PlayerName] [level 0-10] [Days]");
+    if (sscanf(params, "s[50]ii", Account, level, days)) return SendClientMessage(playerid, -1, "[USAGE]: /setvip [PlayerName] [level 0-3] [Days: 1-365]");
     if (!IsValidAccount(RemoveMalChars(Account))) return SendClientMessage(playerid, -1, "[Alexa]: Account not Found");
-    if (level < 0 || level > 10) return SendClientMessage(playerid, -1, "[ERROR]: Invalid VIP Level: 0-10");
+    if (level < 0 || level > 3) return SendClientMessage(playerid, -1, "[ERROR]: Invalid VIP Level: 0-3");
     if (days < 1 || days > 365) return SendClientMessage(playerid, -1, "[ERROR]: Invalid Days: 1-365");
 
     new expireAt = gettime() + (days * 24 * 60 * 60);

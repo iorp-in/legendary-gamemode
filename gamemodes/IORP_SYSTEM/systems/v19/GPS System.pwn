@@ -251,7 +251,7 @@ stock GPS:MenuLocationOptions(playerid, locationid) {
     if (GPSMarker[playerid][0] == 0) format(string, sizeof string, "Turn on GPS\n");
     if (GPSMarker[playerid][0] != 0) format(string, sizeof string, "Turn off GPS\n");
     if (
-        GetPlayerVIPLevel(playerid) > 2 &&
+        GetPlayerVIPLevel(playerid) > 1 &&
         // !GetPlayerRPMode(playerid) &&
         !IsPlayerInHeist(playerid) &&
         !Event:IsInEvent(playerid)

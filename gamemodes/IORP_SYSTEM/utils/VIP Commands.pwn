@@ -58,7 +58,6 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
             Faction:ShowLocker(extraid, Faction:GetPlayerFID(extraid));
             return ~1;
         } else if (GetPlayerVIPLevel(playerid) > 0) {
-            if (GetPlayerVIPLevel(playerid) < 2) { SendClientMessageEx(playerid, -1, "{4286f4}[Error]: {FFFFFF}you required level 3+ access for this action"); return ~1; }
             if (IsPlayerInHeist(playerid)) { SendClientMessageEx(playerid, -1, "{4286f4}[Error]: {FFFFFF}you can't use this command in heist"); return ~1; }
             Faction:ShowLocker(playerid, Faction:GetPlayerFID(playerid));
             return ~1;
@@ -205,15 +204,15 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         if (!IsArrayContainNumber(resvlist2, VehicleID) && GetPlayerVIPLevel(playerid) == 2) { GameTextForPlayer(playerid, "~w~This vehicle can not be spawned", 1000, 3); return ~1; }
 
         // spawned count in last 24 hours
-        new spawnedRate = CountPlayerEvent(playerid, "VIPSPAWN", gettime() - (24 * 60 * 60));
+        new spawnedRate = CountPlayerEvent(playerid, "VIPSPAWN", gettime() - (60 * 60));
         if (GetPlayerVIPLevel(playerid) == 3 && spawnedRate >= 20) {
-            SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}your 24 hour limit is reached, please try again later.");
+            SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}your hourly limit is reached, please try again later.");
             return ~1;
         } else if (GetPlayerVIPLevel(playerid) == 2 && spawnedRate >= 10) {
-            SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}your 24 hour limit is reached, please try again later.");
+            SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}your hourly limit is reached, please try again later.");
             return ~1;
         } else if (spawnedRate >= 5) {
-            SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}your 24 hour limit is reached, please try again later.");
+            SendClientMessage(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFFF}your hourly limit is reached, please try again later.");
             return ~1;
         }
         LogPlayerEvent(playerid, "VIPSPAWN", sprintf("spawned %s", GetVehicleModelName(VehicleID)));

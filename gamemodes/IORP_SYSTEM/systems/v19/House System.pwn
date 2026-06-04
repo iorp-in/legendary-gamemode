@@ -402,7 +402,7 @@ stock House:GetLimit(playerid) {
     if (IsPlayerMasterAdmin(playerid)) return 100;
     if (GetPlayerVIPLevel(playerid) == 1) return 3;
     if (GetPlayerVIPLevel(playerid) == 2) return 5;
-    if (GetPlayerVIPLevel(playerid) >= 3) return 10;
+    if (GetPlayerVIPLevel(playerid) == 3) return 10;
     return DEFAULT_HOUSE_LIMIT;
 }
 
