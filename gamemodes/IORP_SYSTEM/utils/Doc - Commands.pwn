@@ -18,6 +18,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}-----------------------------------------------------------------------------------------------n");
         strcat(info, "{db6600}/discord: {FFFFEE}link to: https://discord.gg/Xq9k3hr\n");
         strcat(info, "{db6600}/report: {FFFFEE}report player to administrators.\n");
+        strcat(info, "{db6600}/eject: {FFFFEE}eject other player from vehicle.\n");
         strcat(info, "{db6600}/vc: {FFFFEE}to chat on voice chat selected frequnecy.\n");
         strcat(info, "{db6600}/vcset: {FFFFEE}to select voice frequency\n");
         strcat(info, "{db6600}/vcstatus: {FFFFEE}to check voice chat members and status\n");
@@ -96,7 +97,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
             strcat(info, "{db6600}Character:{FFFFEE} license, change skin\n");
             strcat(info, "{db6600}Property:{FFFFEE} viphouseint, faction locker, factions\n");
             strcat(info, "{db6600}Entertainment:{FFFFEE} dj panel, mp3, tts, play, minigames\n");
-            strcat(info, "{db6600}Utilities:{FFFFEE} pocket, scp, patch status, clean screen\n");
+            strcat(info, "{db6600}Utilities:{FFFFEE} pocket, patch status, clean screen\n");
             strcat(info, "{db6600}VIP:{FFFFEE} vipweather, vipflamminghand, vipghostrider\n");
         }
 
@@ -122,6 +123,8 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}---------------------------------------------------\n");
         strcat(info, "{db6600}/aplayer: {FFFFEE}open player administration panel.\n");
         strcat(info, "{db6600}/acp: {FFFFEE}open admin control panel.\n");
+        strcat(info, "{db6600}/asay: {FFFFEE}send admin message to everyone.\n");
+        strcat(info, "{db6600}/achat: {FFFFEE}admin chat.\n");
         strcat(info, "{db6600}---------------------------------------------------\n");
         ShowInfo(playerid, "Admin Commands", info);
         return ~1;

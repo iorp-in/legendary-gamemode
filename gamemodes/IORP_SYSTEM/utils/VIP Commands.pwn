@@ -103,25 +103,25 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         PlayAudioStreamForPlayer(playerid, sprintf("https://iorp.in/music/%s", song));
         return ~1;
     }
-    if (IsStringContainWords(text, "aplay") && (GetPlayerAdminLevel(playerid) > 0 || DJ:IsPlayer(playerid))) {
-        new song[128];
-        sscanf(text, "s[128]", song);
-        if (strreplace(song, "aplay ", "", false, 0, 1) == 0) strreplace(song, "aplay", "", false, 0, 1);
-        if (isnull(song)) {
-            SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} what to play?");
-            return ~1;
-        }
-        foreach(new i:Player) {
-            if (!DJ:GetStatusMP3(i)) continue;
-            SendClientMessageEx(i, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}DJ %s playing {FFCC66}%s {FFFFEE}for you", GetPlayerNameEx(playerid), song));
-            PlayAudioStreamForPlayer(i, sprintf("https://iorp.in/music/%s", song));
-        }
-        return ~1;
-    }
-    if (IsStringContainWords(text, "dj panel")) {
-        DJ:OpenPanel(playerid);
-        return ~1;
-    }
+    // if (IsStringContainWords(text, "aplay") && (GetPlayerAdminLevel(playerid) > 0 || DJ:IsPlayer(playerid))) {
+    //     new song[128];
+    //     sscanf(text, "s[128]", song);
+    //     if (strreplace(song, "aplay ", "", false, 0, 1) == 0) strreplace(song, "aplay", "", false, 0, 1);
+    //     if (isnull(song)) {
+    //         SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} what to play?");
+    //         return ~1;
+    //     }
+    //     foreach(new i:Player) {
+    //         if (!DJ:GetStatusMP3(i)) continue;
+    //         SendClientMessageEx(i, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}DJ %s playing {FFCC66}%s {FFFFEE}for you", GetPlayerNameEx(playerid), song));
+    //         PlayAudioStreamForPlayer(i, sprintf("https://iorp.in/music/%s", song));
+    //     }
+    //     return ~1;
+    // }
+    // if (IsStringContainWords(text, "dj panel")) {
+    //     DJ:OpenPanel(playerid);
+    //     return ~1;
+    // }
     if (IsStringContainWords(text, "my cars, mycars")) {
         PersonalVehicle:Menu(playerid);
         return ~1;

@@ -55,10 +55,10 @@ cmd:free(playerid, const params[]) {
     new expireAt = gettime() + 60 * 60 * 24 * 7;
     EtShop:SetAlexa(playerid, expireAt);
     EtShop:SetGps(playerid, expireAt);
-    EtShop:SetMp3(playerid, expireAt);
+    // EtShop:SetMp3(playerid, expireAt);
     EtShop:SetPhone(playerid, expireAt);
     EtShop:SetTablet(playerid, expireAt);
-    EtShop:SetRadio(playerid, expireAt);
+    // EtShop:SetRadio(playerid, expireAt);
     return 1;
 }
 

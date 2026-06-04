@@ -280,11 +280,11 @@ CMD:s(playerid, const params[]) {
         if (IsPlayerInRangeOfPoint(i, 10, x, y, z) && i != playerid && pintID == GetPlayerInterior(i) && pvwID == GetPlayerVirtualWorld(i)) {
             SendClientMessageEx(i, Player_Color, string);
             sucs = true;
-            if (DJ:GetStatusTTS(i)) {
-                new audio[252];
-                format(audio, sizeof audio, "https://tts.iorp.in/%s", FormatMention(msg));
-                PlayAudioStreamForPlayer(i, audio);
-            }
+            // if (DJ:GetStatusTTS(i)) {
+            //     new audio[252];
+            //     format(audio, sizeof audio, "https://tts.iorp.in/%s", FormatMention(msg));
+            //     PlayAudioStreamForPlayer(i, audio);
+            // }
         }
     }
 
@@ -363,7 +363,7 @@ CMD:asay(playerid, const params[]) {
     }
 
     SendClientMessageToAll(-1, sprintf("{bc0000}[Admin]: {e0000e}%s (%s)", FormatMention(msg), GetPlayerNameEx(playerid)));
-    foreach(new i:Player) if (DJ:GetStatusTTS(i)) PlayAudioStreamForPlayer(i, sprintf("https://tts.iorp.in/%s", FormatMention(msg)));
+    // foreach(new i:Player) if (DJ:GetStatusTTS(i)) PlayAudioStreamForPlayer(i, sprintf("https://tts.iorp.in/%s", FormatMention(msg)));
     return 1;
 }
 

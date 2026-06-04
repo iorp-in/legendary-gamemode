@@ -18,10 +18,10 @@ stock ManageElectronicItem(adminid, playerid) {
     strcat(string, "Item\tExpire At\n");
     strcat(string, sprintf("Alexa\t%s\n", UnixToHumanEx(EtShop:GetAlexa(playerid))));
     strcat(string, sprintf("GPS\t%s\n", UnixToHumanEx(EtShop:GetGps(playerid))));
-    strcat(string, sprintf("MP3\t%s\n", UnixToHumanEx(EtShop:GetMp3(playerid))));
+    // strcat(string, sprintf("MP3\t%s\n", UnixToHumanEx(EtShop:GetMp3(playerid))));
     strcat(string, sprintf("Phone\t%s\n", UnixToHumanEx(EtShop:GetPhone(playerid))));
     strcat(string, sprintf("Tablet\t%s\n", UnixToHumanEx(EtShop:GetTablet(playerid))));
-    strcat(string, sprintf("Radio\t%s\n", UnixToHumanEx(EtShop:GetRadio(playerid))));
+    // strcat(string, sprintf("Radio\t%s\n", UnixToHumanEx(EtShop:GetRadio(playerid))));
     return FlexPlayerDialog(
         adminid, "AcpElectronicIitems", DIALOG_STYLE_TABLIST_HEADERS, "Manage Electronic Devices", string, "Select", "Close", playerid
     );
@@ -48,10 +48,10 @@ FlexDialog:ManageElectronicInput(adminid, response, listitem, const inputtext[],
     new expireAt = gettime() + seconds;
     if (IsStringSame(device, "Alexa")) EtShop:SetAlexa(playerid, expireAt);
     if (IsStringSame(device, "GPS")) EtShop:SetGps(playerid, expireAt);
-    if (IsStringSame(device, "MP3")) EtShop:SetMp3(playerid, expireAt);
+    // if (IsStringSame(device, "MP3")) EtShop:SetMp3(playerid, expireAt);
     if (IsStringSame(device, "Phone")) EtShop:SetPhone(playerid, expireAt);
     if (IsStringSame(device, "Tablet")) EtShop:SetTablet(playerid, expireAt);
-    if (IsStringSame(device, "Radio")) EtShop:SetRadio(playerid, expireAt);
+    // if (IsStringSame(device, "Radio")) EtShop:SetRadio(playerid, expireAt);
     ManageElectronicItem(adminid, playerid);
     return 1;
 }

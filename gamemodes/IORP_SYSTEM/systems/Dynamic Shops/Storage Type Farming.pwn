@@ -1317,8 +1317,8 @@ stock DynamicShopBusinessItem:GetItemName(shopItemId) {
     if (shopItemId == 32) format(string, 50, "Alexa Kit");
     if (shopItemId == 33) format(string, 50, "Auto Drive Kit");
     if (shopItemId == 34) format(string, 50, "GPS");
-    if (shopItemId == 35) format(string, 50, "MP3");
-    if (shopItemId == 36) format(string, 50, "Personal Radio");
+    // if (shopItemId == 35) format(string, 50, "MP3");
+    // if (shopItemId == 36) format(string, 50, "Personal Radio");
     if (shopItemId == 37) format(string, 50, "Phone");
     if (shopItemId == 38) format(string, 50, "Tablet");
     if (shopItemId == 39) format(string, 50, "Oral Antihistamines");

@@ -113,8 +113,8 @@
 #include "IORP_SYSTEM/systems/v19/Map System.pwn" /////===== IORP Map System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Food System.pwn" /////===== Food System =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/DJ System.pwn" /////===== DJ System =====/////
+// #include <YSI_Coding\y_hooks>
+// #include "IORP_SYSTEM/systems/v19/DJ System.pwn" /////===== DJ System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Vehicle Dealership System.pwn" /////===== Vehicle Ownership System =====/////
 #include <YSI_Coding\y_hooks>
