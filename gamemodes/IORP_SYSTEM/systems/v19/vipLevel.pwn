@@ -14,7 +14,7 @@ public RestoreVipState(playerid) {
     if (!IsPlayerConnected(playerid)) return 1;
 
     SetPlayerVIPLevel(playerid, 3);
-    AlexaMsg(playerid, "your vip access level 3 is granted")
+    AlexaMsg(playerid, "your vip access level 3 is granted");
 
     // new vipLevel;
     // new Cache:mysql_cache;
