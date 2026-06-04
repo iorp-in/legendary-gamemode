@@ -2,19 +2,17 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/dynamic progress bar.pwn" /////===== dynamic progress bar =====/////
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Dynamic UCP.pwn" /////===== Dynamic ACP =====/////
+#include "IORP_SYSTEM/systems/v19/Dynamic UCP.pwn" /////===== Dynamic UCP =====/////
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Dynamic APCP.pwn" /////===== Dynamic UCP =====/////
+#include "IORP_SYSTEM/systems/v19/Dynamic APCP.pwn" /////===== Dynamic APCP =====/////
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Dynamic ACP.pwn" /////===== Dynamic UCP =====/////
+#include "IORP_SYSTEM/systems/v19/Dynamic ACP.pwn" /////===== Dynamic ACP =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic ASCP.pwn" /////===== Dynamic ASCP =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic HCP.pwn" /////===== Dynamic HCP =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic VCP.pwn" /////===== Dynamic VCP =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Dynamic Credits.pwn" /////===== Dynamic Credits =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic Database System.pwn" /////===== Dynamic Database System =====/////
 #include <YSI_Coding\y_hooks>
