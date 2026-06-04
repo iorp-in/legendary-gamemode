@@ -325,11 +325,6 @@ CMD:gc(playerid, const params[]) {
     if (GetPlayerHelperStatus(playerid)) format(string, sizeof string, "{FF9A6F}[Helper] {FFCC66}%s", string);
     if (GetPlayerAdminLevel(playerid) > 0 && ManagementTag[playerid]) format(string, sizeof string, "{FF0000}[Management] {FFCC66}%s", string);
 
-    if (offensiveWordCount(string) > 0) {
-        SendClientMessageEx(playerid, -1, "{db6600}[Alexa]: {FFFFEE}Your message has been blocked due to {FF0000}offensive words{FFFFFF}.");
-        return 1;
-    }
-
     if (isStringHasIP(string)) {
         SendClientMessageEx(playerid, -1, "{db6600}[Alexa]: {FFFFEE}Your message has been blocked due {FF0000}advertise suspect{FFFFFF}, staff has been alerted.");
         Discord:SendHelper(sprintf(":page_with_curl:**Report for %s: alexa detected advertisement **", GetPlayerNameEx(playerid)));
