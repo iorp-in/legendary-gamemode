@@ -10,7 +10,7 @@
 #define     INVALID_HOUSE_ID            (-1)
 #define     HOUSE_COOLDOWN              (10)
 #define     DEFAULT_HOUSE_LIMIT         (1)
-#define     HOUSE_RESET_DAY             (180)
+#define     HOUSE_RESET_DAY             (900)
 
 enum _:e_lockmodes {
     LOCK_MODE_NOLOCK,

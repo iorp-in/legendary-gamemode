@@ -1,6 +1,6 @@
 //#region variables
 #define XVEHICLE_TABLE "xVehicle"
-#define VEHICLE_RESET_DAY           (180)
+#define VEHICLE_RESET_DAY           (900)
 
 #define DEFAULT_Buyable_Limit       (3)
 
