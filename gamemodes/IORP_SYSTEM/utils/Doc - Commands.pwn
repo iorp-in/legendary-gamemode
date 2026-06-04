@@ -15,10 +15,8 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 
     if (IsStringSame("General Commands", inputtext)) {
         new info[2000];
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        strcat(info, "{db6600}/forum: {FFFFEE}link to: https://forum.iorp.in\n");
+        strcat(info, "{db6600}-----------------------------------------------------------------------------------------------n");
         strcat(info, "{db6600}/discord: {FFFFEE}link to: https://discord.gg/Xq9k3hr\n");
-        strcat(info, "{db6600}/helpme: {FFFFEE}ask administrators for help.\n");
         strcat(info, "{db6600}/report: {FFFFEE}report player to administrators.\n");
         strcat(info, "{db6600}/vc: {FFFFEE}to chat on voice chat selected frequnecy.\n");
         strcat(info, "{db6600}/vcset: {FFFFEE}to select voice frequency\n");
@@ -33,7 +31,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/vip: {FFFFEE}open vip menu\n");
         strcat(info, "{db6600}/bitcoin: {FFFFEE}open premium player shop\n");
         strcat(info, "{db6600}/phelp: {FFFFEE}show pong cmds\n");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}-----------------------------------------------------------------------------------------------n");
         ShowInfo(playerid, "General Commands", info);
         return ~1;
     }
@@ -41,7 +39,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (IsStringSame("Roleplay Commands", inputtext)) {
         new info[2000];
         format(info, sizeof info, "");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}-------------------------------------------------------------------------------------------------------------------------------\n");
         strcat(info, "{db6600}/me: {FFFFEE}Displays an action or emote your character is performing.\n");
         strcat(info, "{db6600}/my: {FFFFEE}Same as /me, except instead of the `Name` prefix, you get `name's`.\n");
         strcat(info, "{db6600}/do: {FFFFEE}IC emote . Used if you want to ask something roleplay wise or something what can't begin with your character name.\n");
@@ -57,7 +55,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/radio: {FFFFEE}Radio for law factions only.\n");
         strcat(info, "{db6600}/pu: {FFFFEE}Pull Over.\n");
         strcat(info, "{db6600}/fchat: {FFFFEE}Faction chat.\n");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}-------------------------------------------------------------------------------------------------------------------------------\n");
         ShowInfo(playerid, "Roleplay Commands", info);
         return ~1;
     }
@@ -65,7 +63,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (IsStringSame("Auto Roleplay Commands", inputtext)) {
         new info[2000];
         format(info, sizeof info, "");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}-------------------------------------------------------------------\n");
         strcat(info, "{db6600}/rpgun: {FFFFEE}use it when you are ready to engage a fight.\n");
         strcat(info, "{db6600}/rpgunout: {FFFFEE}use it to show, gun out rp.\n");
         strcat(info, "{db6600}/rpgunput: {FFFFEE}use it to show, gun put rp.\n");
@@ -80,14 +78,14 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/rphandsup: {FFFFEE}use it to ask for handsup (for cops).\n");
         strcat(info, "{db6600}/rpbodycheck: {FFFFEE}use it to for body search (for cops).\n");
         strcat(info, "{db6600}/rpapproach: {FFFFEE}use it to approach a suspect (for cops).\n");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}--------------------------------------------------------------------\n");
         ShowInfo(playerid, "Auto Roleplay Commands", info);
         return ~1;
     }
 
     if (IsStringSame("Alexa Commands", inputtext)) {
         new info[2000];
-        strcat(info, "{db6600}════════ Alexa Commands ════════\n");
+        strcat(info, "{db6600}------------------------------ Alexa Commands ------------------------------");
         strcat(info, "{FFFFEE}Use {db6600}/alexa [command]\n\n");
         strcat(info, "{db6600}General:{FFFFEE} gps, unbug me, chat animation\n");
 
@@ -102,18 +100,18 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
             strcat(info, "{db6600}VIP:{FFFFEE} vipweather, vipflamminghand, vipghostrider\n");
         }
 
-        strcat(info, "{db6600}═════════════════════════════════");
+        strcat(info, "{db6600}-----------------------------------------------------------------------------");
         ShowInfo(playerid, "Alexa Commands", info);
         return ~1;
     }
 
     if (IsStringSame("VIP Commands", inputtext)) {
         new info[2000];
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}---------------------------------------------------\n");
         strcat(info, "{db6600}/vsay: {FFFFEE}Send message to all players.\n");
         strcat(info, "{db6600}/vchat: {FFFFEE}Send message to vip players.\n");
         strcat(info, "{db6600}/findbackpack: {FFFFEE}find backpack.\n");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}---------------------------------------------------\n");
         ShowInfo(playerid, "VIP Commands", info);
         return ~1;
     }
@@ -121,10 +119,10 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (IsStringSame("Admin Commands", inputtext)) {
         new info[2000];
         format(info, sizeof info, "");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}---------------------------------------------------\n");
         strcat(info, "{db6600}/aplayer: {FFFFEE}open player administration panel.\n");
         strcat(info, "{db6600}/acp: {FFFFEE}open admin control panel.\n");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}---------------------------------------------------\n");
         ShowInfo(playerid, "Admin Commands", info);
         return ~1;
     }
@@ -132,7 +130,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (IsStringSame("Management Commands", inputtext)) {
         new info[2000];
         format(info, sizeof info, "");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}--------------------------------------------------------------------\n");
         strcat(info, "{db6600}/ascp: {FFFFEE}open system control panel.\n");
         strcat(info, "{db6600}/setadmin: {FFFFEE}set player's admin level.\n");
         strcat(info, "{db6600}/setvip: {FFFFEE}set player's VIP level.\n");
@@ -159,7 +157,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/disablebankaccount: {FFFFEE}disable a bank account.\n");
         strcat(info, "{db6600}/setfaction: {FFFFEE}assign faction and rank.\n");
         strcat(info, "{db6600}/removefaction: {FFFFEE}remove player from faction.\n");
-        strcat(info, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(info, "{db6600}--------------------------------------------------------------------\n");
         ShowInfo(playerid, "Management Commands", info);
         return ~1;
     }
