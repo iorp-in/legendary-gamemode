@@ -16,15 +16,15 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     return 1;
 }
 
-SCP:OnInit(playerid, page) {
-    if (page != 0) return 1;
-    SCP:AddCommand(playerid, "Patch Settings");
+UCP:OnInit(playerid, page) {
+    if (page != 1) return 1;
+    UCP:AddCommand(playerid, "Patch Settings");
     return 1;
 }
 
-SCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Patch Settings", inputtext)) return Patch:Menu(playerid);
+UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response && page != 1) return 1;
+    if (IsStringSame("Patch Settings", inputtext)) { Patch:Menu(playerid); return ~1; }
     return 1;
 }
 

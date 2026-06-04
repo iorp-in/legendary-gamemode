@@ -25,7 +25,7 @@ enum Motive:PlayerDataEnum {
 };
 new Motive:PlayerData[MAX_PLAYERS][Motive:PlayerDataEnum];
 
-new i18n_hunger_warn, Disease_Thrist, Disease_Skin, Disease_Bladder, Disease_Sleep, Disease_Hunger;
+new Disease_Thrist, Disease_Skin, Disease_Bladder, Disease_Sleep, Disease_Hunger;
 new operation:Thrist, operation:Hunger, operation:Hygiene, operation:Sleep, operation:Bladder;
 
 hook OnGameModeInit() {
@@ -51,10 +51,6 @@ hook OnGameModeInit() {
     Database:AddColumn("playerdata", "Disease_Thrist", "boolean", "0");
     Database:AddColumn("playerdata", "Disease_Sleep", "boolean", "0");
     Database:AddColumn("playerdata", "Disease_Hunger", "boolean", "0");
-
-    i18n_hunger_warn = I18N_Register("{4286f4}[Alexa]:{FFFFFF} you are hungry, get some food");
-    I18N_SetNativeText(i18n_hunger_warn, NATIVE_LANGUAGE_MALAYALAM, "{4286f4}[Alexa]:{FFFFFF} നിങ്ങൾക്ക് വിശക്കുന്നു, ഭക്ഷണം കഴിക്കൂ");
-    I18N_SetNativeText(i18n_hunger_warn, NATIVE_LANGUAGE_TELUGU, "{4286f4}[Alexa]:{FFFFFF} మీరు ఆకలితో ఉన్నారు, కొంచెం ఆహారం తీసుకోండి");
     return 1;
 }
 
@@ -298,7 +294,7 @@ hook GlobalOneMinuteInterval() {
             }
         }
         if (GetPlayerHealthEx(playerid) < 20) {
-            if (time_passed) SendClientMessage(playerid, -1, GetNativeText(i18n_hunger_warn, GetPlayerNativeLang(playerid)));
+            if (time_passed) AlexaMsg(playerid, "you are hungry, get some food");
         }
         if (Motive:PlayerData[playerid][awake_count] >= Motive:PlayerData[playerid][sleep_count] && Motive:PlayerData[playerid][awake_mode]) {
             new diff = Motive:PlayerData[playerid][awake_count] - Motive:PlayerData[playerid][sleep_count];

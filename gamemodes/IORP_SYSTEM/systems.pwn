@@ -8,8 +8,6 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic ACP.pwn" /////===== Dynamic UCP =====/////
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Dynamic SCP.pwn" /////===== Dynamic SCP =====/////
-#include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic ASCP.pwn" /////===== Dynamic ASCP =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic HCP.pwn" /////===== Dynamic HCP =====/////
@@ -27,8 +25,6 @@
 #include "IORP_SYSTEM/utils/Hostpital Locator.pwn" /////===== Hospital Locator =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Player Patch Status.pwn" /////===== Player Patch Status System =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Universal Language Translator.pwn" /////===== Universal Language Translator System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic Dialog System.pwn" /////===== Dynamic Dialog System =====/////
 #include <YSI_Coding\y_hooks>
@@ -291,7 +287,6 @@
 #include "IORP_SYSTEM/systems/v19/Material Shipment System - Export.pwn" /////===== Material Shipment System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Material Shipment System - Crate Unload.pwn" /////===== Material Shipment System =====/////
-#include "IORP_SYSTEM/systems/v19/i18n system.pwn" /////===== i18n system =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Information System.pwn" /////===== Information System =====/////
 #include <YSI_Coding\y_hooks>

@@ -583,24 +583,19 @@ hook OnGameModeInit() {
     return 1;
 }
 
-
-SCP:OnInit(playerid, page) {
-    if (page != 0) {
-        return 1;
-    }
-
-    SCP:AddCommand(playerid, "Clean Screen");
-    SCP:AddCommand(playerid, "Fix Screen");
+UCP:OnInit(playerid, page) {
+    if (page != 1) return 1;
+    UCP:AddCommand(playerid, "Unbug me");
+    UCP:AddCommand(playerid, "Clean Screen");
+    UCP:AddCommand(playerid, "Fix Screen");
     return 1;
 }
 
-SCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) {
-        return 1;
-    }
-
-    if (!strcmp("Clean Screen", inputtext)) clean_screen(playerid);
-    if (!strcmp("Fix Screen", inputtext)) fix_screen(playerid);
+UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response && page != 1) return 1;
+    if (!strcmp("Clean Screen", inputtext)) { clean_screen(playerid); return ~1; }
+    if (!strcmp("Fix Screen", inputtext)) { fix_screen(playerid); return ~1; }
+    if (!strcmp("Unbug me", inputtext)) { unbug(playerid); return ~1; }
     return 1;
 }
 
@@ -652,24 +647,6 @@ stock unbug(playerid, bool:force = false) {
     SetPlayerPosEx(playerid, HospitalData[id][coordX], HospitalData[id][coordY], HospitalData[id][coordZ]);
     SetCameraBehindPlayer(playerid);
     CallRemoteFunction("OnPlayerImairedRequest", "d", playerid);
-    return 1;
-}
-
-UCP:OnInit(playerid, page) {
-    if (page != 0) {
-        return 1;
-    }
-
-    UCP:AddCommand(playerid, "Unbug me");
-    return 1;
-}
-
-UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) {
-        return 1;
-    }
-
-    if (!strcmp("Unbug me", inputtext)) { unbug(playerid); return ~1; }
     return 1;
 }
 

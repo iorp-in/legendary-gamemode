@@ -1209,24 +1209,28 @@ stock AutoLoginCommand(playerid) {
     return 1;
 }
 
-SCP:OnInit(playerid, page) {
-    if (page != 0) return 1;
-    SCP:AddCommand(playerid, "Change Skin");
-    SCP:AddCommand(playerid, "Enable/Disable Auto Login");
-    // if(GetPlayerAutoSpawn(playerid) == -1) SCP:AddCommand(playerid, "Enable AutoSpawn");
-    // if(GetPlayerAutoSpawn(playerid) != -1) SCP:AddCommand(playerid, "Disable AutoSpawn");
-    SCP:AddCommand(playerid, "Logout");
+UCP:OnInit(playerid, page) {
+    if (page != 1) return 1;
+    // if(GetPlayerAutoSpawn(playerid) == -1) UCP:AddCommand(playerid, "Enable AutoSpawn");
+    // if(GetPlayerAutoSpawn(playerid) != -1) UCP:AddCommand(playerid, "Disable AutoSpawn");
+    UCP:AddCommand(playerid, "Enable/Disable Auto Login");
+    UCP:AddCommand(playerid, "Logout");
     return 1;
 }
 
-SCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Change Skin", inputtext)) ChangeSkin(playerid);
-    if (IsStringSame("Enable AutoSpawn", inputtext)) AutospawnCommand(playerid);
-    if (IsStringSame("Disable AutoSpawn", inputtext)) AutospawnCommand(playerid);
-    if (IsStringSame("Logout", inputtext)) LogoutCommand(playerid);
-    if (IsStringSame("Enable/Disable Auto Login", inputtext)) AutoLoginCommand(playerid);
+UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response && page != 1) return 1;
+    // if (IsStringSame("Enable AutoSpawn", inputtext)) AutospawnCommand(playerid);
+    // if (IsStringSame("Disable AutoSpawn", inputtext)) AutospawnCommand(playerid);
+    if (IsStringSame("Enable/Disable Auto Login", inputtext)) { AutoLoginCommand(playerid); return ~1; }
+    if (IsStringSame("Logout", inputtext)) { LogoutCommand(playerid); return ~1; }
     return 1;
+}
+
+hook OnPlayerRequestShop(playerid, shopid) {
+    if (shopid != 37) return 1;
+    ChangeSkin(playerid);
+    return ~1;
 }
 
 hook OnAccountRename(const OldName[], const NewName[]) {

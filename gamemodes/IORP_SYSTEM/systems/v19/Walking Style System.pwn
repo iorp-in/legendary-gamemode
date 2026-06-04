@@ -120,14 +120,14 @@ stock GetPlayerWalkingStyle(playerid) {
     return WalkStyle[playerid];
 }
 
-SCP:OnInit(playerid, page) {
-    if (page != 0) return 1;
-    SCP:AddCommand(playerid, "Set PED Style");
+UCP:OnInit(playerid, page) {
+    if (page != 1) return 1;
+    UCP:AddCommand(playerid, "Set PED Style");
     return 1;
 }
 
-SCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
+UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response && page != 1) return 1;
     if (IsStringSame("Set PED Style", inputtext)) {
         PlayerWalkingStyleMenu(playerid);
         return ~1;

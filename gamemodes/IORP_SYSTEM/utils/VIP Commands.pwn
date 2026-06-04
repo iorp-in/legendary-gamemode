@@ -46,10 +46,6 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         Event:Leave(playerid);
         return ~1;
     }
-    if (IsStringContainWords(text, "ult, translator")) {
-        UniLangTranslator(playerid);
-        return ~1;
-    }
     if (IsStringContainWords(text, "faction locker")) {
         if (GetPlayerAdminLevel(playerid) == 10) {
             new extraid;
@@ -378,7 +374,6 @@ stock Alexa_VipCommands(playerid) {
     strcat(string, "{db6600}Faction System: {FFFFEE}faction locker, factions\n");
     strcat(string, "{db6600}Screen Control: {FFFFEE}clean/fix screen\n");
     strcat(string, "{db6600}Minigame System: {FFFFEE}minigame, minigames, mini game\n");
-    strcat(string, "{db6600}Universal Language Translator: {FFFFEE}ult, translator\n");
     strcat(string, "{db6600}General Commands: {FFFFEE}phone, tablet, answer call, pickup call, end call, hangup call, my number, dial\n");
     strcat(string, "{db6600}Personal Vehicles: {FFFFEE}my cars, mycars\n");
     strcat(string, "{db6600}Control Panels: {FFFFEE}pocket, scp, change skin, change password\n");
