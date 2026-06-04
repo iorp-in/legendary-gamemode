@@ -101,7 +101,7 @@ CMD:pm(playerid, const params[]) {
     return PM:Send(playerid, receiverid, message);
 }
 
-hook ApcpOnInit(playerid, targetid, page) {
+APCP:OnInit(playerid, targetid, page) {
     if (page != 1 || GetPlayerAdminLevel(targetid) > 0) return 1;
 
     if (Player_PM_Config_LastPM[targetid][1]) {
@@ -113,7 +113,7 @@ hook ApcpOnInit(playerid, targetid, page) {
     return 1;
 }
 
-hook ApcpOnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
+APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response || GetPlayerAdminLevel(targetid) > 0) return 1;
 
     if (IsStringSame("Enable PM", inputtext)) {

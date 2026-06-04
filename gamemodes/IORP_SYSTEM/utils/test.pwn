@@ -8,7 +8,7 @@ cmd:tanim(playerid, const params[]) {
 }
 
 cmd:camera(playerid, const params[]) {
-    if (!IsPlayerInAnyVehicle(playerid) || GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerInAnyVehicle(playerid) || !IsPlayerMasterAdmin(playerid)) return 0;
     new vehicleid = GetPlayerVehicleID(playerid);
     new Float:distance, Float:angle, Float:zoffset, cut;
     if (sscanf(params, "fffd", distance, angle, zoffset, cut) || cut < 1 || cut > 2) return AlexaMsg(playerid, "/camera distance angle zoffset cameramode", "Usage");
@@ -21,13 +21,13 @@ cmd:camera(playerid, const params[]) {
 }
 
 cmd:cameraoff(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     SetCameraBehindPlayer(playerid);
     return 1;
 }
 
 cmd:testobject(playerid, const params[]) {
-    if (!IsTimePassedForPlayer(playerid, "objtest", 5 * 60) && GetPlayerAdminLevel(playerid) == 0) return 0;
+    if (!IsTimePassedForPlayer(playerid, "objtest", 5 * 60) || !IsPlayerMasterAdmin(playerid)) return 0;
     new Float:pos[3];
     GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
     GetXYInFrontOfPlayer(playerid, pos[0], pos[1], 5.0);

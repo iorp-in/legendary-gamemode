@@ -917,33 +917,31 @@ hook OnTrailerCheckInit(playerid, vehicleid) {
     return 1;
 }
 
-hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    new vehicleid = GetPlayerVehicleID(playerid);
-    new trailerid = GetVehicleTrailer(vehicleid);
-    if (trailerid != 0) vehicleid = trailerid;
-    if (!IsVehicleAllowedForStorage(vehicleid)) {
-        return 1;
-    }
+UCP:OnInit(playerid, page) {
+    if (!IsPlayerMasterAdmin(playerid)) return 1;
+    new trailerid = GetPlayerTrailerID(playerid);
+    if (page != 0 || trailerid == -1) return 1;
+    UCP:AddCommand(playerid, "Refill Trailer", true);
+    UCP:AddCommand(playerid, "Reset Trailer", true);
+    return 1;
+}
 
-    if (
-        IsStringContainWords(text, "refill trailer") &&
-        StaticVehicle:IsValidID(StaticVehicle:GetID(vehicleid)) &&
-        GetPlayerAdminLevel(playerid) >= 10
-    ) {
+UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0 || !IsPlayerMasterAdmin(playerid)) return 1;
+    new trailerid = GetPlayerTrailerID(playerid);
+    if (trailerid == -1) return 1;
+
+    if (IsStringSame("Refill Trailer", inputtext)) {
         for (new trailerItemId; trailerItemId < MAXTRAILERITEMS; trailerItemId++) {
-            TrailerStorage:SetResource(vehicleid, trailerItemId, TrailerStorage:GetResourceLimit(trailerItemId));
+            TrailerStorage:SetResource(trailerid, trailerItemId, TrailerStorage:GetResourceLimit(trailerItemId));
         }
         AlexaMsg(playerid, "trailer refilled");
         return ~1;
     }
 
-    if (
-        IsStringContainWords(text, "reset trailer") &&
-        StaticVehicle:IsValidID(StaticVehicle:GetID(vehicleid)) &&
-        GetPlayerAdminLevel(playerid) >= 8
-    ) {
+    if (IsStringSame("Reset Trailer", inputtext)) {
         for (new trailerItemId; trailerItemId < MAXTRAILERITEMS; trailerItemId++) {
-            TrailerStorage:SetResource(vehicleid, trailerItemId, 0);
+            TrailerStorage:SetResource(trailerid, trailerItemId, 0);
         }
         AlexaMsg(playerid, "trailer reseted");
         return ~1;

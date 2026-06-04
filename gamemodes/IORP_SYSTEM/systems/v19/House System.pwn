@@ -1118,7 +1118,7 @@ hook OnAccountDelete(const AccountName[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "house system") && GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsPlayerMasterAdmin(playerid) && IsStringSame(text, "house system")) {
         House:AdminMenu(playerid);
         return ~1;
     }

@@ -561,9 +561,9 @@ hook QuickActionsOnResponse(playerid, targetid, page, response, listitem, const 
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (GetPlayerVIPLevel(playerid) < 1) return 1;
-    if (IsStringContainWords(text, "license")) return showdl_cmd(playerid, playerid);
-    return 1;
+    if (GetPlayerVIPLevel(playerid) < 1 || !IsStringSame(text, "license")) return 1;
+    showdl_cmd(playerid, playerid);
+    return ~1;
 }
 
 hook OnAccountRename(const OldName[], const NewName[]) {

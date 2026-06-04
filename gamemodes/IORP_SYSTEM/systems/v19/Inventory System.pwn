@@ -535,20 +535,15 @@ ACP:OnInit(playerid, page) {
 }
 
 ACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || page != 0) return 1;
-    if (IsStringSame("Backpack System", inputtext)) {
-        Backpack:AdminMenu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Backpack System", inputtext)) return 1;
+    Backpack:AdminMenu(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "backpack system") && GetPlayerAdminLevel(playerid) > 8) {
-        Backpack:AdminMenu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "backpack system")) return 1;
+    Backpack:AdminMenu(playerid);
+    return ~1;
 }
 
 Backpack:AdminMenu(playerid) {

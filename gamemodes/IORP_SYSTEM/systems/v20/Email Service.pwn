@@ -44,7 +44,7 @@ stock Email:Send(const type[], const username[], const subject[], const content[
 }
 
 cmd:sendemail(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (GetPlayerAdminLevel(playerid) != 3) return 0;
     new username[50], content[144];
     if (sscanf(params, "s[50]s[144]", username, content)) return SendClientMessage(playerid, -1, "{FF0000}[Alexa]: {FFFFFF} /sendemail [username] [message]");
     if (!IsValidAccount(username)) return SendClientMessage(playerid, -1, "{FF0000}[Alexa]: {FFFFFF} invalid username");

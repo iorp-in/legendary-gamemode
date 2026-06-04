@@ -463,7 +463,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "register hack system") || GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "register hack system")) return 1;
     RegisterHacking:AdminPanel(playerid);
     return ~1;
 }

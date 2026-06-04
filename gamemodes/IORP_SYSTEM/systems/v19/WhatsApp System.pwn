@@ -148,11 +148,9 @@ FlexDialog:WhatsappViewMsg(playerid, response, listitem, const inputtext[], extr
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "whatsapp") && GetPlayerVIPLevel(playerid) > 0) {
-        Whatsapp:init(playerid);
-        return ~1;
-    }
-    return 1;
+    if (GetPlayerVIPLevel(playerid) == 0 || !IsStringSame(text, "whatsapp")) return 1;
+    Whatsapp:init(playerid);
+    return ~1;
 }
 
 // group chat system

@@ -26,62 +26,87 @@ hook OnGameModeInit() {
 APCP:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
     if (!IsPlayerConnected(playerid) || !IsPlayerConnected(targetid)) return 1;
-    if (GetPlayerAdminLevel(playerid) >= 1 && !IsPlayerFreezed(targetid)) APCP:AddCommand(playerid, "freeze");
-    if (GetPlayerAdminLevel(playerid) >= 1 && IsPlayerFreezed(targetid)) APCP:AddCommand(playerid, "unfreeze");
-    if (GetPlayerAdminLevel(playerid) >= 5 && IsPlayerRequestNameChange(targetid)) APCP:AddCommand(playerid, "accept name change request");
-    if (GetPlayerAdminLevel(playerid) >= 5 && IsPlayerRequestNameChange(targetid)) APCP:AddCommand(playerid, "reject name change request");
-    if (GetPlayerAdminLevel(playerid) >= 9 && !GetPlayerRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable Vehicle Repair");
-    if (GetPlayerAdminLevel(playerid) >= 9 && GetPlayerRepairAuth(targetid)) APCP:AddCommand(playerid, "Disable Vehicle Repair");
-    if (GetPlayerAdminLevel(playerid) >= 9 && !GetPlayerAutoRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable Automatic Vehicle Repair");
-    if (GetPlayerAdminLevel(playerid) >= 9 && GetPlayerAutoRepairAuth(targetid)) APCP:AddCommand(playerid, "Disable Automatic Vehicle Repair");
-    if (GetPlayerAdminLevel(playerid) >= 9 && !FuelAuth:IsActive(targetid)) APCP:AddCommand(playerid, "Enable Vehicle Refuel");
-    if (GetPlayerAdminLevel(playerid) >= 9 && FuelAuth:IsActive(targetid)) APCP:AddCommand(playerid, "Disable Vehicle Refuel");
-    if (GetPlayerAdminLevel(playerid) >= 9 && !FuelAuth:IsAutoActive(targetid)) APCP:AddCommand(playerid, "Enable Automatic Vehicle Refuel");
-    if (GetPlayerAdminLevel(playerid) >= 9 && FuelAuth:IsAutoActive(targetid)) APCP:AddCommand(playerid, "Disable Automatic Vehicle Refuel");
-    if (GetPlayerAdminLevel(playerid) >= 9 && !GetPlayerTPAuth(targetid)) APCP:AddCommand(playerid, "Enable Quick Teleportation");
-    if (GetPlayerAdminLevel(playerid) >= 9 && GetPlayerTPAuth(targetid)) APCP:AddCommand(playerid, "Disable Quick Teleportation");
-    if (GetPlayerAdminLevel(playerid) >= 5 && GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) APCP:AddCommand(playerid, "Spectate");
-    if (GetPlayerAdminLevel(playerid) >= 1) APCP:AddCommand(playerid, "Get Player to your location");
-    if (GetPlayerAdminLevel(playerid) >= 10 && IsCuff_Player(targetid)) APCP:AddCommand(playerid, "Uncuff Player");
-    else if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Cuff Player");
-    if (GetPlayerAdminLevel(playerid) >= 10 && IsCES_FollowPlayer(targetid)) APCP:AddCommand(playerid, "Disable Follow up Player");
-    else if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Enable Follow up Player");
-    if (GetPlayerAdminLevel(playerid) >= 1) APCP:AddCommand(playerid, "Teleport to Player");
-    if (!GetPlayerTeleportKickStatus(targetid) && GetPlayerAdminLevel(playerid) >= 8) APCP:AddCommand(playerid, "Enable Teleport Kick");
-    if (GetPlayerTeleportKickStatus(targetid) && GetPlayerAdminLevel(playerid) >= 8) APCP:AddCommand(playerid, "Disable Teleport Kick");
-    if (GetPlayerAdminLevel(playerid) >= 1) APCP:AddCommand(playerid, "Set Interior");
-    if (GetPlayerAdminLevel(playerid) >= 1) APCP:AddCommand(playerid, "Set Virtual World");
-    if (GetPlayerAdminLevel(playerid) >= 1) APCP:AddCommand(playerid, "Set Wanted Level");
-    if (GetPlayerAdminLevel(playerid) >= 1) APCP:AddCommand(playerid, "Jail Player");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Spawn Vehicle");
-    if (GetPlayerAdminLevel(playerid) >= 8) APCP:AddCommand(playerid, "Set Vehicle Color");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Give Weapon");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Give Money");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Set Money");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Set Health");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Set Armour");
-    if (IsPlayerMasterAdmin(playerid)) APCP:AddCommand(playerid, "Set Score");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Set Skin");
-    if (GetPlayerAdminLevel(playerid) >= 5) APCP:AddCommand(playerid, "Disarm Player");
-    if (GetPlayerAdminLevel(playerid) >= 5) APCP:AddCommand(playerid, "Kick Player");
-    if (GetPlayerAdminLevel(playerid) >= 5) APCP:AddCommand(playerid, "Ban Player");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Give All License");
-    if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Remove All License");
-    if (GetPlayerAdminLevel(playerid) >= 8 && !BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As Beta Tester");
-    if (GetPlayerAdminLevel(playerid) >= 8 && BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Remove Player As Beta Tester");
-    // if (GetPlayerAdminLevel(playerid) >= 8 && !DJ:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As DJ");
-    // if (GetPlayerAdminLevel(playerid) >= 8 && DJ:IsPlayer(targetid)) APCP:AddCommand(playerid, "Remove Player As DJ");
-    if (GetPlayerAdminLevel(playerid) >= 5 && !GetPlayerMutedStatus(targetid)) APCP:AddCommand(playerid, "Mute Player");
-    if (GetPlayerAdminLevel(playerid) >= 5 && GetPlayerMutedStatus(targetid)) APCP:AddCommand(playerid, "UnMute Player");
-    if (GetPlayerAdminLevel(playerid) >= 8 && Faction:GetPlayerFID(targetid) == -1) APCP:AddCommand(playerid, "Set Player Faction");
-    if (GetPlayerAdminLevel(playerid) >= 8 && Faction:GetPlayerFID(targetid) != -1) APCP:AddCommand(playerid, "Show Faction Locker");
-    if (GetPlayerAdminLevel(playerid) >= 8 && Faction:GetPlayerFID(targetid) != -1) APCP:AddCommand(playerid, "Remove Player from his Faction");
+
+    if (!IsPlayerFreezed(targetid)) APCP:AddCommand(playerid, "Freeze");
+    else APCP:AddCommand(playerid, "Unfreeze");
+
+    APCP:AddCommand(playerid, "Get Player to your location");
+    APCP:AddCommand(playerid, "Teleport to Player");
+    APCP:AddCommand(playerid, "Set Interior");
+    APCP:AddCommand(playerid, "Set Virtual World");
+    APCP:AddCommand(playerid, "Set Wanted Level");
+    APCP:AddCommand(playerid, "Jail Player");
+
+    if (IsPlayerMasterAdmin(playerid)) {
+        APCP:AddCommand(playerid, "Give Money");
+        APCP:AddCommand(playerid, "Set Money");
+        APCP:AddCommand(playerid, "Set Score");
+    }
+
+    if (GetPlayerAdminLevel(playerid) == 3) {
+        APCP:AddCommand(playerid, "Spawn Vehicle");
+        APCP:AddCommand(playerid, "Set Vehicle Color");
+        APCP:AddCommand(playerid, "Give Weapon");
+        APCP:AddCommand(playerid, "Set Health");
+        APCP:AddCommand(playerid, "Set Armour");
+        APCP:AddCommand(playerid, "Set Skin");
+        APCP:AddCommand(playerid, "Disarm Player");
+        APCP:AddCommand(playerid, "Kick Player");
+        APCP:AddCommand(playerid, "Ban Player");
+        APCP:AddCommand(playerid, "Give All License");
+        APCP:AddCommand(playerid, "Remove All License");
+
+        if (GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) APCP:AddCommand(playerid, "Spectate");
+
+        if (IsPlayerRequestNameChange(targetid)) {
+            APCP:AddCommand(playerid, "Accept Name Change Request");
+            APCP:AddCommand(playerid, "Reject Name Change Request");
+        }
+
+        if (!GetPlayerRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable Vehicle Repair");
+        else APCP:AddCommand(playerid, "Disable Vehicle Repair");
+
+        if (!GetPlayerAutoRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable Automatic Vehicle Repair");
+        else APCP:AddCommand(playerid, "Disable Automatic Vehicle Repair");
+
+        if (!FuelAuth:IsActive(targetid)) APCP:AddCommand(playerid, "Enable Vehicle Refuel");
+        else APCP:AddCommand(playerid, "Disable Vehicle Refuel");
+
+        if (!FuelAuth:IsAutoActive(targetid)) APCP:AddCommand(playerid, "Enable Automatic Vehicle Refuel");
+        else APCP:AddCommand(playerid, "Disable Automatic Vehicle Refuel");
+
+        if (!GetPlayerTPAuth(targetid)) APCP:AddCommand(playerid, "Enable Quick Teleportation");
+        else APCP:AddCommand(playerid, "Disable Quick Teleportation");
+
+        if (IsCuff_Player(targetid)) APCP:AddCommand(playerid, "Uncuff Player");
+        else APCP:AddCommand(playerid, "Cuff Player");
+        if (IsCES_FollowPlayer(targetid)) APCP:AddCommand(playerid, "Disable Follow up Player");
+        else APCP:AddCommand(playerid, "Enable Follow up Player");
+
+        if (!GetPlayerTeleportKickStatus(targetid)) APCP:AddCommand(playerid, "Enable Teleport Kick");
+        else APCP:AddCommand(playerid, "Disable Teleport Kick");
+
+        if (!BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As Beta Tester");
+        else APCP:AddCommand(playerid, "Remove Player As Beta Tester");
+
+        // if (!DJ:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As DJ");
+        // else APCP:AddCommand(playerid, "Remove Player As DJ");
+
+        if (!GetPlayerMutedStatus(targetid)) APCP:AddCommand(playerid, "Mute Player");
+        else APCP:AddCommand(playerid, "UnMute Player");
+
+        if (Faction:GetPlayerFID(targetid) == -1) APCP:AddCommand(playerid, "Set Player Faction");
+        else {
+            APCP:AddCommand(playerid, "Show Faction Locker");
+            APCP:AddCommand(playerid, "Remove Player from his Faction");
+        }
+    }
     return 1;
 }
 
 APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response || page != 0) return 1;
-    if (IsStringSame("freeze", inputtext)) {
+    if (IsStringSame("Freeze", inputtext)) {
         if (!Tryg3D::IsPlayerSpawned(targetid)) {
             SendClientMessageEx(playerid, COLOR_GREY, "{4286f4}[Error]:{FFFFEE} wait for the player to spawn");
             APCP:Init(playerid, targetid);
@@ -98,7 +123,7 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("unfreeze", inputtext)) {
+    if (IsStringSame("Unfreeze", inputtext)) {
         if (!Tryg3D::IsPlayerSpawned(targetid)) {
             SendClientMessageEx(playerid, COLOR_GREY, "{4286f4}[Error]:{FFFFEE} wait for the player to spawn");
             APCP:Init(playerid, targetid);
@@ -115,12 +140,12 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("accept name change request", inputtext)) {
+    if (IsStringSame("Accept Name Change Request", inputtext)) {
         ApproveNameChange(targetid);
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("reject name change request", inputtext)) {
+    if (IsStringSame("Reject Name Change Request", inputtext)) {
         RejectNameChange(targetid);
         APCP:Init(playerid, targetid);
         return ~1;

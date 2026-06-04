@@ -582,55 +582,28 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     new vehicleid = GetPlayerVehicleID(playerid);
     new xid = PersonalVehicle:GetID(vehicleid);
     if (PersonalVehicle:IsValidID(xid)) {
-        if (IsStringContainWords(text, "turn neon") && PersonalVehicle:GetNeon(vehicleid) != 0) {
+        if (IsStringSame(text, "neon")) {
             switch_neon(playerid);
             return ~1;
         }
-        if (IsStringContainWords(text, "turn off xenon") && PersonalVehicle:GetXenon(xid) != 0) {
-            XenonMod:Uninstall(vehicleid);
+        if (IsStringSame(text, "xenon")) {
+            if (PersonalVehicle:GetXenon(xid) == 0) XenonMod:Install(vehicleid, PersonalVehicle:GetXenon(xid));
+            else XenonMod:Uninstall(vehicleid);
             return ~1;
         }
-        if (IsStringContainWords(text, "turn on xenon") && PersonalVehicle:GetXenon(xid) != 0) {
-            XenonMod:Install(vehicleid, PersonalVehicle:GetXenon(xid));
-            return ~1;
-        }
-        if (IsStringContainWords(text, "turn on halloween") && PersonalVehicle:GetHalloween(xid)) {
-            VehicleHalloweenMode:Install(vehicleid);
-            return ~1;
-        }
-        if (IsStringContainWords(text, "turn off halloween") && PersonalVehicle:GetHalloween(xid)) {
-            VehicleHalloweenMode:Remove(vehicleid);
+        if (IsStringSame(text, "halloween")) {
+            if (PersonalVehicle:GetHalloween(xid) == 0) VehicleHalloweenMode:Install(vehicleid);
+            else VehicleHalloweenMode:Remove(vehicleid);
             return ~1;
         }
     }
 
-    if (IsStringContainWords(text, "turn lights")) {
-        switch_lights(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "open bonnet, close bonnet")) {
-        switch_bonnet(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "open boot, boot bonnet")) {
-        switch_boot(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "lock doors, unlock doors")) {
-        switch_doors(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "start engine, stop engine")) {
-        switch_engine(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "turn on alarm, turn of alarms")) {
-        switch_alarm(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "open windows, close windows")) {
-        switch_windows(playerid);
-        return ~1;
-    }
+    if (IsStringSame(text, "lights")) { switch_lights(playerid); return ~1; }
+    if (IsStringSame(text, "bonnet")) { switch_bonnet(playerid); return ~1; }
+    if (IsStringSame(text, "boot")) { switch_boot(playerid); return ~1; }
+    if (IsStringSame(text, "doors")) { switch_doors(playerid); return ~1; }
+    if (IsStringSame(text, "engine")) { switch_engine(playerid); return ~1; }
+    if (IsStringSame(text, "alarm")) { switch_alarm(playerid); return ~1; }
+    if (IsStringSame(text, "windows")) { switch_windows(playerid); return ~1; }
     return 1;
 }

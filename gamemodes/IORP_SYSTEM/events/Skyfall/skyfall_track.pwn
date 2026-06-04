@@ -26,17 +26,10 @@ hook OnPlayerEventLeave(playerid, eventid) {
     return 1;
 }
 
-stock skyfall_cmd(playerid) {
-    if (Event:IsInEvent(playerid) && Event:GetID(playerid) == SKYFALL_EVENT_ID) {
-        if (IsPlayerInAnyVehicle(playerid)) TeleportVehicleEx(GetPlayerVehicleID(playerid), RandomEx(8000, 8010), RandomEx(-7133, -7123), 13691, 0, skyfall_track_virtualworld, 0);
-        else SetPlayerPosEx(playerid, RandomEx(8000, 8010), RandomEx(-7133, -7123), 13691);
-        return SendClientMessageEx(playerid, -1, "{4286f4}[Event System]:{FFFFEE}teleported back to skyfall hub.");
-    }
-    return 0;
-}
-
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (strcmp(cmd, "skyfall") || !Event:IsInEvent(playerid) || Event:GetID(playerid) != SKYFALL_EVENT_ID) return 1;
-    skyfall_cmd(playerid);
+    if (!Event:IsInEvent(playerid) || Event:GetID(playerid) != SKYFALL_EVENT_ID || !IsStringSame(cmd, "skyfall")) return 1;
+    if (IsPlayerInAnyVehicle(playerid)) TeleportVehicleEx(GetPlayerVehicleID(playerid), RandomEx(8000, 8010), RandomEx(-7133, -7123), 13691, 0, skyfall_track_virtualworld, 0);
+    else SetPlayerPosEx(playerid, RandomEx(8000, 8010), RandomEx(-7133, -7123), 13691);
+    SendClientMessageEx(playerid, -1, "{4286f4}[Event System]:{FFFFEE}teleported back to skyfall hub.");
     return ~1;
 }

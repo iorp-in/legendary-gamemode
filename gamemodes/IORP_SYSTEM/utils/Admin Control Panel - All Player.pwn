@@ -22,8 +22,6 @@ ACP:OnInit(playerid, page) {
     ACP:AddCommand(playerid, "All Vehicle Respawn");
     ACP:AddCommand(playerid, "Set Weather");
     ACP:AddCommand(playerid, "Clear Global Chat");
-    ACP:AddCommand(playerid, "Reboot Server");
-    ACP:AddCommand(playerid, "Hard Reboot Server");
     ACP:AddCommand(playerid, "Teleport to Vehicle by ID");
     ACP:AddCommand(playerid, "Teleport using Coordinate");
     ACP:AddCommand(playerid, "Give Weapons to All Player");
@@ -37,10 +35,15 @@ ACP:OnInit(playerid, page) {
     ACP:AddCommand(playerid, "Set All Player Armour");
     ACP:AddCommand(playerid, "Make All Invisible");
     ACP:AddCommand(playerid, "Make All Visible");
-    ACP:AddCommand(playerid, "Set All Player Skin");
-    ACP:AddCommand(playerid, "Set All Player Wanted Level");
-    ACP:AddCommand(playerid, "Reset All Player Wanted Level");
-    ACP:AddCommand(playerid, "Kick All");
+
+    if (GetPlayerAdminLevel(playerid) == 3) {
+        ACP:AddCommand(playerid, "Set All Player Wanted Level");
+        ACP:AddCommand(playerid, "Reset All Player Wanted Level");
+        ACP:AddCommand(playerid, "Set All Player Skin");
+        ACP:AddCommand(playerid, "Kick All");
+        // ACP:AddCommand(playerid, "Reboot Server");
+        // ACP:AddCommand(playerid, "Hard Reboot Server");
+    }
     return 1;
 }
 
@@ -218,7 +221,6 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
     if (offsetid == AllPlayer:OffsetGiveVehtoAll) {
         if (!response) { ACP:Init(playerid); return ~1; }
         new Float:pX, Float:pY, Float:pZ, Float:pAngle, vehicleid;
-        if (GetPlayerAdminLevel(playerid) < 9) return 0;
         new Vehicle[32], VehicleID, ColorOne, ColorTwo;
         if (sscanf(inputtext, "s[32]D(1)D(1)", Vehicle, ColorOne, ColorTwo)) { ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetGiveVehtoAll, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Vehiclename/Vehicleid] [Color 1] [Color 2]", "Submit", "Close"); return ~1; }
         if (isNumeric(Vehicle)) VehicleID = strval(Vehicle);

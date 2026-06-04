@@ -21,8 +21,8 @@ hook OnPlayerConnect(playerid) {
 
 APCP:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
-    if (GetPlayerAdminLevel(playerid) >= 9 && !InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Enable Player Invincible Mode");
-    if (GetPlayerAdminLevel(playerid) >= 9 && InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Disable Player Invincible Mode");
+    if (GetPlayerAdminLevel(playerid) == 3 && !InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Enable Player Invincible Mode");
+    if (GetPlayerAdminLevel(playerid) == 3 && InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Disable Player Invincible Mode");
     return 1;
 }
 

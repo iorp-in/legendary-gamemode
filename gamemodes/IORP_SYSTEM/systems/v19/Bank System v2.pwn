@@ -600,7 +600,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "bank system") || !IsPlayerMasterAdmin(playerid)) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "bank system")) return 1;
     Bank:AdminShowMenu(playerid);
     return ~1;
 }

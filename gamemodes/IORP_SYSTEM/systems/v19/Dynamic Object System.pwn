@@ -1,4 +1,4 @@
-#define MAX_Dynamic_Objects   10000
+#define MAX_Dynamic_Objects   1000
 enum Dynamic_Object_Data {
     ID,
     ModelID,
@@ -149,7 +149,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "object system") || GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "object system")) return 1;
     DynObjectAdminPanel(playerid);
     return ~1;
 }
@@ -179,7 +179,6 @@ stock DynObjectCreate(playerid) {
 }
 
 FlexDialog:DynObjectCreate(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
-    if (!response) return 1;
     if (!response) return 1;
     new Id, mId, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, wid, iid;
     if (sscanf(inputtext, "i", mId)) return DynObjectCreate(playerid);

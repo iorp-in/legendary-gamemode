@@ -31,7 +31,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
     if (IsStringContainWords(text, "gamezone")) {
-        if (GetPlayerAdminLevel(playerid) == 10) {
+        if (GetPlayerAdminLevel(playerid) == 3) {
             new extraid;
             if (sscanf(GetNextWordFromString(text, "for"), "u", extraid)) extraid = playerid;
             if (!IsPlayerConnected(extraid)) extraid = playerid;
@@ -47,7 +47,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
     if (IsStringContainWords(text, "faction locker")) {
-        if (GetPlayerAdminLevel(playerid) == 10) {
+        if (GetPlayerAdminLevel(playerid) == 3) {
             new extraid;
             if (sscanf(GetNextWordFromString(text, "for"), "u", extraid)) extraid = playerid;
             if (!IsPlayerConnected(extraid)) extraid = playerid;
@@ -91,18 +91,18 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         }
         return ~1;
     }
-    if (IsStringContainWords(text, "play") && (GetPlayerAdminLevel(playerid) > 0 || GetPlayerVIPLevel(playerid) > 0)) {
-        new song[128];
-        sscanf(text, "s[128]", song);
-        if (strreplace(song, "play ", "", false, 0, 1) == 0) strreplace(song, "play", "", false, 0, 1);
-        if (isnull(song)) {
-            SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} what to play?");
-            return ~1;
-        }
-        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE}playing {FFCC66}%s {FFFFEE}for you", song));
-        PlayAudioStreamForPlayer(playerid, sprintf("https://iorp.in/music/%s", song));
-        return ~1;
-    }
+    // if (IsStringContainWords(text, "play") && (GetPlayerAdminLevel(playerid) > 0 || GetPlayerVIPLevel(playerid) > 0)) {
+    //     new song[128];
+    //     sscanf(text, "s[128]", song);
+    //     if (strreplace(song, "play ", "", false, 0, 1) == 0) strreplace(song, "play", "", false, 0, 1);
+    //     if (isnull(song)) {
+    //         SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} what to play?");
+    //         return ~1;
+    //     }
+    //     SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE}playing {FFCC66}%s {FFFFEE}for you", song));
+    //     PlayAudioStreamForPlayer(playerid, sprintf("https://iorp.in/music/%s", song));
+    //     return ~1;
+    // }
     // if (IsStringContainWords(text, "aplay") && (GetPlayerAdminLevel(playerid) > 0 || DJ:IsPlayer(playerid))) {
     //     new song[128];
     //     sscanf(text, "s[128]", song);
@@ -337,7 +337,7 @@ hook OnMathResponse(playerid, const response[], offset) {
 }
 
 CMD:vsay(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) < 1) return 0;
+    if (GetPlayerVIPLevel(playerid) < 1) return 0;
     if (isnull(params)) {
         SendClientMessageEx(playerid, -1, "{4286f4}[Alexa VIP]: {FFFFEE}what to send?");
         return ~1;

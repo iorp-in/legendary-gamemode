@@ -1535,11 +1535,9 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "race system") && GetPlayerVIPLevel(playerid) > 0) {
-        Race:MainMenu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!IsStringSame(text, "race system")) return 1;
+    Race:MainMenu(playerid);
+    return ~1;
 }
 
 stock Race:Start(raceid, bool:countdown = true) {

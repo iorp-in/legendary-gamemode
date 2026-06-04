@@ -151,13 +151,13 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
     if (newstate == PLAYER_STATE_DRIVER) {
         new fId = StaticVehicle:GetFactionID(StaticVehicle:GetIDbyPlayerID(playerid));
         if (fId != Faction:GetPlayerFID(playerid) && fId != -1) {
-            if (GetPlayerAdminLevel(playerid) < 8) RemovePlayerFromVehicle(playerid);
+            if (GetPlayerAdminLevel(playerid) != 3) RemovePlayerFromVehicle(playerid);
             new Message[512];
             format(Message, sizeof(Message), "{4286f4}[%s]:{e9967a} you are not authorize to access this vehicle", Faction:GetName(fId));
             return SendClientMessageEx(playerid, -1, Message);
         }
         if (fId == Faction:GetPlayerFID(playerid) && !Faction:IsPlayerSigned(playerid) && fId != -1) {
-            if (GetPlayerAdminLevel(playerid) < 8) RemovePlayerFromVehicle(playerid);
+            if (GetPlayerAdminLevel(playerid) != 3) RemovePlayerFromVehicle(playerid);
             new Message[512];
             format(Message, sizeof(Message), "{4286f4}[%s]:{e9967a}You need to sign in to access the vehicle", Faction:GetName(fId));
             return SendClientMessageEx(playerid, -1, Message);
@@ -185,7 +185,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "static vehicle system") || GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "static vehicle system")) return 1;
     StaticVehicle:AdminPanel(playerid);
     return ~1;
 }

@@ -641,12 +641,22 @@ FlexDialog:BusinessDirect(playerid, response, listitem, const inputtext[], shopi
     return 1;
 }
 
-hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (GetPlayerAdminLevel(playerid) >= 8 && IsStringContainWords(text, "business system")) {
-        DynamicShopBusiness:AdminPanel(playerid);
-        return ~1;
-    }
+ASCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "Bussiness System");
     return 1;
+}
+
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || !IsStringSame("Bussiness System", inputtext)) return 1;
+    DynamicShopBusiness:AdminPanel(playerid);
+    return ~1;
+}
+
+hook OnAlexaResponse(playerid, const cmd[], const text[]) {
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "business system")) return 1;
+    DynamicShopBusiness:AdminPanel(playerid);
+    return ~1;
 }
 
 forward RefillShopStock(playerid, shopid);

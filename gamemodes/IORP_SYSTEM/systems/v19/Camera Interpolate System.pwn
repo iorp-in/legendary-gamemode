@@ -39,7 +39,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "camera interpolate system") || !IsPlayerMasterAdmin(playerid)) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "camera interpolate system")) return 1;
     CameraInterpolate:Menu(playerid);
     return ~1;
 }

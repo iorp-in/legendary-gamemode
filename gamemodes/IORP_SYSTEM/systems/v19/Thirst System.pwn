@@ -352,22 +352,11 @@ stock ResetPlayerSleep(playerid) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "hide motive, hide motives")) {
-        HideMotives(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "show motive, show motives")) {
-        ShowMotives(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "sleep mode")) {
-        ActivateSleep(playerid);
-        return ~1;
-    } else if (IsStringContainWords(text, "awake mode")) {
-        DeactivateSleep(playerid);
-        return ~1;
-    }
-    //    if (IsStringContainWords(text, "reset sleep") && GetPlayerAdminLevel(playerid) == 10) {
+    if (IsStringSame(text, "hide motives")) { HideMotives(playerid); return ~1; }
+    if (IsStringSame(text, "show motives")) { ShowMotives(playerid); return ~1; }
+    if (IsStringSame(text, "sleep mode")) { ActivateSleep(playerid); return ~1; }
+    if (IsStringSame(text, "awake mode")) { DeactivateSleep(playerid); return ~1; }
+    //    if (IsStringContainWords(text, "reset sleep") && GetPlayerAdminLevel(playerid) == 3) {
     //        new extraid;
     //        if (sscanf(GetNextWordFromString(text, "for"), "u", extraid)) extraid = playerid;
     //        if (!IsPlayerConnected(extraid)) extraid = playerid;
@@ -375,7 +364,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     //        SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}you have reseted %s sleep time", GetPlayerNameEx(extraid)));
     //        SendClientMessage(extraid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}your sleep time has been reseted by admin %s", GetPlayerNameEx(playerid)));
     //        return ~1;
-    //    } else if (IsStringContainWords(text, "reset motive") && GetPlayerAdminLevel(playerid) == 10) {
+    //    } else if (IsStringContainWords(text, "reset motive") && GetPlayerAdminLevel(playerid) == 3) {
     //        new extraid;
     //        if (sscanf(GetNextWordFromString(text, "for"), "u", extraid)) extraid = playerid;
     //        if (!IsPlayerConnected(extraid)) extraid = playerid;
@@ -385,7 +374,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     //        SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}you have reseted %s motive states", GetPlayerNameEx(extraid)));
     //        SendClientMessage(extraid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}your player motive has been reseted by admin %s", GetPlayerNameEx(playerid)));
     //        return ~1;
-    //    } else if (IsStringContainWords(text, "give motive disease") && GetPlayerAdminLevel(playerid) == 10) {
+    //    } else if (IsStringContainWords(text, "give motive disease") && GetPlayerAdminLevel(playerid) == 3) {
     //        new extraid;
     //        if (sscanf(GetNextWordFromString(text, "for"), "u", extraid)) extraid = playerid;
     //        if (!IsPlayerConnected(extraid)) extraid = playerid;
@@ -647,13 +636,13 @@ stock Motive:SetPercentage(playerid, motiveid, percent) {
     return 1;
 }
 
-hook ApcpOnInit(playerid, targetid, page) {
+APCP:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
     APCP:AddCommand(playerid, "Motives");
     return 1;
 }
 
-hook ApcpOnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
+APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response) return 1;
     if (IsStringSame("Motives", inputtext)) {
         Motive:ShowMotives(playerid, targetid);
@@ -699,7 +688,7 @@ FlexDialog:DocMotives(doctorid, response, motiveid, const inputtext[], patientid
         Backpack:PopItem(backPackId, medicineid, 1);
         return 1;
     }
-    if (GetPlayerAdminLevel(doctorid) >= 8) return Motive:ManagePlayer(doctorid, patientid, motiveid);
+    if (GetPlayerAdminLevel(doctorid) == 3) return Motive:ManagePlayer(doctorid, patientid, motiveid);
     return 1;
 }
 

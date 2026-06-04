@@ -177,7 +177,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "drop gun system") || !IsPlayerMasterAdmin(playerid)) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "drop gun system")) return 1;
     GunDrop:AdminMenu(playerid);
     return ~1;
 }

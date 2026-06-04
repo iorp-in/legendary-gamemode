@@ -108,8 +108,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 // Alexa Achievement
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (GetPlayerVIPLevel(playerid) < 1) return 1;
-    if (!IsStringContainWords(text, "achievements")) return 1;
+    if (!IsStringSame(text, "achievements")) return 1;
     InitAchievementList(playerid);
     return ~1;
 }

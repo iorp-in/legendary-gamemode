@@ -46,7 +46,7 @@ stock UCP:AddCommand(playerid, const command[], bool:top = false) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (strcmp("pocket", cmd) || GetPlayerAdminLevel(playerid) < 1) return 1;
+    if (!IsStringSame("pocket", cmd)) return 1;
     UCP:Init(playerid);
     return ~1;
 }
@@ -167,4 +167,4 @@ stock UCP:PocketMenu(playerid) {
 //     return 1;
 // }
 
-//#snippet init_ucp UCP:OnInit(playerid, page) {\n\tif (page != 0) return 1;\n\tUCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nUCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0) return 1;\n\tif (IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_ucp UCP:OnInit(playerid, page) {\n\tif (page != 0) return 1;\n\tUCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nUCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

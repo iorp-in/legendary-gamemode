@@ -202,7 +202,7 @@ FlexDialog:EventMainMenu(playerid, response, listitem, const inputtext[], extrai
     if (!response) return 1;
     new eventid = listitem;
     if (IsStringSame("Leave", inputtext)) return Event:Leave(playerid);
-    if (GetPlayerAdminLevel(playerid) > 3) return Event:AdminMenu(playerid, eventid);
+    if (GetPlayerAdminLevel(playerid) == 3) return Event:AdminMenu(playerid, eventid);
     if (GetPlayerScore(playerid) < Event:GetMinimumScore(eventid)) {
         SendClientMessage(playerid, -1, "{F1C40F}Gaming Zone:{FFFFFF} you does not have minimum score required for this event.");
         Event:MainMenu(playerid);
@@ -305,7 +305,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!Event:IsInEvent(playerid) || !Event:GetVehicleAuth(playerid) || strcmp(cmd, "espawn")) return 1;
+    if (!Event:IsInEvent(playerid) || !Event:GetVehicleAuth(playerid) || !IsStringSame(cmd, "espawn")) return 1;
     new Vehicle[50], VehicleID, ColorOne = -1, ColorTwo = -1;
     sscanf(GetNextWordFromString(text, "espawn", 1), "s[32]", Vehicle);
     sscanf(GetNextWordFromString(text, "espawn", 2), "D(1)", ColorOne);

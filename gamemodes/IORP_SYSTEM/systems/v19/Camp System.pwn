@@ -175,7 +175,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "removecamp") || GetPlayerAdminLevel(playerid) < 1) return 1;
+    if (GetPlayerAdminLevel(playerid) < 1 || !IsStringContainWords(text, "removecamp")) return 1;
     new targetid;
     if (sscanf(GetNextWordFromString(text, "removecamp"), "u", targetid)) {
         AlexaMsg(playerid, "/alexa removecamp playerid", "Usage");

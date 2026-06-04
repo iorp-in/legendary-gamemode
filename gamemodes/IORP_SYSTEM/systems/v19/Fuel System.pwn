@@ -894,16 +894,13 @@ ASCP:OnInit(playerid, page) {
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Fuel System", inputtext)) {
-        PumpBusiness:AdminMenu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!response || !IsStringSame("Fuel System", inputtext)) return 1;
+    PumpBusiness:AdminMenu(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "fuel system") || GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "fuel system")) return 1;
     PumpBusiness:AdminMenu(playerid);
     return ~1;
 }
@@ -1023,12 +1020,14 @@ stock PumpBusiness:Access(playerid, bussid) {
         strcat(string, "Sale To Friend\n");
         strcat(string, "Sale To Government\n");
     }
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Owner\t%s\n", PumpBusiness:GetOwner(bussid)));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Sale Price\t%s\n", FormatCurrency(PumpBusiness:GetSalePrice(bussid))));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Teleport To\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Update Cordinates\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Reset\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Remove\n");
+    if (IsPlayerMasterAdmin(playerid)) {
+        strcat(string, sprintf("Owner\t%s\n", PumpBusiness:GetOwner(bussid)));
+        strcat(string, sprintf("Sale Price\t%s\n", FormatCurrency(PumpBusiness:GetSalePrice(bussid))));
+        strcat(string, "Teleport To\n");
+        strcat(string, "Update Cordinates\n");
+        strcat(string, "Reset\n");
+        strcat(string, "Remove\n");
+    }
     return FlexPlayerDialog(playerid, "PumpMenuAccess", DIALOG_STYLE_TABLIST, "{4286f4}[Fuel System]: {FFFFEE}Manage Fuel Business", string, "Select", "Close", bussid);
 }
 
@@ -1207,10 +1206,12 @@ stock PumpBusiness:MenuManagePump(playerid, pumpid) {
     strcat(string, sprintf("Fuel Price\t$%s\n", FormatCurrency(PumpBusiness:GetPumpFuelPrice(pumpid))));
     strcat(string, sprintf("Refilling\t%s\n", PumpBusiness:GetPumpRefillingStatus(pumpid) ? ("Enabled") : ("Disabled")));
     strcat(string, sprintf("Filling\t%s\n", PumpBusiness:GetPumpFillingStatus(pumpid) ? ("Enabled") : ("Disabled")));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Teleport To\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Store ID\t%d\n", PumpBusiness:GetPumpBussID(pumpid)));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Stored Fuel\t%d\n", PumpBusiness:GetPumpFuel(pumpid)));
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, sprintf("Max Capacity\t%d\n", PumpBusiness:GetPumpCapacity(pumpid)));
+    if (IsPlayerMasterAdmin(playerid)) {
+        strcat(string, "Teleport To\n");
+        strcat(string, sprintf("Store ID\t%d\n", PumpBusiness:GetPumpBussID(pumpid)));
+        strcat(string, sprintf("Stored Fuel\t%d\n", PumpBusiness:GetPumpFuel(pumpid)));
+        strcat(string, sprintf("Max Capacity\t%d\n", PumpBusiness:GetPumpCapacity(pumpid)));
+    }
     return FlexPlayerDialog(playerid, "PumpMenuManagePump", DIALOG_STYLE_TABLIST, "{4286f4}[Fuel System]: {FFFFEE}Manage PUMP", string, "Select", "Close", pumpid);
 }
 
@@ -1476,10 +1477,8 @@ FlexDialog:FuelMenuShowList(playerid, response, listitem, const inputtext[], pag
     new bussid = strval(inputtext);
     new string[512];
     strcat(string, "Turn on GPS\n");
-    if (GetPlayerAdminLevel(playerid) > 8) {
-        strcat(string, "Teleport Me\n");
-        strcat(string, "Admin Panel\n");
-    }
+    if (GetPlayerVIPLevel(playerid) > 0 || GetPlayerAdminLevel(playerid) > 0) strcat(string, "Teleport Me\n");
+    if (IsPlayerMasterAdmin(playerid)) strcat(string, "Admin Panel\n");
 
     FlexPlayerDialog(
         playerid, "FuelMenuShowListEx", DIALOG_STYLE_LIST, "Food Stall",
@@ -1494,11 +1493,13 @@ FlexDialog:FuelMenuShowListEx(playerid, response, listitem, const inputtext[], b
     if (IsStringSame(inputtext, "Teleport Me")) {
         TeleportPlayer(playerid, PumpBusiness:data[bussid][PumpBusiness:location][0], PumpBusiness:data[bussid][PumpBusiness:location][1], PumpBusiness:data[bussid][PumpBusiness:location][2], PumpBusiness:data[bussid][PumpBusiness:vwint][0], PumpBusiness:data[bussid][PumpBusiness:vwint][1]);
         AlexaMsg(playerid, "you are teleported to gps location");
+        return 1;
     }
 
     if (IsStringSame(inputtext, "Turn on GPS")) {
         MarkGPS(playerid, PumpBusiness:data[bussid][PumpBusiness:location][0], PumpBusiness:data[bussid][PumpBusiness:location][1], PumpBusiness:data[bussid][PumpBusiness:location][2]);
         AlexaMsg(playerid, "fuel station location has been marked on your map");
+        return 1;
     }
 
     if (IsStringSame(inputtext, "Admin Panel")) return PumpBusiness:Access(playerid, bussid);

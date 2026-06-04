@@ -45,15 +45,15 @@ stock ASCP:AddCommand(playerid, const command[], bool:top = false) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (strcmp("ascp", cmd) || GetPlayerAdminLevel(playerid) != 10) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame("ascp", cmd)) return 1;
     ASCP:Init(playerid);
     return ~1;
 }
 
 cmd:ascp(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) != 10) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     ASCP:Init(playerid);
     return 1;
 }
 
-//#snippet init_ascp ASCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tASCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_ascp ASCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tASCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

@@ -33,7 +33,7 @@ cmd:changename(playerid, const params[]) {
     SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} your request has been sent to management, please wait until you hear from them.");
     Discord:SendStaff(sprintf("%s [%d] has requested name change to: %s\nto approve type this request type :approvename %s or :rejectname %s\n\n<@&597292999227211777>", GetPlayerNameEx(playerid), playerid, nName, GetPlayerNameEx(playerid), GetPlayerNameEx(playerid)));
     foreach(new i:Player) {
-        if (GetPlayerAdminLevel(i) >= 5) {
+        if (IsPlayerMasterAdmin(i)) {
             SendClientMessage(i, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} %s requested new name: %s", GetPlayerNameEx(playerid), nName));
         }
     }

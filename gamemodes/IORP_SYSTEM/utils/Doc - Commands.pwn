@@ -86,22 +86,34 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 
     if (IsStringSame("Alexa Commands", inputtext)) {
         new info[2000];
-        strcat(info, "{db6600}------------------------------ Alexa Commands ------------------------------");
-        strcat(info, "{FFFFEE}Use {db6600}/alexa [command]\n\n");
-        strcat(info, "{db6600}General:{FFFFEE} gps, unbug me, chat animation\n");
+        strcat(info, "{db6600}>> Alexa Commands - {FFFFEE}use {db6600}/alexa [command]\n");
+        strcat(info, "{db6600}General:{FFFFEE} help, unbug me, chat animation, achievements, race system\n");
+        strcat(info, "{db6600}General:{FFFFEE} hide/show motives, sleep/awake mode\n");
+        strcat(info, "{db6600}Utilities:{FFFFEE} pocket, gps, patch status, clean/fix screen\n");
+        strcat(info, "{db6600}Event:{FFFFEE} skyfall, espawn\n");
 
         if (GetPlayerVIPLevel(playerid) > 0) {
-            strcat(info, "{db6600}Phone:{FFFFEE} phone, tablet, dial, answer, pickup, hangup, my number\n");
-            strcat(info, "{db6600}Vehicles:{FFFFEE} mycars, vipspawn, viprepair, viprefuel, vipmod\n");
-            strcat(info, "{FFFFEE}engine, lights, alarm, bonnet, boot, windows, lock doors\n");
-            strcat(info, "{db6600}Character:{FFFFEE} license, change skin\n");
+            strcat(info, "\n");
+            strcat(info, "{db6600}>> VIP Commands\n");
+            strcat(info, "{db6600}Phone:{FFFFEE} phone, tablet, dial, answer, pickup, hangup, my number, whatsapp\n");
+            strcat(info, "{db6600}Vehicles:{FFFFEE} my cars, vipspawn, viprepair, viprefuel, vipmod, auto/manual gear\n");
+            strcat(info, "{db6600}Vehicle :{FFFFEE} neon, xenon, halloween, engine, lights, bonnet, doors, alarm, windows \n");
+            strcat(info, "{db6600}Character:{FFFFEE} license, change skin, family\n");
             strcat(info, "{db6600}Property:{FFFFEE} viphouseint, faction locker, factions\n");
-            strcat(info, "{db6600}Entertainment:{FFFFEE} dj panel, mp3, tts, play, minigames\n");
-            strcat(info, "{db6600}Utilities:{FFFFEE} pocket, patch status, clean screen\n");
-            strcat(info, "{db6600}VIP:{FFFFEE} vipweather, vipflamminghand, vipghostrider\n");
+            strcat(info, "{db6600}Entertainment:{FFFFEE} gamezone, minigames, race system\n");
+            strcat(info, "{db6600}Features:{FFFFEE} vipweather, vipflamminghand, vipghostrider, math\n");
         }
 
-        strcat(info, "{db6600}-----------------------------------------------------------------------------");
+        if (GetPlayerAdminLevel(playerid) > 0) {
+            strcat(info, "\n");
+            strcat(info, "{db6600}>> Admin Commands {FFFFEE}\n");
+            strcat(info, "respawn, tp, goto, get, getvehicle, gotovehicle, sethealth, setarmour, freeze/unfreeze\n");
+            strcat(info, "enable/disable management tag\n");
+            if (GetPlayerAdminLevel(playerid) == 3) {
+                strcat(info, "spawn, sumo map, wanted database, enable/disable global chat\n");
+            }
+        }
+
         ShowInfo(playerid, "Alexa Commands", info);
         return ~1;
     }

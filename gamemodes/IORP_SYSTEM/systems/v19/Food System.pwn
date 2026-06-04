@@ -1562,7 +1562,6 @@ stock FoodStall:ShowMenuOwner(playerid, foodid) {
     new string[512];
     strcat(string, "Open Food Menu\n");
     strcat(string, "Manage Business\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Admin Panel\n");
     return FlexPlayerDialog(playerid, "ShowMenuOwner", DIALOG_STYLE_LIST, "Food Stall", string, "Select", "Close", foodid);
 }
 
@@ -1570,7 +1569,6 @@ FlexDialog:ShowMenuOwner(playerid, response, listitem, const inputtext[], foodid
     if (!response) return 1;
     if (IsStringSame(inputtext, "Open Food Menu")) return FoodStall:OrderMenu(playerid);
     if (IsStringSame(inputtext, "Manage Business")) return FoodStall:Access(playerid, foodid);
-    if (IsStringSame(inputtext, "Admin Panel")) return FoodStall:AdminMenu(playerid);
     return 1;
 }
 
@@ -1599,7 +1597,7 @@ stock FoodStall:Access(playerid, foodid) {
         strcat(string, "Sell to friend\n");
         strcat(string, "Sell to Government\n");
     }
-    if (GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsPlayerMasterAdmin(playerid)) {
         strcat(string, sprintf("Owner\t%s\n", FoodStall:GetOwner(foodid)));
         strcat(string, sprintf("Price\t$%s\n", FormatCurrency(FoodStall:GetPrice(foodid))));
         strcat(string, "Refill Stock\n");
@@ -1879,7 +1877,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "food system") || GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "food system")) return 1;
     FoodStall:AdminMenu(playerid);
     return ~1;
 }
@@ -2062,10 +2060,8 @@ FlexDialog:FoodMenuShowList(playerid, response, listitem, const inputtext[], pag
     new foodid = strval(inputtext);
     new string[512];
     strcat(string, "Turn on GPS\n");
-    if (GetPlayerAdminLevel(playerid) > 8) {
-        strcat(string, "Teleport Me\n");
-        strcat(string, "Admin Panel\n");
-    }
+    if (GetPlayerVIPLevel(playerid) > 0 || GetPlayerAdminLevel(playerid) > 0) strcat(string, "Teleport Me\n");
+    if (IsPlayerMasterAdmin(playerid)) strcat(string, "Admin Panel\n");
 
     FlexPlayerDialog(
         playerid, "FoodMenuShowListEx", DIALOG_STYLE_LIST, "Food Stall",

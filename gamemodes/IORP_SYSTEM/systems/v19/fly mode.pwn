@@ -204,7 +204,7 @@ stock StartFlyMode(playerid) {
     return 1;
 }
 CMD:flyhelp(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     SendClientMessageEx(playerid, -1, "/flymode - to activate flymode");
     SendClientMessageEx(playerid, -1, "/fmspeed - set camera speed");
     SendClientMessageEx(playerid, -1, "/fmaccel - set camera accelate speed");
@@ -213,14 +213,14 @@ CMD:flyhelp(playerid, const params[]) {
     return 1;
 }
 CMD:flymode(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     // Place the player in and out of edit mode
     if (FlyMode[playerid]) CancelFlyMode(playerid);
     else StartFlyMode(playerid);
     return 1;
 }
 CMD:fmspeed(playerid, arg[], help) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     new Float:newspeed;
     sscanf(arg, "F(-1.0)", newspeed);
     if (newspeed == -1.0)
@@ -234,7 +234,7 @@ CMD:fmspeed(playerid, arg[], help) {
     return 1;
 }
 CMD:fmaccel(playerid, arg[], help) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     new Float:newacc;
     sscanf(arg, "F(-1.0)", newacc);
     if (newacc == -1.0)
@@ -248,13 +248,13 @@ CMD:fmaccel(playerid, arg[], help) {
     return 1;
 }
 CMD:fmtoggle(playerid, arg[], help) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     noclipdata[playerid][accel] = !noclipdata[playerid][accel];
     SendClientMessageEx(playerid, -1, sprintf("Flymode acceleration toggled %s", noclipdata[playerid][accel] ? ("on") : ("off")));
     return 1;
 }
 CMD:camsave(playerid, const params[]) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 0;
+    if (!IsPlayerMasterAdmin(playerid)) return 0;
     const Float:fScale = 5.0;
     new Float:fPX, Float:fPY, Float:fPZ, Float:fVX, Float:fVY, Float:fVZ;
     GetPlayerCameraPos(playerid, fPX, fPY, fPZ);

@@ -112,7 +112,7 @@ CMD:pspeed(playerid, params[]) {
 }
 
 CMD:pcreate(playerid, params[]) {
-    if (GetPlayerAdminLevel(playerid) != 10) return 1;
+    if (GetPlayerAdminLevel(playerid) != 3) return 1;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
     new Float:x, Float:y, Float:z, Float:a;
     GetPlayerPos(playerid, x, y, z);
@@ -134,7 +134,7 @@ CMD:pend(playerid, params[]) {
 }
 
 CMD:pdestroy(playerid, params[]) {
-    if (GetPlayerAdminLevel(playerid) != 10) return 1;
+    if (GetPlayerAdminLevel(playerid) != 3) return 1;
     if (!strlen(params) || strlen(params) > 5) return SendClientMessageEx(playerid, -1, "Invalid ID.");
     new id = strval(params);
     if (!IsValidPongGame(id)) return SendClientMessageEx(playerid, -1, "ID does not exist.");
@@ -143,7 +143,7 @@ CMD:pdestroy(playerid, params[]) {
 }
 
 CMD:pinfo(playerid, params[]) {
-    if (GetPlayerAdminLevel(playerid) != 10) return 1;
+    if (GetPlayerAdminLevel(playerid) != 3) return 1;
     new id = GetPlayerPongArea(playerid);
     if (id == -1) return SendClientMessageEx(playerid, -1, "There's no Pong Game nearby.");
     new text[80];
@@ -156,7 +156,7 @@ CMD:phelp(playerid, params[]) {
     SendClientMessageEx(playerid, 0xCCFFDD56, "[PONG] Commands");
     SendClientMessageEx(playerid, 0xCCFFDD56, "/phost|phostlocal|pjoin|pstart|pexit|pend");
     SendClientMessageEx(playerid, 0xCCFFDD56, "/pscore|prounds|pspeed [value]");
-    if (GetPlayerAdminLevel(playerid) == 10) {
+    if (GetPlayerAdminLevel(playerid) == 3) {
         SendClientMessageEx(playerid, 0xAAFFCC88, "[PONG] Admin Commands");
         SendClientMessageEx(playerid, 0xAAFFCC88, "/pcreate|pinfo");
         SendClientMessageEx(playerid, 0xAAFFCC88, "/pdestroy [id]");

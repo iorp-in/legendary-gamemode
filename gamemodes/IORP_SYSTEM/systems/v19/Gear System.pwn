@@ -209,25 +209,24 @@ hook OnPlayerUpdate(playerid) {
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     if (GetPlayerVIPLevel(playerid) < 1) return 1;
-    if (IsStringContainWords(text, "auto gear")) {
+    if (IsStringSame(text, "auto gear")) {
         if (gs_transmission[playerid] == 0) {
-            SendClientMessage(playerid, 0x00FF00FF, "Alexa:type manual to change to manual gs_transmission.");
+            AlexaMsg(playerid, "Type: manual gear, to switch transmission");
             return ~1;
         }
         gs_transmission[playerid] = 0;
-        SendClientMessage(playerid, 0x00FF00FF, "Alexa:Transmission:Automatic");
+        AlexaMsg(playerid, "Switch transmission to auto gear");
         return ~1;
     }
 
-    if (IsStringContainWords(text, "manual gear")) {
+    if (IsStringSame(text, "manual gear")) {
         if (gs_transmission[playerid] == 1) {
-            SendClientMessage(playerid, 0x00FF00FF, "Alexa:type auto to change to automatic gs_transmission.");
+            AlexaMsg(playerid, "Type: auto gear, to switch transmission");
             return ~1;
         }
-        gs_transmission[playerid] = 0;
-        SendClientMessage(playerid, 0x00FF00FF, "Alexa:Transmission:Manual");
-        SendClientMessage(playerid, 0x00FF00FF, "Alexa:CONTROLS -  [LALT] CLUTCH || [LALT+W] UP GEAR || [LALT+S] DOWN GEAR");
         gs_transmission[playerid] = 1;
+        AlexaMsg(playerid, "Switch transmission to manual gear");
+        AlexaMsg(playerid, "CONTROLS -  [LALT] CLUTCH || [LALT+W] UP GEAR || [LALT+S] DOWN GEAR");
         return ~1;
     }
     return 1;

@@ -942,7 +942,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     if (BetaTester:IsPlayer(playerid) || IsPlayerMasterAdmin(playerid)) {
-        if (IsStringContainWords(text, "farming system")) {
+        if (IsStringSame(text, "farming system")) {
             Farm:FarmAdminMenu(playerid);
             return ~1;
         }

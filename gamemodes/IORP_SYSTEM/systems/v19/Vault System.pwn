@@ -337,7 +337,7 @@ FlexDialog:MenuVaultoCash(playerid, response, listitem, const inputtext[], vault
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "vault system") || !IsPlayerMasterAdmin(playerid)) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "vault system")) return 1;
     vault:adminpanel(playerid);
     return ~1;
 }

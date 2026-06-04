@@ -92,7 +92,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(cmd, "gps") || !EtShop:IsGpsActive(playerid)) return 1;
+    if (!EtShop:IsGpsActive(playerid) || !IsStringSame(cmd, "gps")) return 1;
     GPS:ShowMenu(playerid);
     return ~1;
 }
@@ -139,7 +139,7 @@ stock GPS:ShowMenu(playerid) {
         }
     }
     if (GPSMarker[playerid][0] != 0) format(string, sizeof string, "%s{FFFFFF}Turn off GPS\t-\t-\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%s{FFFFFF}Add\tNew\tCatergory\n", string);
+    if (IsPlayerMasterAdmin(playerid)) format(string, sizeof string, "%s{FFFFFF}Add\tNew\tCatergory\n", string);
     new title[512];
     format(title, sizeof title, "{F1C40F}IORP GPS: {FFFFFF}select category");
     cache_delete(result);
@@ -192,9 +192,11 @@ stock GPS:ViewSubMenu(playerid, categoryid) {
             format(string, sizeof string, "%s{FFFFFF}%d\t%s\t%.1f\n", string, gID, gName, GetPlayerDistanceFromPoint(playerid, gPos[0], gPos[1], gPos[2]));
         }
     }
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%s{FFFFFF}Rename\tCategory\t-\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%s{FFFFFF}Remove\tCategory\t-\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%s{FFFFFF}Add\tNew\tLocation\n", string);
+    if (IsPlayerMasterAdmin(playerid)) {
+        format(string, sizeof string, "%s{FFFFFF}Rename\tCategory\t-\n", string);
+        format(string, sizeof string, "%s{FFFFFF}Remove\tCategory\t-\n", string);
+        format(string, sizeof string, "%s{FFFFFF}Add\tNew\tLocation\n", string);
+    }
     cache_delete(result);
     return FlexPlayerDialog(playerid, "GpsSubMenu", DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}IORP GPS: {FFFFFF}select location", string, "Select", "Close", categoryid);
 }
@@ -256,10 +258,12 @@ stock GPS:MenuLocationOptions(playerid, locationid) {
         !IsPlayerInHeist(playerid) &&
         !Event:IsInEvent(playerid)
     ) format(string, sizeof string, "%sTeleport Me\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%sTeleport to Location\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%sRename Location\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%sReplace Coordinate\n", string);
-    if (GetPlayerAdminLevel(playerid) >= 8) format(string, sizeof string, "%sRemove Location\n", string);
+    if (IsPlayerMasterAdmin(playerid)) {
+        format(string, sizeof string, "%sTeleport to Location\n", string);
+        format(string, sizeof string, "%sRename Location\n", string);
+        format(string, sizeof string, "%sReplace Coordinate\n", string);
+        format(string, sizeof string, "%sRemove Location\n", string);
+    }
     return FlexPlayerDialog(playerid, "GPSMenuLocationOptions", DIALOG_STYLE_LIST, "IORP GPS: What to do", string, "Select", "Close", locationid);
 }
 

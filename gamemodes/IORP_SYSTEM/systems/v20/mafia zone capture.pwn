@@ -387,7 +387,6 @@ public HealZoneProperty(playerid, propid) {
     return 1;
 }
 
-
 // hook OnPlayerEnterGangZone(playerid, zoneid) {
 //     foreach(new zid:mafiazones) {
 //         if(MafiaZoneSystem:zonedata[zid][MafiaZoneSystem:zoneObjectID] == zoneid) {
@@ -406,16 +405,26 @@ public HealZoneProperty(playerid, propid) {
 //     return 1;
 // }
 
-hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "mafia system") && GetPlayerAdminLevel(playerid) >= 8) {
-        MafiaZoneSystem:AdminPanel(playerid);
-        return 1;
-    }
+ASCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "Mafia System");
     return 1;
 }
 
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || !IsStringSame("Mafia System", inputtext)) return 1;
+    MafiaZoneSystem:AdminPanel(playerid);
+    return ~1;
+}
+
+hook OnAlexaResponse(playerid, const cmd[], const text[]) {
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "mafia system")) return 1;
+    MafiaZoneSystem:AdminPanel(playerid);
+    return ~1;
+}
+
 hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid)) return 1;
     foreach(new zoneid:mafiazones) {
         if (MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:MasterNodeObjectID] == objectid) {
             if (response == EDIT_RESPONSE_FINAL) {

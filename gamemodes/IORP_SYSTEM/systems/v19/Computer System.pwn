@@ -480,7 +480,7 @@ new computer_zones[][computer_zoneinfo] = {
 stock Computer_ReturnPlayerZone(playerid) {
     new playerzone[256] = "Desconocida";
     for (new j; j < sizeof(computer_zones); j++) {
-        if(Computer_IsPlayerInZone(playerid, j)) {
+        if (Computer_IsPlayerInZone(playerid, j)) {
             memcpy(playerzone, computer_zones[j][computer_zone_name], 0, 108);
             break;
         }
@@ -488,10 +488,10 @@ stock Computer_ReturnPlayerZone(playerid) {
     return playerzone;
 }
 stock Computer_IsPlayerInZone(playerid, zoneid) {
-    if(zoneid == -1) return false;
+    if (zoneid == -1) return false;
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x, y, z);
-    if(x >= computer_zones[zoneid][zone_minx] && x < computer_zones[zoneid][zone_maxx] && y >= computer_zones[zoneid][zone_miny] && y < computer_zones[zoneid][zone_maxy] && z >= computer_zones[zoneid][zone_minz] && z < computer_zones[zoneid][zone_maxz] && z < 900.0) return true;
+    if (x >= computer_zones[zoneid][zone_minx] && x < computer_zones[zoneid][zone_maxx] && y >= computer_zones[zoneid][zone_miny] && y < computer_zones[zoneid][zone_maxy] && z >= computer_zones[zoneid][zone_minz] && z < computer_zones[zoneid][zone_maxz] && z < 900.0) return true;
     return false;
 }
 // Text Draws //
@@ -579,18 +579,18 @@ hook OnGameModeInit() {
     DIALOG_RNAMEE = Dialog:GetFreeID();
     DIALOG_RNAMEGG = Dialog:GetFreeID();
     DIALOG_RNAMEG = Dialog:GetFreeID();
-    if(!fexist(load)) dini_Create(load);
-    if(!fexist(load2)) dini_Create(load2);
-    if(!fexist(fbfolder)) dini_Create(fbfolder), fblike = 0, dini_IntSet(fbfolder, "likes", fblike);
+    if (!fexist(load)) dini_Create(load);
+    if (!fexist(load2)) dini_Create(load2);
+    if (!fexist(fbfolder)) dini_Create(fbfolder), fblike = 0, dini_IntSet(fbfolder, "likes", fblike);
     else fblike = dini_Int(fbfolder, "likes");
 
-    if(fexist(load)) ScriptInfo[complete1] = true;
+    if (fexist(load)) ScriptInfo[complete1] = true;
     else return ScriptInfo[complete1] = false, print("\n--------------------------------------"), print(" Computer System By IORP missing folder scriptfiles/computers"), print("--------------------------------------\n");
-    if(fexist(load2)) ScriptInfo[complete2] = true;
+    if (fexist(load2)) ScriptInfo[complete2] = true;
     else return ScriptInfo[complete2] = false, print("\n--------------------------------------"), print(" Computer System By IORP missing folder scriptfiles/computers/users"), print("--------------------------------------\n");
 
-    if(ScriptInfo[complete2] && ScriptInfo[complete1]) ScriptInfo[complete] = true;
-    if(ScriptInfo[complete]) {
+    if (ScriptInfo[complete2] && ScriptInfo[complete1]) ScriptInfo[complete] = true;
+    if (ScriptInfo[complete]) {
         ScriptInfo[complete] = true;
         loadcomputers();
 
@@ -6403,7 +6403,7 @@ hook OnGameModeInit() {
         TextDrawSetProportional(gzmenu[11], 1);
 
         loopp {
-            if(IsPlayerConnected(i)) loaddata(i);
+            if (IsPlayerConnected(i)) loaddata(i);
         }
     }
     return 1;
@@ -6413,7 +6413,7 @@ stock loadcomputers() {
     loopco {
         new file[64];
         format(file, 64, cofolder, i);
-        if(fexist(file) && !ComputerInfo[i][cCreated]) {
+        if (fexist(file) && !ComputerInfo[i][cCreated]) {
             ComputerInfo[i][cX] = dini_Float(file, "X");
             ComputerInfo[i][cY] = dini_Float(file, "Y");
             ComputerInfo[i][cZ] = dini_Float(file, "Z");
@@ -6434,7 +6434,7 @@ stock loadcomputers() {
 hook OnGameModeExit() {
     dini_IntSet(fbfolder, "likes", fblike);
     loopco {
-        if(ComputerInfo[i][cCreated]) {
+        if (ComputerInfo[i][cCreated]) {
             DestroyObject(ComputerInfo[i][cObject]);
             Delete3DTextLabel(computer_ctext[i]);
         }
@@ -6444,10 +6444,10 @@ hook OnGameModeExit() {
 }
 
 CMD:computer(playerid, const params[]) {
-    if(!fexist(load)) dini_Create(load);
-    if(!fexist(load2)) dini_Create(load2);
-    if(!fexist(load)) return SM(playerid, "ERROR: Computer System By IORP missing folder scriptfiles/computers");
-    if(!fexist(load2)) return SM(playerid, "ERROR: Computer System By IORP missing folder scriptfiles/computers/users");
+    if (!fexist(load)) dini_Create(load);
+    if (!fexist(load2)) dini_Create(load2);
+    if (!fexist(load)) return SM(playerid, "ERROR: Computer System By IORP missing folder scriptfiles/computers");
+    if (!fexist(load2)) return SM(playerid, "ERROR: Computer System By IORP missing folder scriptfiles/computers/users");
     ShowPlayerDialogEx(playerid, DIALOG_COMPUTERHELP, 0, DIALOG_STYLE_LIST, "{00BFFF}Computer cmds", "{37FF00}Buy Computer 550$\n{84FF00}Edit Computer place\n{CCFF00}Sell Computer\n{FFEE00}Where is my computer?\n{FFEE00}Lock/Unlock\n{FF0000}RCON cmds", "Select", "Cancel");
     return 1;
 }
@@ -6459,8 +6459,8 @@ stock destroy(playerid, const params[]) {
     format(pfile, 64, plfolder, params);
     pid = dini_Int(pfile, "PCID");
     format(cfile, 128, cofolder, pid);
-    if(fexist(pfile)) {
-        if(IsPlayerConnected(getid(params))) { rsellcom(getid(params)), MDES(playerid); } else { DestroyObject(ComputerInfo[pid][cObject]), Delete3DTextLabel(computer_ctext[pid]), dini_Remove(pfile), dini_Remove(cfile), rconlist(playerid); }
+    if (fexist(pfile)) {
+        if (IsPlayerConnected(getid(params))) { rsellcom(getid(params)), MDES(playerid); } else { DestroyObject(ComputerInfo[pid][cObject]), Delete3DTextLabel(computer_ctext[pid]), dini_Remove(pfile), dini_Remove(cfile), rconlist(playerid); }
     } else ShowPlayerDialogEx(playerid, DIALOG_RNAMED, 0, DIALOG_STYLE_INPUT, "{4B05FC}Destroy Computer", "Type name of owner", "Destroy", "Cancel"), TDC(playerid);
     return 1;
 }
@@ -6472,8 +6472,8 @@ stock reditc(playerid, const params[]) {
     pid = dini_Int(pfile, "PCID");
     format(cfile, 128, cofolder, pid);
 
-    if(fexist(pfile)) {
-        if(!IsPlayerInRangeOfPoint(playerid, disfcom * 2, ComputerInfo[pid][cX], ComputerInfo[pid][cY], ComputerInfo[pid][cZ])) return YNC(playerid);
+    if (fexist(pfile)) {
+        if (!IsPlayerInRangeOfPoint(playerid, disfcom * 2, ComputerInfo[pid][cX], ComputerInfo[pid][cY], ComputerInfo[pid][cZ])) return YNC(playerid);
         EditObject(playerid, ComputerInfo[pid][cObject]);
     } else ShowPlayerDialogEx(playerid, DIALOG_RNAMEE, 0, DIALOG_STYLE_INPUT, "{4B05FC}Edit Computer", "Type name of owner", "Edit", "Cancel"), TDC(playerid);
     return 1;
@@ -6486,8 +6486,8 @@ stock rgotoc(playerid, const params[]) {
     pid = dini_Int(pfile, "PCID");
     format(cfile, 128, cofolder, pid);
 
-    if(fexist(pfile)) {
-        if(!IsPlayerInAnyVehicle(playerid)) SetPlayerPos(playerid, ComputerInfo[pid][cX], ComputerInfo[pid][cY], ComputerInfo[pid][cZ] + 2);
+    if (fexist(pfile)) {
+        if (!IsPlayerInAnyVehicle(playerid)) SetPlayerPos(playerid, ComputerInfo[pid][cX], ComputerInfo[pid][cY], ComputerInfo[pid][cZ] + 2);
         else SetVehiclePosEx(GetPlayerVehicleID(playerid), ComputerInfo[pid][cX], ComputerInfo[pid][cY], ComputerInfo[pid][cZ] + 2);
     } else ShowPlayerDialogEx(playerid, DIALOG_RNAMEG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Goto Computer", "Type name of owner", "Goto", "Cancel"), TDC(playerid);
     return 1;
@@ -6507,8 +6507,8 @@ stock getco(playerid, const params[]) {
     pPos[0] += (disfcom * floatsin(-pPos[3], degrees));
     pPos[1] += (disfcom * floatcos(-pPos[3], degrees));
 
-    if(fexist(pfile)) {
-        if(!IsPlayerInAnyVehicle(playerid)) {
+    if (fexist(pfile)) {
+        if (!IsPlayerInAnyVehicle(playerid)) {
             SetObjectPos(ComputerInfo[pid][cObject], pPos[0], pPos[1], pPos[2] - 1.1);
             SetObjectRot(ComputerInfo[pid][cObject], 0, 0, pPos[3] - 90.0);
             EditObject(playerid, ComputerInfo[pid][cObject]);
@@ -6518,13 +6518,10 @@ stock getco(playerid, const params[]) {
 }
 
 stock buycom(playerid) {
-    if(PlayerInfo[playerid][haveone]) return YAO(playerid);
-    if(GetPlayerAdminLevel(playerid) == 10) {} else {
-        if(GetPlayerMoney(playerid) < computercost) return NEM(playerid);
-        GivePlayerCash(playerid, -computercost);
-    }
-    if(IsPlayerInAnyVehicle(playerid))
-        return YTV(playerid);
+    if (PlayerInfo[playerid][haveone]) return YAO(playerid);
+    if (GetPlayerMoney(playerid) < computercost) return NEM(playerid);
+    GivePlayerCash(playerid, -computercost, "Purchased computer");
+    if (IsPlayerInAnyVehicle(playerid)) return YTV(playerid);
 
     new Float:pPos[4];
     GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
@@ -6538,18 +6535,18 @@ stock buycom(playerid) {
     return 1;
 }
 stock editcomplace(playerid) {
-    if(!PlayerInfo[playerid][haveone]) return YDC(playerid);
-    if(IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
+    if (!PlayerInfo[playerid][haveone]) return YDC(playerid);
+    if (IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
         EditObject(playerid, ComputerInfo[PlayerInfo[playerid][computer]][cObject]);
     } else YNTY(playerid);
     return 1;
 }
 stock sellcom(playerid) {
-    if(!PlayerInfo[playerid][haveone]) return YDC(playerid);
-    if(IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer]) && GetPlayerAdminLevel(playerid) == 10) {} else if(IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
-        GivePlayerCash(playerid, computercost - 1);
+    if (!PlayerInfo[playerid][haveone]) return YDC(playerid);
+    if (IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer]) && IsPlayerMasterAdmin(playerid)) {} else if (IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
+        GivePlayerCash(playerid, computercost - 1, "Sold computer");
     }
-    if(IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
+    if (IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
         DestroyObject(ComputerInfo[PlayerInfo[playerid][computer]][cObject]), ComputerInfo[PlayerInfo[playerid][computer]][cZ] += 1000;
         Delete3DTextLabel(computer_ctext[PlayerInfo[playerid][computer]]);
         removecomputer(playerid);
@@ -6559,7 +6556,7 @@ stock sellcom(playerid) {
     return 1;
 }
 stock rsellcom(playerid) {
-    if(!PlayerInfo[playerid][haveone]) return YDC(playerid);
+    if (!PlayerInfo[playerid][haveone]) return YDC(playerid);
     DestroyObject(ComputerInfo[PlayerInfo[playerid][computer]][cObject]), ComputerInfo[PlayerInfo[playerid][computer]][cZ] += 1000;
     Delete3DTextLabel(computer_ctext[PlayerInfo[playerid][computer]]);
     removecomputer(playerid);
@@ -6572,8 +6569,8 @@ stock removecomputer(playerid) {
     ComputerInfo[PlayerInfo[playerid][computer]][cCreated] = false;
 }
 stock gpscom(playerid) {
-    if(!PlayerInfo[playerid][haveone]) return YDC(playerid);
-    if(!IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
+    if (!PlayerInfo[playerid][haveone]) return YDC(playerid);
+    if (!IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
         SetPlayerCheckpoint(playerid, ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ], disfcom);
     } else YCTY(playerid);
     return 1;
@@ -6581,9 +6578,9 @@ stock gpscom(playerid) {
 stock lockunlock(playerid) {
     new file[64];
     format(file, 64, cofolder, PlayerInfo[playerid][computer]);
-    if(!PlayerInfo[playerid][haveone]) return YDC(playerid);
-    if(IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
-        if(ComputerInfo[PlayerInfo[playerid][computer]][Locked]) ComputerInfo[PlayerInfo[playerid][computer]][Locked] = false, YNTRR(playerid), dini_IntSet(file, "Locked", false);
+    if (!PlayerInfo[playerid][haveone]) return YDC(playerid);
+    if (IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) {
+        if (ComputerInfo[PlayerInfo[playerid][computer]][Locked]) ComputerInfo[PlayerInfo[playerid][computer]][Locked] = false, YNTRR(playerid), dini_IntSet(file, "Locked", false);
         else ComputerInfo[PlayerInfo[playerid][computer]][Locked] = true, YNTRT(playerid), dini_IntSet(file, "Locked", true);
         refleshclabel(PlayerInfo[playerid][computer]);
     } else YNTY(playerid);
@@ -6597,8 +6594,8 @@ stock removecom(comid) {
     new file[64];
     format(file, 64, plfolder, dini_Get(file2, "cOwner"));
 
-    if(fexist(file2)) dini_Remove(file2);
-    if(fexist(file)) dini_Remove(file);
+    if (fexist(file2)) dini_Remove(file2);
+    if (fexist(file)) dini_Remove(file);
 
 }
 #define fspeed 3.000
@@ -6607,7 +6604,7 @@ stock CreateComputer(playerid, Float:x, Float:y, Float:z, Float:a) {
 
         new file[64];
         format(file, 64, cofolder, i);
-        if(!fexist(file)) {
+        if (!fexist(file)) {
             ComputerInfo[i][cObject] = CreateObject(COMPUTER_OBJECT, x, y, z, 0, 0, a);
 
             format(ComputerInfo[i][cOwner], 24, "%s", Computer_PlayerName(playerid));
@@ -6660,7 +6657,7 @@ stock CreateComputer(playerid, Float:x, Float:y, Float:z, Float:a) {
 }
 
 hook OnPlayerDisconnect(playerid, reason) {
-    if(IsPlayerNPC(playerid)) return 1;
+    if (IsPlayerNPC(playerid)) return 1;
     savedata(playerid);
     return 1;
 }
@@ -6682,7 +6679,7 @@ loaddata(playerid) {
     new file2[64];
     format(file2, 64, plfolder, Computer_PlayerName(playerid));
 
-    if(fexist(file2)) {
+    if (fexist(file2)) {
         PlayerInfo[playerid][haveone] = true;
         PlayerInfo[playerid][computer] = dini_Int(file2, "PCID");
         PlayerInfo[playerid][lang] = dini_Int(file2, "LANG");
@@ -7202,7 +7199,7 @@ loaddata(playerid) {
 #define plY 271.333374
 
 hook OnPlayerLogin(playerid) {
-    if(IsPlayerNPC(playerid)) return 1;
+    if (IsPlayerNPC(playerid)) return 1;
     PlayerInfo[playerid][nX] = 111.000000;
     PlayerInfo[playerid][nY] = 271.250000;
     loaddata(playerid);
@@ -7228,10 +7225,10 @@ hook OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, Fl
     GetObjectPos(objectid, oldX, oldY, oldZ);
     GetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
 
-    if(response == EDIT_RESPONSE_FINAL || response == EDIT_RESPONSE_CANCEL) {
+    if (response == EDIT_RESPONSE_FINAL || response == EDIT_RESPONSE_CANCEL) {
         loopco {
 
-            if(objectid == ComputerInfo[i][cObject]) {
+            if (objectid == ComputerInfo[i][cObject]) {
                 new file[64];
                 format(file, 64, cofolder, i);
                 dini_FloatSet(file, "X", fX);
@@ -7262,71 +7259,71 @@ hook OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, Fl
 }
 
 hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const inputtext[], extraid, const payload[]) {
-    if(dialogid == DIALOG_COMPUTERHELP) {
+    if (dialogid == DIALOG_COMPUTERHELP) {
 
-        if(!response) return 1;
+        if (!response) return 1;
         switch (listitem) {
 
-            case 0:{
+            case 0 :  {
                 buycom(playerid);
             }
-            case 1:{
+            case 1 :  {
                 editcomplace(playerid);
             }
-            case 2:{
+            case 2 :  {
                 sellcom(playerid);
             }
-            case 3:{
+            case 3 :  {
                 gpscom(playerid);
             }
-            case 4:{
+            case 4 :  {
                 lockunlock(playerid);
             }
-            case 5:{
-                if(GetPlayerAdminLevel(playerid) != 10) return pc_cmd_computer(playerid, ""), YNR(playerid);
-                else rconlist(playerid);
+            case 5 :  {
+                if (IsPlayerMasterAdmin(playerid)) return rconlist(playerid);
+                return pc_cmd_computer(playerid, ""), YNR(playerid);
             }
 
         }
 
     }
-    if(dialogid == DIALOG_RCONL) {
+    if (dialogid == DIALOG_RCONL) {
 
-        if(!response) return pc_cmd_computer(playerid, "");
+        if (!response) return pc_cmd_computer(playerid, "");
         switch (listitem) {
 
-            case 0:{
+            case 0 :  {
                 ShowPlayerDialogEx(playerid, DIALOG_RNAMED, 0, DIALOG_STYLE_INPUT, "{4B05FC}Destroy Computer", "Type name of owner", "Destroy", "Cancel");
             }
-            case 1:{
+            case 1 :  {
                 ShowPlayerDialogEx(playerid, DIALOG_RNAMEE, 0, DIALOG_STYLE_INPUT, "{4B05FC}Edit Computer Place", "Type name of owner", "Edit", "Cancel");
             }
-            case 2:{
+            case 2 :  {
                 ShowPlayerDialogEx(playerid, DIALOG_RNAMEG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Goto Computer", "Type name of owner", "Goto", "Cancel");
             }
-            case 3:{
+            case 3 :  {
                 ShowPlayerDialogEx(playerid, DIALOG_RNAMEGG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Get Computer", "Type name of owner", "Get", "Cancel");
             }
 
         }
 
     }
-    if(dialogid == DIALOG_PLIST) {
+    if (dialogid == DIALOG_PLIST) {
 
-        if(!response) return PlayerInfo[playerid][Computer_selected] = -1, PlayerInfo[playerid][showpl] = false;
+        if (!response) return PlayerInfo[playerid][Computer_selected] = -1, PlayerInfo[playerid][showpl] = false;
         switch (listitem) {
 
-            default:{
+            default:  {
 
                 PlayerInfo[playerid][showpl] = true;
                 new match = -1;
                 new file[64];
                 format(file, 64, plfolder, Computer_PlayerName(playerid));
                 for (new i = 0; i < MAX_PLAYERS; i++) {
-                    if(!IsPlayerConnected(i) || i == playerid) continue;
+                    if (!IsPlayerConnected(i) || i == playerid) continue;
                     match++;
-                    if(match == listitem) {
-                        if(!PlayerInfo[i][sshowfb]) return TNO(playerid), ShowMsgPlayer(playerid);
+                    if (match == listitem) {
+                        if (!PlayerInfo[i][sshowfb]) return TNO(playerid), ShowMsgPlayer(playerid);
                         PlayerInfo[playerid][Computer_selected] = i;
                         PlayerInfo[i][Computer_selected] = playerid;
                         ShowPlayerDialogEx(playerid, DIALOG_Sendm, 0, DIALOG_STYLE_INPUT, Computer_PlayerName(i), "Type Your Message Here", "Send", "Back");
@@ -7338,12 +7335,12 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
         }
 
     }
-    if(dialogid == DIALOG_Sendm) {
+    if (dialogid == DIALOG_Sendm) {
         format(PlayerInfo[playerid][chat1], 128, "{03FFEE}%s{03FF81}: {03FF24}%s\n", Computer_PlayerName(playerid), inputtext);
         format(PlayerInfo[PlayerInfo[playerid][Computer_selected]][chat1], 128, "{03FFEE}%s{03FF81}: {03FF24}%s\n", Computer_PlayerName(playerid), inputtext);
-        if(!response) ShowMsgPlayer(playerid);
+        if (!response) ShowMsgPlayer(playerid);
         else {
-            if(!PlayerInfo[PlayerInfo[playerid][Computer_selected]][sshowfb]) return TNO(playerid);
+            if (!PlayerInfo[PlayerInfo[playerid][Computer_selected]][sshowfb]) return TNO(playerid);
             ShowPlayerDialogEx(PlayerInfo[playerid][Computer_selected], DIALOG_Sendm, 0, DIALOG_STYLE_INPUT, Computer_PlayerName(playerid), PlayerInfo[playerid][chat1], "Send", "Back");
             ShowPlayerDialogEx(playerid, DIALOG_Sendm, 0, DIALOG_STYLE_INPUT, Computer_PlayerName(PlayerInfo[playerid][Computer_selected]), PlayerInfo[PlayerInfo[playerid][Computer_selected]][chat1], "Send", "Back");
             PlayerInfo[playerid][showpl] = false;
@@ -7351,35 +7348,31 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
             SendFBmsg(PlayerInfo[playerid][Computer_selected], PlayerInfo[playerid][chat1]);
         }
     }
-    if(dialogid == DIALOG_RNAMED) {
-        if(!response) return rconlist(playerid);
-        if(GetPlayerAdminLevel(playerid) != 10) return pc_cmd_computer(playerid, "");
-        if(!strlen(inputtext))
-            return ShowPlayerDialogEx(playerid, DIALOG_RNAMED, 0, DIALOG_STYLE_INPUT, "{4B05FC}Destroy Computer", "Type name of owner", "Destroy", "Cancel");
+    if (dialogid == DIALOG_RNAMED) {
+        if (!response) return rconlist(playerid);
+        if (!IsPlayerMasterAdmin(playerid)) return pc_cmd_computer(playerid, "");
+        if (!strlen(inputtext)) return ShowPlayerDialogEx(playerid, DIALOG_RNAMED, 0, DIALOG_STYLE_INPUT, "{4B05FC}Destroy Computer", "Type name of owner", "Destroy", "Cancel");
         destroy(playerid, inputtext);
 
     }
-    if(dialogid == DIALOG_RNAMEE) {
-        if(!response) return rconlist(playerid);
-        if(GetPlayerAdminLevel(playerid) != 10) return pc_cmd_computer(playerid, "");
-        if(!strlen(inputtext))
-            return ShowPlayerDialogEx(playerid, DIALOG_RNAMEE, 0, DIALOG_STYLE_INPUT, "{4B05FC}Edit Computer place", "Type name of owner", "Edit", "Cancel");
+    if (dialogid == DIALOG_RNAMEE) {
+        if (!response) return rconlist(playerid);
+        if (!IsPlayerMasterAdmin(playerid)) return pc_cmd_computer(playerid, "");
+        if (!strlen(inputtext)) return ShowPlayerDialogEx(playerid, DIALOG_RNAMEE, 0, DIALOG_STYLE_INPUT, "{4B05FC}Edit Computer place", "Type name of owner", "Edit", "Cancel");
         reditc(playerid, inputtext);
 
     }
-    if(dialogid == DIALOG_RNAMEG) {
-        if(!response) return rconlist(playerid);
-        if(GetPlayerAdminLevel(playerid) != 10) return pc_cmd_computer(playerid, "");
-        if(!strlen(inputtext))
-            return ShowPlayerDialogEx(playerid, DIALOG_RNAMEG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Goto Computer", "Type name of owner", "Goto", "Cancel"), TDC(playerid);
+    if (dialogid == DIALOG_RNAMEG) {
+        if (!response) return rconlist(playerid);
+        if (!IsPlayerMasterAdmin(playerid)) return pc_cmd_computer(playerid, "");
+        if (!strlen(inputtext)) return ShowPlayerDialogEx(playerid, DIALOG_RNAMEG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Goto Computer", "Type name of owner", "Goto", "Cancel"), TDC(playerid);
         rgotoc(playerid, inputtext);
 
     }
-    if(dialogid == DIALOG_RNAMEGG) {
-        if(!response) return rconlist(playerid);
-        if(GetPlayerAdminLevel(playerid) != 10) return pc_cmd_computer(playerid, "");
-        if(!strlen(inputtext))
-            return ShowPlayerDialogEx(playerid, DIALOG_RNAMEGG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Get Computer", "Type name of owner", "Get", "Cancel"), TDC(playerid);
+    if (dialogid == DIALOG_RNAMEGG) {
+        if (!response) return rconlist(playerid);
+        if (!IsPlayerMasterAdmin(playerid)) return pc_cmd_computer(playerid, "");
+        if (!strlen(inputtext)) return ShowPlayerDialogEx(playerid, DIALOG_RNAMEGG, 0, DIALOG_STYLE_INPUT, "{4B05FC}Get Computer", "Type name of owner", "Get", "Cancel"), TDC(playerid);
         getco(playerid, inputtext);
 
     }
@@ -7388,8 +7381,8 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
 
 IsPlayerCloseToComputer(playerid, comid) {
 
-    if(IsPlayerInRangeOfPoint(playerid, disfcom, ComputerInfo[comid][cX], ComputerInfo[comid][cY], ComputerInfo[comid][cZ])) return true;
-    if(!IsPlayerInRangeOfPoint(playerid, disfcom, ComputerInfo[comid][cX], ComputerInfo[comid][cY], ComputerInfo[comid][cZ])) return false;
+    if (IsPlayerInRangeOfPoint(playerid, disfcom, ComputerInfo[comid][cX], ComputerInfo[comid][cY], ComputerInfo[comid][cZ])) return true;
+    if (!IsPlayerInRangeOfPoint(playerid, disfcom, ComputerInfo[comid][cX], ComputerInfo[comid][cY], ComputerInfo[comid][cZ])) return false;
     return 1;
 }
 
@@ -7400,16 +7393,16 @@ hook OnPlayerEnterCP(playerid) {
 }
 
 hook OnPlayerUpdateEx(playerid) {
-    if(PlayerInfo[playerid][usecom] && !PlayerInfo[playerid][playh] && !PlayerInfo[playerid][Zombiesshow]) SelectTextDraw(playerid, 0xA3B4C5FF);
-    if(!PlayerInfo[playerid][usecom] && IsPlayerCloseToAnyComputer(playerid)) GameTextForPlayer(playerid, "~w~Click ~r~N ~w~To Start.", 1000, 4);
+    if (PlayerInfo[playerid][usecom] && !PlayerInfo[playerid][playh] && !PlayerInfo[playerid][Zombiesshow]) SelectTextDraw(playerid, 0xA3B4C5FF);
+    if (!PlayerInfo[playerid][usecom] && IsPlayerCloseToAnyComputer(playerid)) GameTextForPlayer(playerid, "~w~Click ~r~N ~w~To Start.", 1000, 4);
     //=================Friends=====================//
     GetTotalOnline(playerid);
     return 1;
 }
 
 IsballInArea(playerid) {
-    if(PlayerInfo[playerid][pbY] > PlayerInfo[playerid][bY] - 10.00 && PlayerInfo[playerid][bX] + 25.000 > PlayerInfo[playerid][pbX] > PlayerInfo[playerid][bX] - 10.5000) {
-        if(PlayerInfo[playerid][bspeed] < ballspeed + 2.8) PlayerInfo[playerid][bspeed] += 0.19;
+    if (PlayerInfo[playerid][pbY] > PlayerInfo[playerid][bY] - 10.00 && PlayerInfo[playerid][bX] + 25.000 > PlayerInfo[playerid][pbX] > PlayerInfo[playerid][bX] - 10.5000) {
+        if (PlayerInfo[playerid][bspeed] < ballspeed + 2.8) PlayerInfo[playerid][bspeed] += 0.19;
         PlayerPlaySound(playerid, 1139, 0.0, 0.0, 0.0);
         return 1;
     }
@@ -7417,13 +7410,13 @@ IsballInArea(playerid) {
 }
 IsballInyajora(playerid) {
     for (new i = 0; i < 15; i++) {
-        if(106.750022 < PlayerInfo[playerid][pbY] <= 118.416633 && Yjinfo[playerid][i][yjX] + 16.000 > PlayerInfo[playerid][pbX] > Yjinfo[playerid][i][yjX] - 6.0000 && !Yjinfo[playerid][i][destroyed]) {
+        if (106.750022 < PlayerInfo[playerid][pbY] <= 118.416633 && Yjinfo[playerid][i][yjX] + 16.000 > PlayerInfo[playerid][pbX] > Yjinfo[playerid][i][yjX] - 6.0000 && !Yjinfo[playerid][i][destroyed]) {
             PlayerTextDrawHide(playerid, yajora[i]);
-            if(PlayerInfo[playerid][bt7t]) { PlayerInfo[playerid][bdown] = true, PlayerInfo[playerid][bup] = false; } else { PlayerInfo[playerid][bdown] = false, PlayerInfo[playerid][bup] = true; }
+            if (PlayerInfo[playerid][bt7t]) { PlayerInfo[playerid][bdown] = true, PlayerInfo[playerid][bup] = false; } else { PlayerInfo[playerid][bdown] = false, PlayerInfo[playerid][bup] = true; }
             Yjinfo[playerid][i][destroyed] = true;
             PlayerInfo[playerid][pcount] += 1;
             PlayerInfo[playerid][phscore] += 1;
-            if(PlayerInfo[playerid][pcount] == 15) {
+            if (PlayerInfo[playerid][pcount] == 15) {
                 hideSuperBall(playerid);
                 PlayerInfo[playerid][playh] = false;
                 MWIN(playerid);
@@ -7437,20 +7430,20 @@ IsballInyajora(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if(newkeys == KEY_NO) {
-        if(!PlayerInfo[playerid][usecom] && IsPlayerCloseToAnyComputer(playerid)) {
+    if (newkeys == KEY_NO) {
+        if (!PlayerInfo[playerid][usecom] && IsPlayerCloseToAnyComputer(playerid)) {
             StarComp(playerid);
             return ~1;
         }
-    } else if(newkeys == KEY_SPRINT) {
-        if(PlayerInfo[playerid][playh]) {
+    } else if (newkeys == KEY_SPRINT) {
+        if (PlayerInfo[playerid][playh]) {
             hideSuperBall(playerid);
             PlayerInfo[playerid][playh] = false;
             return ~1;
         }
     }
-    if(newkeys == KEY_FIRE && OnHeadShot(playerid) && PlayerInfo[playerid][Zombiesshow]) PlayerPlaySound(playerid, 1136, 0.0, 0.0, 0.0);
-    if(newkeys == KEY_FIRE && OnBodyShot(playerid) && PlayerInfo[playerid][Zombiesshow]) PlayerPlaySound(playerid, 1190, 0.0, 0.0, 0.0);
+    if (newkeys == KEY_FIRE && OnHeadShot(playerid) && PlayerInfo[playerid][Zombiesshow]) PlayerPlaySound(playerid, 1136, 0.0, 0.0, 0.0);
+    if (newkeys == KEY_FIRE && OnBodyShot(playerid) && PlayerInfo[playerid][Zombiesshow]) PlayerPlaySound(playerid, 1190, 0.0, 0.0, 0.0);
     return 1;
 }
 stock StarComp(playerid) {
@@ -7460,17 +7453,17 @@ stock StarComp(playerid) {
     showfonddec(playerid);
     showbarre(playerid);
     showwinico(playerid);
-    if(!PlayerInfo[playerid][timework]) Time[playerid] = SetTimerEx("TRTR", 50, 1, "d", playerid), PlayerInfo[playerid][timework] = true;
+    if (!PlayerInfo[playerid][timework]) Time[playerid] = SetTimerEx("TRTR", 50, 1, "d", playerid), PlayerInfo[playerid][timework] = true;
 
 }
 #define pzcost PlayerInfo[playerid][zbuy]*133
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
-    if(clickedid == winico[0][computer_id]) { if(PlayerInfo[playerid][menushow]) { hidemenu(playerid); } else if(!PlayerInfo[playerid][menushow]) { showmenu(playerid); } }
-    if(clickedid == boxlike) {
+    if (clickedid == winico[0][computer_id]) { if (PlayerInfo[playerid][menushow]) { hidemenu(playerid); } else if (!PlayerInfo[playerid][menushow]) { showmenu(playerid); } }
+    if (clickedid == boxlike) {
         // facebook like===========================
 
-        if(!PlayerInfo[playerid][like]) {
+        if (!PlayerInfo[playerid][like]) {
             fblike += 1;
             PlayerInfo[playerid][like] = true;
         } else fblike -= 1, PlayerInfo[playerid][like] = false;
@@ -7481,92 +7474,92 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         dini_IntSet(fbfolder, "likes", fblike);
     }
     //=======================================
-    if(clickedid == tdlang[5]) tarjm(playerid, ENG);
-    if(clickedid == tdlang[6]) tarjm(playerid, FRA);
-    if(clickedid == tdlang[7]) tarjm(playerid, DAR);
+    if (clickedid == tdlang[5]) tarjm(playerid, ENG);
+    if (clickedid == tdlang[6]) tarjm(playerid, FRA);
+    if (clickedid == tdlang[7]) tarjm(playerid, DAR);
 
     //Shut Down===================================
-    if(clickedid == menu[8]) { shutdown(playerid); }
+    if (clickedid == menu[8]) { shutdown(playerid); }
     //============================================
     //=======================================Show Hide================
-    if(clickedid == menu[4] || clickedid == map[5] || clickedid == fonddec[10]) {
+    if (clickedid == menu[4] || clickedid == map[5] || clickedid == fonddec[10]) {
         hidepgzmenu(playerid), hidezmenu(playerid);
         hidelang(playerid);
         hidefbd(playerid);
         hidemusic(playerid);
         hideSuperBall(playerid);
-        if(PlayerInfo[playerid][mapshow]) { hidemap(playerid); } else if(!PlayerInfo[playerid][mapshow]) { showmap(playerid), hidemenu(playerid); }
+        if (PlayerInfo[playerid][mapshow]) { hidemap(playerid); } else if (!PlayerInfo[playerid][mapshow]) { showmap(playerid), hidemenu(playerid); }
     }
-    if(clickedid == menu[6] || clickedid == music[4] || clickedid == fonddec[11]) {
+    if (clickedid == menu[6] || clickedid == music[4] || clickedid == fonddec[11]) {
         hidepgzmenu(playerid), hidezmenu(playerid);
         hidelang(playerid);
         hidefbd(playerid);
         hidemap(playerid);
         hideSuperBall(playerid);
-        if(PlayerInfo[playerid][musicshow]) { hidemusic(playerid), SetStop(playerid); } else if(!PlayerInfo[playerid][musicshow]) { showmusic(playerid), hidemenu(playerid); }
+        if (PlayerInfo[playerid][musicshow]) { hidemusic(playerid), SetStop(playerid); } else if (!PlayerInfo[playerid][musicshow]) { showmusic(playerid), hidemenu(playerid); }
     }
-    if(clickedid == music[32]) {
+    if (clickedid == music[32]) {
         hidelang(playerid);
         hidemap(playerid);
         hidefbd(playerid);
         hideSuperBall(playerid);
-        if(PlayerInfo[playerid][musicshow]) { hidemusic(playerid); } else if(!PlayerInfo[playerid][musicshow]) { showmusic(playerid), hidemenu(playerid); }
+        if (PlayerInfo[playerid][musicshow]) { hidemusic(playerid); } else if (!PlayerInfo[playerid][musicshow]) { showmusic(playerid), hidemenu(playerid); }
     }
-    if(clickedid == menu[11] || clickedid == SuperBall[5] || clickedid == fonddec[12]) {
+    if (clickedid == menu[11] || clickedid == SuperBall[5] || clickedid == fonddec[12]) {
         hidepgzmenu(playerid), hidezmenu(playerid);
         hidelang(playerid);
         hidemap(playerid);
         hidemusic(playerid);
         hidefbd(playerid);
-        if(PlayerInfo[playerid][SuperBallshow]) { hideSuperBall(playerid); } else if(!PlayerInfo[playerid][SuperBallshow]) { showSuperBall(playerid), hidemenu(playerid); }
+        if (PlayerInfo[playerid][SuperBallshow]) { hideSuperBall(playerid); } else if (!PlayerInfo[playerid][SuperBallshow]) { showSuperBall(playerid), hidemenu(playerid); }
     }
-    if(clickedid == menu[20] || clickedid == fonddec[17]) {
+    if (clickedid == menu[20] || clickedid == fonddec[17]) {
         hidepgzmenu(playerid), hidezmenu(playerid);
         hideSuperBall(playerid);
         hidelang(playerid);
         hidemap(playerid);
         hidemusic(playerid);
         hidefbd(playerid);
-        if(PlayerInfo[playerid][Zombiesshow]) { hideZombies(playerid); } else if(!PlayerInfo[playerid][Zombiesshow]) { showZombies(playerid); }
+        if (PlayerInfo[playerid][Zombiesshow]) { hideZombies(playerid); } else if (!PlayerInfo[playerid][Zombiesshow]) { showZombies(playerid); }
     }
-    if(clickedid == menu[16] || clickedid == onglet[6] || clickedid == onglet[15] || clickedid == fonddec[15]) {
+    if (clickedid == menu[16] || clickedid == onglet[6] || clickedid == onglet[15] || clickedid == fonddec[15]) {
         hidepgzmenu(playerid), hidezmenu(playerid);
         hidelang(playerid);
         hidemusic(playerid);
         hideSuperBall(playerid);
         hidemap(playerid);
-        if(PlayerInfo[playerid][ongletshow]) { hideonglet(playerid), hidefbd(playerid); } else if(!PlayerInfo[playerid][ongletshow]) { showonglet(playerid), showfbd(playerid), hidemenu(playerid); }
+        if (PlayerInfo[playerid][ongletshow]) { hideonglet(playerid), hidefbd(playerid); } else if (!PlayerInfo[playerid][ongletshow]) { showonglet(playerid), showfbd(playerid), hidemenu(playerid); }
     }
     //=================FaceBook========================================//
-    if(clickedid == fbdata[23])
-        if(!PlayerInfo[playerid][notifshow]) { shownotif(playerid); } else { hidenotif(playerid); }
-    if(clickedid == fbdata[20]) ShowAllPlayer(playerid);
-    if(clickedid == fbdata[25] || clickedid == fbdata[18]) ShowMsgPlayer(playerid);
+    if (clickedid == fbdata[23])
+        if (!PlayerInfo[playerid][notifshow]) { shownotif(playerid); } else { hidenotif(playerid); }
+    if (clickedid == fbdata[20]) ShowAllPlayer(playerid);
+    if (clickedid == fbdata[25] || clickedid == fbdata[18]) ShowMsgPlayer(playerid);
     //===================" > _ ||"====================================
-    if(clickedid == music[10]) spmusic(playerid);
-    if(clickedid == music[14]) editmpos(playerid, -1);
-    else if(clickedid == music[15]) editmpos(playerid, 1);
+    if (clickedid == music[10]) spmusic(playerid);
+    if (clickedid == music[14]) editmpos(playerid, -1);
+    else if (clickedid == music[15]) editmpos(playerid, 1);
     //========================= Musics ==============================
-    if(clickedid == music[34]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 5.500, musicplace(playerid);
-    if(clickedid == music[35]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 4.500, musicplace(playerid);
-    if(clickedid == music[36]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 3.500, musicplace(playerid);
-    if(clickedid == music[37]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 2.500, musicplace(playerid);
-    if(clickedid == music[38]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 1.500, musicplace(playerid);
-    if(clickedid == music[39]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 0.000, musicplace(playerid);
+    if (clickedid == music[34]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 5.500, musicplace(playerid);
+    if (clickedid == music[35]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 4.500, musicplace(playerid);
+    if (clickedid == music[36]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 3.500, musicplace(playerid);
+    if (clickedid == music[37]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 2.500, musicplace(playerid);
+    if (clickedid == music[38]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 1.500, musicplace(playerid);
+    if (clickedid == music[39]) PlayerInfo[playerid][usemusic] = false, PlayerInfo[playerid][sound] = 0.000, musicplace(playerid);
     //========Zombie==================//
-    if(clickedid == boxlang) {
+    if (clickedid == boxlang) {
         hidefbd(playerid);
         hidemusic(playerid);
         hideSuperBall(playerid);
         hidemap(playerid);
-        if(PlayerInfo[playerid][langshow]) { hidelang(playerid); } else if(!PlayerInfo[playerid][langshow]) { showlang(playerid); }
+        if (PlayerInfo[playerid][langshow]) { hidelang(playerid); } else if (!PlayerInfo[playerid][langshow]) { showlang(playerid); }
     }
-    if(clickedid == zmenu[12]) hidezmenu(playerid);
-    if(clickedid == zmenu[8]) showZombies(playerid), hidezmenu(playerid);
-    if(clickedid == zmenu[9]) showpgzmenu(playerid), hidezmenu(playerid);
-    if(clickedid == gzmenu[10]) hidepgzmenu(playerid), Computer_showzmenu(playerid);
-    if(clickedid == gzmenu[9]) {
-        if(PlayerInfo[playerid][zmoney] < pzcost) return NEM(playerid);
+    if (clickedid == zmenu[12]) hidezmenu(playerid);
+    if (clickedid == zmenu[8]) showZombies(playerid), hidezmenu(playerid);
+    if (clickedid == zmenu[9]) showpgzmenu(playerid), hidezmenu(playerid);
+    if (clickedid == gzmenu[10]) hidepgzmenu(playerid), Computer_showzmenu(playerid);
+    if (clickedid == gzmenu[9]) {
+        if (PlayerInfo[playerid][zmoney] < pzcost) return NEM(playerid);
         hidepgzmenu(playerid);
         PlayerInfo[playerid][zmoney] -= pzcost;
         PlayerInfo[playerid][zbuy] += 1;
@@ -7577,7 +7570,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 }
 stock createclabel(i) {
     new strring[128];
-    if(ComputerInfo[i][Locked]) format(strring, sizeof(strring), "{4DFFBE}Owner : {F4FF21}%s\n{FF0000}Locked", ComputerInfo[i][cOwner]);
+    if (ComputerInfo[i][Locked]) format(strring, sizeof(strring), "{4DFFBE}Owner : {F4FF21}%s\n{FF0000}Locked", ComputerInfo[i][cOwner]);
     else format(strring, sizeof(strring), "{4DFFBE}Owner : {F4FF21}%s\n{00FF26}Unocked", ComputerInfo[i][cOwner]);
     computer_ctext[i] = Create3DTextLabel(strring, 0x00FFFF, ComputerInfo[i][cX], ComputerInfo[i][cY], ComputerInfo[i][cZ] + 2, 30, 0);
 }
@@ -7586,10 +7579,10 @@ stock refleshclabel(i) {
     createclabel(i);
 }
 stock shutdown(playerid) {
-    if(PlayerInfo[playerid][usecom]) {
+    if (PlayerInfo[playerid][usecom]) {
         SetCameraBehindPlayer(playerid);
-        if(PlayerInfo[playerid][usemusic]) StopAudioStreamForPlayer(playerid);
-        if(PlayerInfo[playerid][timework]) KillTimer(Time[playerid]), PlayerInfo[playerid][timework] = false;
+        if (PlayerInfo[playerid][usemusic]) StopAudioStreamForPlayer(playerid);
+        if (PlayerInfo[playerid][timework]) KillTimer(Time[playerid]), PlayerInfo[playerid][timework] = false;
         PlayerInfo[playerid][sound] = 0.000;
         hideZombies(playerid);
         hidelang(playerid), hidefbd(playerid), hideonglet(playerid), hideSuperBall(playerid), hidemusic(playerid), hidewinico(playerid), hidemap(playerid), hidemenu(playerid), hidefonddec(playerid), hidebarre(playerid);
@@ -7598,17 +7591,17 @@ stock shutdown(playerid) {
 }
 
 stock Computer_UpdateTime(i) {
-    if(PlayerInfo[i][playh]) {
-        if(PlayerInfo[i][hhealth] == 0) return PlayerInfo[i][playh] = false, hideSuperBall(i), MLOSE(i);
+    if (PlayerInfo[i][playh]) {
+        if (PlayerInfo[i][hhealth] == 0) return PlayerInfo[i][playh] = false, hideSuperBall(i), MLOSE(i);
 
-        if(PlayerInfo[i][pbY] < 107.333389) PlayerInfo[i][bfog] = true, PlayerInfo[i][bt7t] = false;
+        if (PlayerInfo[i][pbY] < 107.333389) PlayerInfo[i][bfog] = true, PlayerInfo[i][bt7t] = false;
         else PlayerInfo[i][bt7t] = true, PlayerInfo[i][bfog] = false;
 
-        if(PlayerInfo[i][pbY] <= 27.999982 + 5) PlayerInfo[i][bdown] = true, PlayerInfo[i][bup] = false, PlayerPlaySound(i, 1136, 0.0, 0.0, 0.0);
-        else if(PlayerInfo[i][pbY] >= 316.166809 - 5) {
+        if (PlayerInfo[i][pbY] <= 27.999982 + 5) PlayerInfo[i][bdown] = true, PlayerInfo[i][bup] = false, PlayerPlaySound(i, 1136, 0.0, 0.0, 0.0);
+        else if (PlayerInfo[i][pbY] >= 316.166809 - 5) {
             PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true;
             PlayerInfo[i][hhealth] -= 1;
-            if(PlayerInfo[i][phscore] > 0) PlayerInfo[i][phscore] -= 1;
+            if (PlayerInfo[i][phscore] > 0) PlayerInfo[i][phscore] -= 1;
             TextDrawHideForPlayer(i, tdhealth[PlayerInfo[i][hhealth]]);
             PlayerPlaySound(i, 1148, 0.0, 0.0, 0.0);
             new string[128];
@@ -7616,16 +7609,16 @@ stock Computer_UpdateTime(i) {
             PlayerTextDrawSetString(i, tdscore, string);
         }
 
-        if(PlayerInfo[i][pbX] <= 361.50) PlayerInfo[i][bright] = true, PlayerInfo[i][bleft] = false, PlayerInfo[i][pbX] += PlayerInfo[i][bspeed], PlayerPlaySound(i, 1136, 0.0, 0.0, 0.0);
-        else if(PlayerInfo[i][pbX] >= 625.000 - 5) PlayerInfo[i][bright] = false, PlayerInfo[i][bleft] = true, PlayerInfo[i][pbX] -= PlayerInfo[i][bspeed], PlayerPlaySound(i, 1136, 0.0, 0.0, 0.0);
+        if (PlayerInfo[i][pbX] <= 361.50) PlayerInfo[i][bright] = true, PlayerInfo[i][bleft] = false, PlayerInfo[i][pbX] += PlayerInfo[i][bspeed], PlayerPlaySound(i, 1136, 0.0, 0.0, 0.0);
+        else if (PlayerInfo[i][pbX] >= 625.000 - 5) PlayerInfo[i][bright] = false, PlayerInfo[i][bleft] = true, PlayerInfo[i][pbX] -= PlayerInfo[i][bspeed], PlayerPlaySound(i, 1136, 0.0, 0.0, 0.0);
 
-        if(IsballInArea(i) && PlayerInfo[i][pleft] && PlayerInfo[i][bnone]) PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true, PlayerInfo[i][bleft] = true, PlayerInfo[i][bright] = false;
-        else if(IsballInArea(i) && PlayerInfo[i][pright] && PlayerInfo[i][bnone]) PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true, PlayerInfo[i][bleft] = false, PlayerInfo[i][bright] = true;
-        else if(IsballInArea(i)) PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true;
+        if (IsballInArea(i) && PlayerInfo[i][pleft] && PlayerInfo[i][bnone]) PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true, PlayerInfo[i][bleft] = true, PlayerInfo[i][bright] = false;
+        else if (IsballInArea(i) && PlayerInfo[i][pright] && PlayerInfo[i][bnone]) PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true, PlayerInfo[i][bleft] = false, PlayerInfo[i][bright] = true;
+        else if (IsballInArea(i)) PlayerInfo[i][bdown] = false, PlayerInfo[i][bup] = true;
 
-        if(PlayerInfo[i][bup]) { PlayerInfo[i][pbY] -= PlayerInfo[i][bspeed]; } else if(PlayerInfo[i][bdown]) { PlayerInfo[i][pbY] += PlayerInfo[i][bspeed]; }
+        if (PlayerInfo[i][bup]) { PlayerInfo[i][pbY] -= PlayerInfo[i][bspeed]; } else if (PlayerInfo[i][bdown]) { PlayerInfo[i][pbY] += PlayerInfo[i][bspeed]; }
 
-        if(PlayerInfo[i][bright] && !PlayerInfo[i][bleft]) { PlayerInfo[i][pbX] += PlayerInfo[i][bspeed]; } else if(PlayerInfo[i][bleft] && !PlayerInfo[i][bright]) { PlayerInfo[i][pbX] -= PlayerInfo[i][bspeed]; }
+        if (PlayerInfo[i][bright] && !PlayerInfo[i][bleft]) { PlayerInfo[i][pbX] += PlayerInfo[i][bspeed]; } else if (PlayerInfo[i][bleft] && !PlayerInfo[i][bright]) { PlayerInfo[i][pbX] -= PlayerInfo[i][bspeed]; }
 
         refleshballbar(i);
 
@@ -7634,13 +7627,13 @@ stock Computer_UpdateTime(i) {
 
         PlayerTextDrawHide(i, rightleft[0]);
         PlayerTextDrawHide(i, rightleft[1]);
-        if(LR == KEY_RIGHT) {
+        if (LR == KEY_RIGHT) {
             movepbarre(i, barrespeed, 0);
             PlayerInfo[i][pright] = true;
             PlayerInfo[i][pleft] = false;
             PlayerTextDrawColor(i, rightleft[0], -65281);
             PlayerTextDrawColor(i, rightleft[1], -1);
-        } else if(LR == KEY_LEFT) {
+        } else if (LR == KEY_LEFT) {
             movepbarre(i, -barrespeed, 0);
             PlayerInfo[i][pleft] = true;
             PlayerInfo[i][pright] = false;
@@ -7652,16 +7645,16 @@ stock Computer_UpdateTime(i) {
         IsballInyajora(i);
 
     }
-    if(PlayerInfo[i][Zombiesshow]) {
+    if (PlayerInfo[i][Zombiesshow]) {
 
         new KEYS, UD, LR;
         GetPlayerKeys(i, KEYS, UD, LR);
-        if(UD == KEY_UP) { PlayerInfo[i][nY] -= PlayerInfo[i][kspeed]; } else if(UD == KEY_DOWN) { PlayerInfo[i][nY] += PlayerInfo[i][kspeed]; }
-        if(LR == KEY_LEFT) { PlayerInfo[i][nX] -= PlayerInfo[i][kspeed]; } else if(LR == KEY_RIGHT) { PlayerInfo[i][nX] += PlayerInfo[i][kspeed]; }
+        if (UD == KEY_UP) { PlayerInfo[i][nY] -= PlayerInfo[i][kspeed]; } else if (UD == KEY_DOWN) { PlayerInfo[i][nY] += PlayerInfo[i][kspeed]; }
+        if (LR == KEY_LEFT) { PlayerInfo[i][nX] -= PlayerInfo[i][kspeed]; } else if (LR == KEY_RIGHT) { PlayerInfo[i][nX] += PlayerInfo[i][kspeed]; }
         IsNinA(i);
         refleshallzombie(i);
     }
-    if(PlayerInfo[i][usecom]) {
+    if (PlayerInfo[i][usecom]) {
         tarjm(i, PlayerInfo[i][lang]);
         new Hour, Minute, Second;
         gettime(Hour, Minute, Second);
@@ -7678,15 +7671,15 @@ stock Computer_UpdateTime(i) {
         //================WIFI=========================//
 
         for (new p = 4; p < 9; p++) { PlayerTextDrawHide(i, databarre[p]); }
-        if(Computer_IsPlayerInArea(i, 44.60, -2892.90, 2997.00, -768.00)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -1); //  //LS
-        if(Computer_IsPlayerInArea(i, 869.40, 596.30, 2997.00, 2993.80)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -1); // //LV
-        if(Computer_IsPlayerInArea(i, -2997.40, -1115.50, -1213.90, 1659.60)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -1); // //SanFierro
-        if(Computer_IsPlayerInArea(i, -480.50, 596.30, 869.40, 2993.80)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); // //BoneCounty
-        if(Computer_IsPlayerInArea(i, -1213.90, 596.30, -480.50, 1659.60)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); // //TierraRobada
-        if(Computer_IsPlayerInArea(i, -1213.90, -768.00, 2997.00, 596.30)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); // //RedCountry
-        if(Computer_IsPlayerInArea(i, -2997.40, 1659.60, -480.50, 2993.80)) PlayerTextDrawColor(i, databarre[3 + 3], -2139062017), PlayerTextDrawColor(i, databarre[4 + 3], -2139062017), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); //TierraRobada
-        if(Computer_IsPlayerInArea(i, -1213.90, -2892.90, 44.60, -768.00)) PlayerTextDrawColor(i, databarre[3 + 3], -2139062017), PlayerTextDrawColor(i, databarre[4 + 3], -2139062017), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); //FlintCounty
-        if(Computer_IsPlayerInArea(i, -2997.40, -2892.90, -1213.90, -1115.50)) PlayerTextDrawColor(i, databarre[3 + 3], -2139062017), PlayerTextDrawColor(i, databarre[4 + 3], -2139062017), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); //Whetstone
+        if (Computer_IsPlayerInArea(i, 44.60, -2892.90, 2997.00, -768.00)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -1); //  //LS
+        if (Computer_IsPlayerInArea(i, 869.40, 596.30, 2997.00, 2993.80)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -1); // //LV
+        if (Computer_IsPlayerInArea(i, -2997.40, -1115.50, -1213.90, 1659.60)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -1); // //SanFierro
+        if (Computer_IsPlayerInArea(i, -480.50, 596.30, 869.40, 2993.80)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); // //BoneCounty
+        if (Computer_IsPlayerInArea(i, -1213.90, 596.30, -480.50, 1659.60)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); // //TierraRobada
+        if (Computer_IsPlayerInArea(i, -1213.90, -768.00, 2997.00, 596.30)) PlayerTextDrawColor(i, databarre[3 + 3], -1), PlayerTextDrawColor(i, databarre[4 + 3], -1), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); // //RedCountry
+        if (Computer_IsPlayerInArea(i, -2997.40, 1659.60, -480.50, 2993.80)) PlayerTextDrawColor(i, databarre[3 + 3], -2139062017), PlayerTextDrawColor(i, databarre[4 + 3], -2139062017), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); //TierraRobada
+        if (Computer_IsPlayerInArea(i, -1213.90, -2892.90, 44.60, -768.00)) PlayerTextDrawColor(i, databarre[3 + 3], -2139062017), PlayerTextDrawColor(i, databarre[4 + 3], -2139062017), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); //FlintCounty
+        if (Computer_IsPlayerInArea(i, -2997.40, -2892.90, -1213.90, -1115.50)) PlayerTextDrawColor(i, databarre[3 + 3], -2139062017), PlayerTextDrawColor(i, databarre[4 + 3], -2139062017), PlayerTextDrawColor(i, databarre[5 + 3], -2139062017); //Whetstone
 
         for (new p = 4; p < 9; p++) { PlayerTextDrawShow(i, databarre[p]); }
         Computer_GetPlayerZone(i);
@@ -7701,7 +7694,7 @@ refleshallzombie(playerid) {
 Computer_IsPlayerInArea(playerid, Float:Computer_MinX, Float:Computer_MinY, Float:Computer_MaxX, Float:Computer_MaxY) {
     new Float:X, Float:Y, Float:Z;
     GetPlayerPos(playerid, X, Y, Z);
-    if(X >= Computer_MinX && X <= Computer_MaxX && Y >= Computer_MinY && Y <= Computer_MaxY) {
+    if (X >= Computer_MinX && X <= Computer_MaxX && Y >= Computer_MinY && Y <= Computer_MaxY) {
         return 1;
     }
     return 0;
@@ -7715,7 +7708,7 @@ Computer_PlayerName(playerid) {
 //////////////Show SuperBall////////////////
 stock showSuperBall(playerid) {
 
-    if(!PlayerInfo[playerid][SuperBallshow]) {
+    if (!PlayerInfo[playerid][SuperBallshow]) {
         PlayerInfo[playerid][phscore] = 0;
         PlayerPlaySound(playerid, 1062, 0.0, 0.0, 0.0);
         new string[128];
@@ -7782,7 +7775,7 @@ stock showSuperBall(playerid) {
 }
 //////////////Hide SuperBall////////////////
 stock hideSuperBall(playerid) {
-    if(PlayerInfo[playerid][SuperBallshow]) {
+    if (PlayerInfo[playerid][SuperBallshow]) {
         for (new i = 0; i < USED_SuperBall; i++) { TextDrawHideForPlayer(playerid, SuperBall[i]); }
         TextDrawHideForPlayer(playerid, tdhealth[0]);
         TextDrawHideForPlayer(playerid, tdhealth[1]);
@@ -7802,8 +7795,8 @@ stock hideSuperBall(playerid) {
 }
 //////////////Show Music////////////////
 stock showmusic(playerid) {
-    if(!PlayerInfo[playerid][musicshow]) {
-        if(!PlayerInfo[playerid][haveone]) return YMHP(playerid);
+    if (!PlayerInfo[playerid][musicshow]) {
+        if (!PlayerInfo[playerid][haveone]) return YMHP(playerid);
 
         for (new i = 0; i < USED_music; i++) { TextDrawShowForPlayer(playerid, music[i]); }
         PlayerTextDrawShow(playerid, musicsp);
@@ -7815,7 +7808,7 @@ stock showmusic(playerid) {
 }
 /////////////Hide music//////////////////////
 stock hidemusic(playerid) {
-    if(PlayerInfo[playerid][musicshow]) {
+    if (PlayerInfo[playerid][musicshow]) {
         for (new i = 0; i < USED_music; i++) { TextDrawHideForPlayer(playerid, music[i]); }
         PlayerTextDrawHide(playerid, musicsp);
         PlayerInfo[playerid][musicshow] = false;
@@ -7823,7 +7816,7 @@ stock hidemusic(playerid) {
 }
 /////////////Show Onglet////////////////
 stock showonglet(playerid) {
-    if(!PlayerInfo[playerid][ongletshow]) {
+    if (!PlayerInfo[playerid][ongletshow]) {
         for (new i = 0; i < USED_onglet; i++) { TextDrawShowForPlayer(playerid, onglet[i]); }
         PlayerTextDrawHide(playerid, tdchange[6]);
         PlayerInfo[playerid][ongletshow] = true;
@@ -7831,7 +7824,7 @@ stock showonglet(playerid) {
 }
 ///////////////Show Notif////////////////
 stock shownotif(playerid) {
-    if(!PlayerInfo[playerid][notifshow]) {
+    if (!PlayerInfo[playerid][notifshow]) {
         for (new i = 0; i < USED_fbn; i++) { TextDrawShowForPlayer(playerid, fbnotif[i]); }
         PlayerTextDrawShow(playerid, tdchange[1]);
         PlayerInfo[playerid][notifshow] = true;
@@ -7839,7 +7832,7 @@ stock shownotif(playerid) {
 }
 ///////////////Hide Notif////////////////
 stock hidenotif(playerid) {
-    if(PlayerInfo[playerid][notifshow]) {
+    if (PlayerInfo[playerid][notifshow]) {
         for (new i = 0; i < USED_fbn; i++) { TextDrawHideForPlayer(playerid, fbnotif[i]); }
         PlayerTextDrawHide(playerid, tdchange[1]);
         PlayerInfo[playerid][notifshow] = false;
@@ -7847,7 +7840,7 @@ stock hidenotif(playerid) {
 }
 /////////////Show fbdata////////////////
 stock showfbd(playerid) {
-    if(!PlayerInfo[playerid][haveone]) return showerd(playerid);
+    if (!PlayerInfo[playerid][haveone]) return showerd(playerid);
     for (new i = 0; i < USED_fbd; i++) { TextDrawShowForPlayer(playerid, fbdata[i]); }
     TextDrawShowForPlayer(playerid, boxlike);
     PlayerTextDrawShow(playerid, numlike);
@@ -7859,7 +7852,7 @@ stock showfbd(playerid) {
 }
 /////////////Show Error//////////////////
 stock showerd(playerid) {
-    if(!PlayerInfo[playerid][sshower]) {
+    if (!PlayerInfo[playerid][sshower]) {
         for (new i = 7; i < 14; i++) {
             PlayerTextDrawShow(playerid, tdchange[i]);
             PlayerInfo[playerid][sshower] = true;
@@ -7868,7 +7861,7 @@ stock showerd(playerid) {
     return 1;
 }
 stock hideerd(playerid) {
-    if(PlayerInfo[playerid][sshower]) {
+    if (PlayerInfo[playerid][sshower]) {
         for (new i = 7; i < 14; i++) {
             PlayerTextDrawHide(playerid, tdchange[i]);
             PlayerInfo[playerid][sshower] = false;
@@ -7892,7 +7885,7 @@ stock hidefbd(playerid) {
 }
 /////////////Hide Onglet////////////////
 stock hideonglet(playerid) {
-    if(PlayerInfo[playerid][ongletshow]) {
+    if (PlayerInfo[playerid][ongletshow]) {
         for (new i = 0; i < USED_onglet; i++) { TextDrawHideForPlayer(playerid, onglet[i]); }
         PlayerTextDrawShow(playerid, tdchange[6]);
         hideerd(playerid);
@@ -7901,21 +7894,21 @@ stock hideonglet(playerid) {
 }
 /////////////Show lang//////////////////
 stock showlang(playerid) {
-    if(!PlayerInfo[playerid][langshow]) {
+    if (!PlayerInfo[playerid][langshow]) {
         for (new i = 0; i < USED_lang; i++) { TextDrawShowForPlayer(playerid, tdlang[i]); }
         PlayerInfo[playerid][langshow] = true;
     }
 }
 /////////////Hide lang//////////////////
 stock hidelang(playerid) {
-    if(PlayerInfo[playerid][langshow]) {
+    if (PlayerInfo[playerid][langshow]) {
         for (new i = 0; i < USED_lang; i++) { TextDrawHideForPlayer(playerid, tdlang[i]); }
         PlayerInfo[playerid][langshow] = false;
     }
 }
 /////////////Show Menu//////////////////
 stock showmenu(playerid) {
-    if(!PlayerInfo[playerid][menushow]) {
+    if (!PlayerInfo[playerid][menushow]) {
         for (new i = 0; i < USED_menu; i++) { TextDrawShowForPlayer(playerid, menu[i]); }
         PlayerTextDrawShow(playerid, tdchange[0]);
         PlayerTextDrawShow(playerid, tdchange[4]);
@@ -7925,7 +7918,7 @@ stock showmenu(playerid) {
 }
 /////////////Show ZMenu//////////////////
 stock Computer_showzmenu(playerid) {
-    if(!PlayerInfo[playerid][zmenushow]) {
+    if (!PlayerInfo[playerid][zmenushow]) {
         for (new i = 0; i < USED_zmenu; i++) {
             TextDrawShowForPlayer(playerid, zmenu[i]);
         }
@@ -7935,7 +7928,7 @@ stock Computer_showzmenu(playerid) {
 }
 /////////////Show ZMenu//////////////////
 stock showpgzmenu(playerid) {
-    if(!PlayerInfo[playerid][gpzmenushow]) {
+    if (!PlayerInfo[playerid][gpzmenushow]) {
         for (new i = 0; i < USED_pzmenu; i++) { PlayerTextDrawShow(playerid, pzmenu[i]); }
         for (new i = 0; i < USED_gzmenu; i++) { TextDrawShowForPlayer(playerid, gzmenu[i]); }
 
@@ -7956,7 +7949,7 @@ stock showpgzmenu(playerid) {
 
 /////////////Hide ZMenu//////////////////
 stock hidepgzmenu(playerid) {
-    if(PlayerInfo[playerid][gpzmenushow]) {
+    if (PlayerInfo[playerid][gpzmenushow]) {
         for (new i = 0; i < USED_pzmenu; i++) { PlayerTextDrawHide(playerid, pzmenu[i]); }
         for (new i = 0; i < USED_gzmenu; i++) { TextDrawHideForPlayer(playerid, gzmenu[i]); }
         PlayerInfo[playerid][gpzmenushow] = false;
@@ -7964,14 +7957,14 @@ stock hidepgzmenu(playerid) {
 }
 /////////////Hide ZMenu//////////////////
 stock hidezmenu(playerid) {
-    if(PlayerInfo[playerid][zmenushow]) {
+    if (PlayerInfo[playerid][zmenushow]) {
         for (new i = 0; i < USED_zmenu; i++) { TextDrawHideForPlayer(playerid, zmenu[i]); }
         PlayerInfo[playerid][zmenushow] = false;
     }
 }
 /////////////Hide Menu//////////////////////
 stock hidemenu(playerid) {
-    if(PlayerInfo[playerid][menushow]) {
+    if (PlayerInfo[playerid][menushow]) {
         for (new i = 0; i < USED_menu; i++) { TextDrawHideForPlayer(playerid, menu[i]); }
         PlayerTextDrawHide(playerid, tdchange[0]);
         PlayerTextDrawHide(playerid, tdchange[4]);
@@ -7991,14 +7984,14 @@ stock hidedatafonddec(playerid) {
 }
 ///////////// Show fond d'�cran ////////////////////
 stock showfonddec(playerid) {
-    if(!PlayerInfo[playerid][fondecshow]) {
+    if (!PlayerInfo[playerid][fondecshow]) {
         for (new i = 0; i < USED_fonddec; i++) { TextDrawShowForPlayer(playerid, fonddec[i]); }
         PlayerInfo[playerid][fondecshow] = true;
     }
 }
 //////////// Hide fond d'�cran /////////////////////
 stock hidefonddec(playerid) {
-    if(PlayerInfo[playerid][fondecshow]) {
+    if (PlayerInfo[playerid][fondecshow]) {
         for (new i = 0; i < USED_fonddec; i++) { TextDrawHideForPlayer(playerid, fonddec[i]); }
         PlayerTextDrawHide(playerid, tdchange[6]);
         PlayerInfo[playerid][fondecshow] = false;
@@ -8006,7 +7999,7 @@ stock hidefonddec(playerid) {
 }
 /////////////Show barre doutil//////////////////////
 stock showbarre(playerid) {
-    if(!PlayerInfo[playerid][barreshow]) {
+    if (!PlayerInfo[playerid][barreshow]) {
         TextDrawShowForPlayer(playerid, barre);
         PlayerInfo[playerid][barreshow] = true;
     }
@@ -8014,7 +8007,7 @@ stock showbarre(playerid) {
 }
 /////////////Hide barre doutil///////////////////
 stock hidebarre(playerid) {
-    if(PlayerInfo[playerid][barreshow]) {
+    if (PlayerInfo[playerid][barreshow]) {
         TextDrawHideForPlayer(playerid, barre);
         hidedatafonddec(playerid);
         PlayerInfo[playerid][barreshow] = false;
@@ -8023,7 +8016,7 @@ stock hidebarre(playerid) {
 }
 ////////////Show win icon/////////////////////////
 stock showwinico(playerid) { //600 USED_winico
-    if(!PlayerInfo[playerid][winicoshow]) {
+    if (!PlayerInfo[playerid][winicoshow]) {
         TextDrawShowForPlayer(playerid, loadwin[0]);
         TextDrawShowForPlayer(playerid, loadwin[1]);
         TextDrawShowForPlayer(playerid, loadwin[2]);
@@ -8050,7 +8043,7 @@ stock showwinico(playerid) { //600 USED_winico
 }
 ////////////Hide win icon////////////////////////
 stock hidewinico(playerid) {
-    if(PlayerInfo[playerid][winicoshow]) {
+    if (PlayerInfo[playerid][winicoshow]) {
         PlayerInfo[playerid][winicoshow] = false;
         for (new i = 0; i < USED_winico; i++) { TextDrawHideForPlayer(playerid, winico[i][computer_id]); }
         CancelSelectTextDraw(playerid), PlayerInfo[playerid][usecom] = false;
@@ -8059,7 +8052,7 @@ stock hidewinico(playerid) {
 /////////Show MAP/////////////////////////
 stock showmap(playerid) {
 
-    if(!PlayerInfo[playerid][mapshow]) {
+    if (!PlayerInfo[playerid][mapshow]) {
         for (new i = 0; i < USED_map; i++) { TextDrawShowForPlayer(playerid, map[i]); }
         PlayerTextDrawShow(playerid, map2);
         PlayerTextDrawHide(playerid, tdchange[6]);
@@ -8069,12 +8062,12 @@ stock showmap(playerid) {
 }
 /////////Show Zombies/////////////////////////
 stock showZombies(playerid) {
-    if(!PlayerInfo[playerid][haveone]) return YMHP(playerid);
-    if(!PlayerInfo[playerid][Zombiesshow]) {
+    if (!PlayerInfo[playerid][haveone]) return YMHP(playerid);
+    if (!PlayerInfo[playerid][Zombiesshow]) {
         for (new i = 0; i < usedhg; i++) { TextDrawShowForPlayer(playerid, Zombiesg[i]); }
         CancelSelectTextDraw(playerid);
         for (new i = 0; i < usedhgg; i++) { PlayerTextDrawShow(playerid, Zombiesgg[i]); }
-        if(!PlayerInfo[playerid][kidrob]) PlayerTextDrawHide(playerid, Zombiesgg[7]);
+        if (!PlayerInfo[playerid][kidrob]) PlayerTextDrawHide(playerid, Zombiesgg[7]);
         PlayerInfo[playerid][Zombiesshow] = true;
         hidemenu(playerid);
         Time2[playerid] = SetTimerEx("GETZ", 1000, 1, "d", playerid);
@@ -8083,11 +8076,11 @@ stock showZombies(playerid) {
 }
 /////////Hide Zombies/////////////////////////
 stock hideZombies(playerid) {
-    if(PlayerInfo[playerid][Zombiesshow]) {
+    if (PlayerInfo[playerid][Zombiesshow]) {
         for (new i = 0; i < usedhg; i++) { TextDrawHideForPlayer(playerid, Zombiesg[i]); }
         SelectTextDraw(playerid, 0xA3B4C5FF);
         for (new i = 0; i < usedhgg; i++) { PlayerTextDrawHide(playerid, Zombiesgg[i]); }
-        if(!PlayerInfo[playerid][kidrob]) PlayerTextDrawHide(playerid, Zombiesgg[7]);
+        if (!PlayerInfo[playerid][kidrob]) PlayerTextDrawHide(playerid, Zombiesgg[7]);
         PlayerInfo[playerid][Zombiesshow] = false;
         hideallzombies(playerid);
         KillTimer(Time2[playerid]);
@@ -8096,7 +8089,7 @@ stock hideZombies(playerid) {
 }
 /////////Hide map///////////////////
 stock hidemap(playerid) {
-    if(PlayerInfo[playerid][mapshow]) {
+    if (PlayerInfo[playerid][mapshow]) {
         for (new i = 0; i < USED_map; i++) { TextDrawHideForPlayer(playerid, map[i]); }
         PlayerTextDrawHide(playerid, map2);
         PlayerTextDrawHide(playerid, tdchange[3]);
@@ -8106,7 +8099,7 @@ stock hidemap(playerid) {
 }
 // /////// Stop Play musi //////////
 stock spmusic(playerid) {
-    if(!PlayerInfo[playerid][usemusic]) setPlay(playerid);
+    if (!PlayerInfo[playerid][usemusic]) setPlay(playerid);
     else SetStop(playerid);
 }
 stock setPlay(playerid) {
@@ -8124,9 +8117,9 @@ stock SetStop(playerid) {
 #define MIN_MUSICS -1
 stock musicplace(playerid) {
     StopAudioStreamForPlayer(playerid);
-    if(!PlayerInfo[playerid][usemusic]) {
-        if(PlayerInfo[playerid][musicpos] == 0) { PlayAudioStreamForPlayer(playerid, "http://hitradio-maroc.ice.infomaniak.ch/hitradio-maroc-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 1) { PlayAudioStreamForPlayer(playerid, "http://dancefloor.ice.infomaniak.ch/dancefloor-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 2) { PlayAudioStreamForPlayer(playerid, "http://buzz.ice.infomaniak.ch/buzz-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 3) { PlayAudioStreamForPlayer(playerid, "http://mgharba.ice.infomaniak.ch/mgharba-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 4) { PlayAudioStreamForPlayer(playerid, "http://rnb.ice.infomaniak.ch/rnb-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 5) { PlayAudioStreamForPlayer(playerid, "http://gold.ice.infomaniak.ch/gold-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 6) { PlayAudioStreamForPlayer(playerid, "http://cover2.ice.infomaniak.ch/cover2-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 7) { PlayAudioStreamForPlayer(playerid, "http://poprock.ice.infomaniak.ch/poprock-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 8) { PlayAudioStreamForPlayer(playerid, "http://french.ice.infomaniak.ch/french-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == 9) { PlayAudioStreamForPlayer(playerid, "http://latino.ice.infomaniak.ch/latino-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if(PlayerInfo[playerid][musicpos] == MAX_MUSICS) PlayerInfo[playerid][musicpos] = 0, musicplace(playerid);
-        else if(PlayerInfo[playerid][musicpos] == MIN_MUSICS) PlayerInfo[playerid][musicpos] = MAX_MUSICS - 1, musicplace(playerid);
+    if (!PlayerInfo[playerid][usemusic]) {
+        if (PlayerInfo[playerid][musicpos] == 0) { PlayAudioStreamForPlayer(playerid, "http://hitradio-maroc.ice.infomaniak.ch/hitradio-maroc-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 1) { PlayAudioStreamForPlayer(playerid, "http://dancefloor.ice.infomaniak.ch/dancefloor-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 2) { PlayAudioStreamForPlayer(playerid, "http://buzz.ice.infomaniak.ch/buzz-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 3) { PlayAudioStreamForPlayer(playerid, "http://mgharba.ice.infomaniak.ch/mgharba-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 4) { PlayAudioStreamForPlayer(playerid, "http://rnb.ice.infomaniak.ch/rnb-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 5) { PlayAudioStreamForPlayer(playerid, "http://gold.ice.infomaniak.ch/gold-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 6) { PlayAudioStreamForPlayer(playerid, "http://cover2.ice.infomaniak.ch/cover2-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 7) { PlayAudioStreamForPlayer(playerid, "http://poprock.ice.infomaniak.ch/poprock-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 8) { PlayAudioStreamForPlayer(playerid, "http://french.ice.infomaniak.ch/french-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == 9) { PlayAudioStreamForPlayer(playerid, "http://latino.ice.infomaniak.ch/latino-128.mp3", ComputerInfo[PlayerInfo[playerid][computer]][cX], ComputerInfo[PlayerInfo[playerid][computer]][cY], ComputerInfo[PlayerInfo[playerid][computer]][cZ] + PlayerInfo[playerid][sound], disfcom * 3, 1); } else if (PlayerInfo[playerid][musicpos] == MAX_MUSICS) PlayerInfo[playerid][musicpos] = 0, musicplace(playerid);
+        else if (PlayerInfo[playerid][musicpos] == MIN_MUSICS) PlayerInfo[playerid][musicpos] = MAX_MUSICS - 1, musicplace(playerid);
         PlayerInfo[playerid][usemusic] = true;
     }
 }
@@ -8214,10 +8207,10 @@ stock movepbarre(playerid, Float:X, Float:Y) {
     PlayerInfo[playerid][bY] += Y;
 
     ///========================
-    if(PlayerInfo[playerid][bX] <= 362.0) PlayerInfo[playerid][bX] -= X;
-    else if(PlayerInfo[playerid][bX] + 10.000 >= 625.0) PlayerInfo[playerid][bX] -= X;
-    else if(PlayerInfo[playerid][bY] >= 316.166687) PlayerInfo[playerid][bY] -= Y;
-    else if(PlayerInfo[playerid][bY] <= 180.250045) PlayerInfo[playerid][bY] -= Y;
+    if (PlayerInfo[playerid][bX] <= 362.0) PlayerInfo[playerid][bX] -= X;
+    else if (PlayerInfo[playerid][bX] + 10.000 >= 625.0) PlayerInfo[playerid][bX] -= X;
+    else if (PlayerInfo[playerid][bY] >= 316.166687) PlayerInfo[playerid][bY] -= Y;
+    else if (PlayerInfo[playerid][bY] <= 180.250045) PlayerInfo[playerid][bY] -= Y;
 
     pbarr[0] = CreatePlayerTextDraw(playerid, PlayerInfo[playerid][bX], PlayerInfo[playerid][bY], "ld_shtr:cbarm");
     PlayerTextDrawLetterSize(playerid, pbarr[0], 0.000000, 0.000000);
@@ -8253,7 +8246,7 @@ public TRTR(playerid) {
 }
 
 hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {
-    if(PlayerInfo[playerid][usecom]) shutdown(playerid);
+    if (PlayerInfo[playerid][usecom]) shutdown(playerid);
     return 1;
 }
 SendFBmsg(playerid, msg[]) {
@@ -8263,12 +8256,12 @@ SendFBmsg(playerid, msg[]) {
     return 1;
 }
 stock ShowAllPlayer(playerid) {
-    if(PlayerInfo[playerid][plsfb] == 0) return onlineerror(playerid);
+    if (PlayerInfo[playerid][plsfb] == 0) return onlineerror(playerid);
     PlayerInfo[playerid][showpl] = true;
     new string[MAX_PLAYERS * 2], String_Large[MAX_PLAYERS * 2];
     for (new i = -1; i < MAX_PLAYERS; i++) {
-        if(IsPlayerConnected(i) && i != playerid) {
-            if(PlayerInfo[i][sshowfb]) format(string, sizeof(String_Large), "{D5D0F2}(%d) %s {00FF00}� Online\n{D5D0F2}", i, Computer_PlayerName(i));
+        if (IsPlayerConnected(i) && i != playerid) {
+            if (PlayerInfo[i][sshowfb]) format(string, sizeof(String_Large), "{D5D0F2}(%d) %s {00FF00}� Online\n{D5D0F2}", i, Computer_PlayerName(i));
             else format(string, sizeof(String_Large), "{D5D0F2}(%d) %s {FF0000}� Offline\n{D5D0F2}", i, Computer_PlayerName(i));
             strcat(String_Large, string);
         }
@@ -8276,12 +8269,12 @@ stock ShowAllPlayer(playerid) {
     return ShowPlayerDialogEx(playerid, DIALOG_PLIST, 0, DIALOG_STYLE_MSGBOX, "Players List", String_Large, "Okey", "");
 }
 stock ShowMsgPlayer(playerid) {
-    if(PlayerInfo[playerid][plsfb] == 0) return onlineerror(playerid);
+    if (PlayerInfo[playerid][plsfb] == 0) return onlineerror(playerid);
     PlayerInfo[playerid][showpl] = true;
     new string[MAX_PLAYERS * 2], String_Large[MAX_PLAYERS * 2];
     for (new i = -1; i < MAX_PLAYERS; i++) {
-        if(IsPlayerConnected(i) && i != playerid) {
-            if(PlayerInfo[i][sshowfb]) format(string, sizeof(String_Large), "{D5D0F2}(%d) %s {00FF00}� Online\n{D5D0F2}", i, Computer_PlayerName(i));
+        if (IsPlayerConnected(i) && i != playerid) {
+            if (PlayerInfo[i][sshowfb]) format(string, sizeof(String_Large), "{D5D0F2}(%d) %s {00FF00}� Online\n{D5D0F2}", i, Computer_PlayerName(i));
             else format(string, sizeof(String_Large), "{D5D0F2}(%d) %s {FF0000}� Offline\n{D5D0F2}", i, Computer_PlayerName(i));
             strcat(String_Large, string);
         }
@@ -8292,15 +8285,15 @@ stock ShowMsgPlayer(playerid) {
 GetTotalOnline(playerid) {
     new fcount, fstring[128];
     for (new i = 0; i < MAX_PLAYERS; i++) {
-        if(PlayerInfo[i][sshowfb] && i != playerid) fcount++;
+        if (PlayerInfo[i][sshowfb] && i != playerid) fcount++;
     }
-    if(PlayerInfo[playerid][lang] == ENG) format(fstring, sizeof(fstring), "friends (%d)", fcount);
-    if(PlayerInfo[playerid][lang] == FRA) format(fstring, sizeof(fstring), "amis (%d)", fcount);
-    if(PlayerInfo[playerid][lang] == DAR) format(fstring, sizeof(fstring), "s7abk (%d)", fcount);
+    if (PlayerInfo[playerid][lang] == ENG) format(fstring, sizeof(fstring), "friends (%d)", fcount);
+    if (PlayerInfo[playerid][lang] == FRA) format(fstring, sizeof(fstring), "amis (%d)", fcount);
+    if (PlayerInfo[playerid][lang] == DAR) format(fstring, sizeof(fstring), "s7abk (%d)", fcount);
     PlayerTextDrawSetString(playerid, fronl, fstring);
     new stringfb[128];
-    if(PlayerInfo[playerid][lang] == ENG) format(stringfb, sizeof(stringfb), "%d like", fblike);
-    if(PlayerInfo[playerid][lang] == FRA || PlayerInfo[playerid][lang] == DAR) format(stringfb, sizeof(stringfb), "%d j'aime", fblike);
+    if (PlayerInfo[playerid][lang] == ENG) format(stringfb, sizeof(stringfb), "%d like", fblike);
+    if (PlayerInfo[playerid][lang] == FRA || PlayerInfo[playerid][lang] == DAR) format(stringfb, sizeof(stringfb), "%d j'aime", fblike);
     PlayerTextDrawSetString(playerid, numlike, stringfb);
     PlayerInfo[playerid][plsfb] = fcount;
     return 1;
@@ -8315,13 +8308,13 @@ stock rconlist(playerid) {
 stock getid(const params[]) {
     new Computer_ID, found, string[128], playername[MAX_PLAYER_NAME];
     for (new i = 0; i <= MAX_PLAYERS; i++) {
-        if(IsPlayerConnected(i)) {
+        if (IsPlayerConnected(i)) {
             GetPlayerName(i, playername, MAX_PLAYER_NAME);
             new namelen = strlen(playername);
             new bool:searched = false;
             for (new pos = 0; pos <= namelen; pos++) {
-                if(searched != true) {
-                    if(strfind(playername, params, true) == pos) {
+                if (searched != true) {
+                    if (strfind(playername, params, true) == pos) {
                         found++;
                         format(string, sizeof(string), "%d. %s (Computer_ID %d)", found, playername, i);
                         searched = true;
@@ -8332,12 +8325,12 @@ stock getid(const params[]) {
             }
         }
     }
-    if(found == 0) return ~1;
+    if (found == 0) return ~1;
     else return Computer_ID;
 }
 
 stock barrelang(playerid, langue) {
-    if(langue == ENG) {
+    if (langue == ENG) {
         PlayerTextDrawSetString(playerid, databarre[3], "ENG");
         PlayerTextDrawSetString(playerid, tdchange[0], "Shut_down");
         PlayerTextDrawSetString(playerid, tdchange[1], "Added image");
@@ -8352,7 +8345,7 @@ stock barrelang(playerid, langue) {
         PlayerTextDrawSetString(playerid, tdchange[10], "You must have an account");
         PlayerTextDrawSetString(playerid, tdchange[12], "How do I make an account ?");
         PlayerTextDrawSetString(playerid, tdchange[13], "its easy You must buy computer");
-    } else if(langue == FRA) {
+    } else if (langue == FRA) {
         PlayerTextDrawSetString(playerid, databarre[3], "FRA");
         PlayerTextDrawSetString(playerid, tdchange[0], "Eteindre");
         PlayerTextDrawSetString(playerid, tdchange[1], "ajout�e une image");
@@ -8367,7 +8360,7 @@ stock barrelang(playerid, langue) {
         PlayerTextDrawSetString(playerid, tdchange[10], "Vous devez avoir un compte");
         PlayerTextDrawSetString(playerid, tdchange[12], "Comment puis-je faire un compte ?");
         PlayerTextDrawSetString(playerid, tdchange[13], "Vous devez acheter un ordinateur");
-    } else if(langue == DAR) {
+    } else if (langue == DAR) {
         PlayerTextDrawSetString(playerid, databarre[3], "DAR");
         PlayerTextDrawSetString(playerid, tdchange[0], "Tfih");
         PlayerTextDrawSetString(playerid, tdchange[1], "law7 tswira");
@@ -8389,111 +8382,111 @@ stock tarjm(playerid, langue) {
     barrelang(playerid, langue);
 }
 stock onlineerror(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "No Player Online on facebook");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Pas de joueur en ligne sur facebook");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "tawa7d ma 7al l facebook");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "No Player Online on facebook");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Pas de joueur en ligne sur facebook");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "tawa7d ma 7al l facebook");
     return 1;
 }
 stock MWIN(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You Win :)");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous gagnez :)");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "rba7ti :)");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You Win :)");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous gagnez :)");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "rba7ti :)");
     return 1;
 }
 stock MLOSE(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You Lose :(");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Tu as perdu :(");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "5srti :(");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You Lose :(");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Tu as perdu :(");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "5srti :(");
     return 1;
 }
 stock MDES(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "The Computer has been destroyed");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "L'ordinateur a �t� d�truit");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "l PC t7ayd");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "The Computer has been destroyed");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "L'ordinateur a �t� d�truit");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "l PC t7ayd");
     return 1;
 }
 stock TDC(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "This player does not have computer");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Ce joueur n'a pas l'ordinateur");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "had l3ab ma3andoch PC");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "This player does not have computer");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Ce joueur n'a pas l'ordinateur");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "had l3ab ma3andoch PC");
     return 1;
 }
 stock YNC(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You are not close to this computer");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous n'�tes pas � proximit� de cet ordinateur");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta ma9ribch mn lPC");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You are not close to this computer");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous n'�tes pas � proximit� de cet ordinateur");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta ma9ribch mn lPC");
     return 1;
 }
 stock YAO(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You already have one");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous avez d�j� un ordinateur");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta rah 3andk wa7d");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You already have one");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous avez d�j� un ordinateur");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta rah 3andk wa7d");
     return 1;
 }
 stock NEM(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "Not enough money");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Pas assez d'argent");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "ma3andkch lflouse");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "Not enough money");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Pas assez d'argent");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "ma3andkch lflouse");
     return 1;
 }
 stock YMHA(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You need an account to save options!");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous devez avoir un compte pour sauver les options!");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "5as ykon 3andk compte bach ytchjel lik scores!");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You need an account to save options!");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous devez avoir un compte pour sauver les options!");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "5as ykon 3andk compte bach ytchjel lik scores!");
     return 1;
 }
 stock YMHP(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "you must to have an computer to access this page");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "vous devez avoir un ordinateur pour acc�der � cette page");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "5as ykon 3andk PC bach d5ol lhad sf7a");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "you must to have an computer to access this page");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "vous devez avoir un ordinateur pour acc�der � cette page");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "5as ykon 3andk PC bach d5ol lhad sf7a");
     return 1;
 }
 stock YTV(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You need to exit your vehicle");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous devez quitter votre v�hicule");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "5roj mnl7dida");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You need to exit your vehicle");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous devez quitter votre v�hicule");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "5roj mnl7dida");
     return 1;
 }
 stock YDC(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You don't have computer");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "?");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "ma3andkch PC");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You don't have computer");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "?");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "ma3andkch PC");
     return 1;
 }
 stock YNTY(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You are not close to your computer");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous ne disposez pas de l'ordinateur");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta ma9ribch mn lPC dialk");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You are not close to your computer");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous ne disposez pas de l'ordinateur");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta ma9ribch mn lPC dialk");
     return 1;
 }
 stock YNTRT(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "you only can use it");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "vous �tes seulement qui peut l'utiliser");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta bo7dk li t9ad t5dm fih");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "you only can use it");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "vous �tes seulement qui peut l'utiliser");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta bo7dk li t9ad t5dm fih");
     return 1;
 }
 stock YNTRR(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "all can use this computer");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "tout le monde peut utiliser cet ordinateur");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "kolchi y9ad y5dm fih");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "all can use this computer");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "tout le monde peut utiliser cet ordinateur");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "kolchi y9ad y5dm fih");
     return 1;
 }
 stock YCTY(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You are close to your computer");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous etes disposez de l'ordinateur");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta rah 9rib mn lPC dialk");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You are close to your computer");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous etes disposez de l'ordinateur");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "nta rah 9rib mn lPC dialk");
     return 1;
 }
 stock YNR(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "You must to be RCON");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous devez �tre RCON");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "5ask tkon RCON");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "You must to be RCON");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Vous devez �tre RCON");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "5ask tkon RCON");
     return 1;
 }
 stock TNO(playerid) {
-    if(PlayerInfo[playerid][lang] == ENG) SM(playerid, "This player not online");
-    else if(PlayerInfo[playerid][lang] == FRA) SM(playerid, "Ce joueur pas en ligne");
-    else if(PlayerInfo[playerid][lang] == DAR) SM(playerid, "Hada machi online");
+    if (PlayerInfo[playerid][lang] == ENG) SM(playerid, "This player not online");
+    else if (PlayerInfo[playerid][lang] == FRA) SM(playerid, "Ce joueur pas en ligne");
+    else if (PlayerInfo[playerid][lang] == DAR) SM(playerid, "Hada machi online");
     return 1;
 }
 #define hBspeed 0.50
@@ -8558,29 +8551,29 @@ stock UpdateTextDrawKiller(playerid) {
     return 1;
 }
 IsNinA(playerid) {
-    if(PlayerInfo[playerid][nX] < 114.500) PlayerInfo[playerid][nX] += PlayerInfo[playerid][kspeed];
-    if(PlayerInfo[playerid][nX] > plX) PlayerInfo[playerid][nX] -= PlayerInfo[playerid][kspeed];
-    if(PlayerInfo[playerid][nY] < 143.500) PlayerInfo[playerid][nY] += PlayerInfo[playerid][kspeed];
-    if(PlayerInfo[playerid][nY] > 343.50) PlayerInfo[playerid][nY] -= PlayerInfo[playerid][kspeed];
+    if (PlayerInfo[playerid][nX] < 114.500) PlayerInfo[playerid][nX] += PlayerInfo[playerid][kspeed];
+    if (PlayerInfo[playerid][nX] > plX) PlayerInfo[playerid][nX] -= PlayerInfo[playerid][kspeed];
+    if (PlayerInfo[playerid][nY] < 143.500) PlayerInfo[playerid][nY] += PlayerInfo[playerid][kspeed];
+    if (PlayerInfo[playerid][nY] > 343.50) PlayerInfo[playerid][nY] -= PlayerInfo[playerid][kspeed];
     return UpdateTextDrawKiller(playerid);
 }
 
 IsPlayerCloseToAnyComputer(playerid) {
     new yes = false;
-    if(!IsPlayerSpawned(playerid) || !IsPlayerLoggedIn(playerid)) return false;
+    if (!IsPlayerSpawned(playerid) || !IsPlayerLoggedIn(playerid)) return false;
     loopco {
-        if(GetPlayerAdminLevel(playerid) == 10 && IsPlayerCloseToComputer(playerid, i)) yes = true;
-        if(IsPlayerCloseToComputer(playerid, i) && !ComputerInfo[i][Locked]) yes = true;
-        if(PlayerInfo[playerid][haveone]) { if(IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) yes = true; }
+        if (IsPlayerMasterAdmin(playerid) && IsPlayerCloseToComputer(playerid, i)) yes = true;
+        if (IsPlayerCloseToComputer(playerid, i) && !ComputerInfo[i][Locked]) yes = true;
+        if (PlayerInfo[playerid][haveone]) { if (IsPlayerCloseToComputer(playerid, PlayerInfo[playerid][computer])) yes = true; }
     }
-    if(yes) return true;
+    if (yes) return true;
     else return false;
 }
 
 #define zid 1.0
 createzombie(playerid) {
     loopz {
-        if(!Zinfo[playerid][i][created]) {
+        if (!Zinfo[playerid][i][created]) {
             Zinfo[playerid][i][zX] = 111.000000;
             Zinfo[playerid][i][zY] = 271.250000;
             Zinfo[playerid][i][Health] = 100.00;
@@ -8638,25 +8631,25 @@ OnZombieDeath(playerid, i) {
 
 OnHeadShot(playerid) {
     loopz {
-        if(IsHeadShot(playerid, i)) n9szhealth(playerid, i, PlayerInfo[playerid][com_damage] * 2), PlayerInfo[playerid][headshot] += 1;
+        if (IsHeadShot(playerid, i)) n9szhealth(playerid, i, PlayerInfo[playerid][com_damage] * 2), PlayerInfo[playerid][headshot] += 1;
     }
     return 1;
 }
 OnBodyShot(playerid) {
     loopz {
-        if(IsBodyShot(playerid, i)) n9szhealth(playerid, i, PlayerInfo[playerid][com_damage]);
+        if (IsBodyShot(playerid, i)) n9szhealth(playerid, i, PlayerInfo[playerid][com_damage]);
     }
     return 1;
 }
 
 IsHeadShot(playerid, i) {
     new yes = false;
-    if(Zinfo[playerid][i][zX] + 4.5 < PlayerInfo[playerid][nX] < Zinfo[playerid][i][zX] + 9.00 && Zinfo[playerid][i][zY] - 1.50 < PlayerInfo[playerid][nY] < Zinfo[playerid][i][zY] + 3.5) yes = true;
+    if (Zinfo[playerid][i][zX] + 4.5 < PlayerInfo[playerid][nX] < Zinfo[playerid][i][zX] + 9.00 && Zinfo[playerid][i][zY] - 1.50 < PlayerInfo[playerid][nY] < Zinfo[playerid][i][zY] + 3.5) yes = true;
     return yes;
 }
 IsBodyShot(playerid, i) {
     new yes = false;
-    if(Zinfo[playerid][i][zX] + 1.5 < PlayerInfo[playerid][nX] < Zinfo[playerid][i][zX] + 12.00 && Zinfo[playerid][i][zY] + 3.5 < PlayerInfo[playerid][nY] < Zinfo[playerid][i][zY] + 16.5) yes = true;
+    if (Zinfo[playerid][i][zX] + 1.5 < PlayerInfo[playerid][nX] < Zinfo[playerid][i][zX] + 12.00 && Zinfo[playerid][i][zY] + 3.5 < PlayerInfo[playerid][nY] < Zinfo[playerid][i][zY] + 16.5) yes = true;
     return yes;
 }
 
@@ -8676,8 +8669,8 @@ hidezombie(playerid, i) {
 }
 givezombie(playerid) {
     loopz {
-        if(zoco(playerid) < 14) {
-            if(Zinfo[playerid][i][created] && !Zinfo[playerid][i][showed]) {
+        if (zoco(playerid) < 14) {
+            if (Zinfo[playerid][i][created] && !Zinfo[playerid][i][showed]) {
                 Zinfo[playerid][i][zX] = zlX;
                 randomY(playerid, i);
                 showzombie(playerid, i);
@@ -8746,23 +8739,23 @@ createzombiea(playerid, i) {
     Zinfo[playerid][i][created] = true;
 }
 refleshzombie(playerid, i) {
-    if(Zinfo[playerid][i][showed]) {
+    if (Zinfo[playerid][i][showed]) {
         destroyzombie(playerid, i);
         createzombiea(playerid, i);
         showzombie(playerid, i);
 
-        if(Zinfo[playerid][i][zX] < plX) Zinfo[playerid][i][zX] += Zinfo[playerid][i][Speed];
+        if (Zinfo[playerid][i][zX] < plX) Zinfo[playerid][i][zX] += Zinfo[playerid][i][Speed];
         else return Zinfo[playerid][i][zX] -= Zinfo[playerid][i][Speed], hideZombies(playerid), Computer_showzmenu(playerid);
-        if(Zinfo[playerid][i][zY] < plY) Zinfo[playerid][i][zY] += Zinfo[playerid][i][Speed];
+        if (Zinfo[playerid][i][zY] < plY) Zinfo[playerid][i][zY] += Zinfo[playerid][i][Speed];
         else Zinfo[playerid][i][zY] -= Zinfo[playerid][i][Speed];
-        if(Zinfo[playerid][i][Health] < 1.00) return OnZombieDeath(playerid, i);
+        if (Zinfo[playerid][i][Health] < 1.00) return OnZombieDeath(playerid, i);
     }
     return 1;
 }
 zoco(playerid) {
     new zcount;
     loopz {
-        if(Zinfo[playerid][i][showed]) zcount++;
+        if (Zinfo[playerid][i][showed]) zcount++;
     }
     return zcount;
 }

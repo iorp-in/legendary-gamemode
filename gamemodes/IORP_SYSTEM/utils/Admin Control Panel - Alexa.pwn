@@ -83,7 +83,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
 
-    if (IsStringContainWords(text, "getvehicle") && GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsStringContainWords(text, "getvehicle") && GetPlayerAdminLevel(playerid) >= 3) {
         new vehicleid;
         if (sscanf(GetNextWordFromString(text, "getvehicle"), "d", vehicleid)) { SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} /alexa getvehicle [vehicleid]"); return ~1; }
         if (!IsValidVehicle(vehicleid)) { SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} invalid vehicleid"); return ~1; }
@@ -97,7 +97,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
 
-    if (IsStringContainWords(text, "gotovehicle") && GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsStringContainWords(text, "gotovehicle") && GetPlayerAdminLevel(playerid) == 3) {
         new vehicleid;
         if (sscanf(GetNextWordFromString(text, "gotovehicle"), "d", vehicleid)) { SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} /alexa gotovehicle [vehicleid]"); return ~1; }
         if (!IsValidVehicle(vehicleid)) { SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} invalid vehicleid"); return ~1; }
@@ -110,7 +110,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
 
-    if (IsStringContainWords(text, "sethealth") && GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsStringContainWords(text, "sethealth") && GetPlayerAdminLevel(playerid) == 3) {
         new extraid, Float:sHealth;
         if (sscanf(GetNextWordFromString(text, "sethealth"), "u", extraid)) extraid = playerid;
         if (sscanf(GetNextWordFromString(text, "sethealth", 2), "f", sHealth)) {
@@ -128,7 +128,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
 
-    if (IsStringContainWords(text, "setarmour") && GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsStringContainWords(text, "setarmour") && GetPlayerAdminLevel(playerid) == 3) {
         new extraid, Float:sArmour;
         if (sscanf(GetNextWordFromString(text, "setarmour"), "u", extraid)) extraid = playerid;
         if (sscanf(GetNextWordFromString(text, "setarmour", 2), "f", sArmour)) {
@@ -186,7 +186,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
 
-    if (IsStringContainWords(text, "spawn") && GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsStringContainWords(text, "spawn") && GetPlayerAdminLevel(playerid) == 3) {
         new extraid = -1;
         new Vehicle[32], VehicleID, ColorOne = -1, ColorTwo = -1, string[512];
         sscanf(GetNextWordFromString(text, "spawn", 1), "s[32]", Vehicle);

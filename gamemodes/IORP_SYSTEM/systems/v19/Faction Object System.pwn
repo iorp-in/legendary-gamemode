@@ -127,7 +127,6 @@ hook OnGameModeInit() {
 }
 
 hook OnPlayerConnect(playerid) {
-    if (IsPlayerNPC(playerid)) return 1;
     EditingCopObjectID[playerid] = -1;
     return 1;
 }
@@ -213,24 +212,24 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
     return 1;
 }
 
-stock SAPDObjectEdit(playerid, sapdObjectID) {
+stock FactionObject:Edit(playerid, sapdObjectID) {
     if (!Iter_Contains(COP_OBJECTS, sapdObjectID)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Object Does not Exist.");
     if (EditingCopObjectID[playerid] != -1) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}You're already editing an object.");
     if (!IsPlayerInRangeOfPoint(playerid, 16.0, FactionObject:Data[sapdObjectID][ObjX], FactionObject:Data[sapdObjectID][ObjY], FactionObject:Data[sapdObjectID][ObjZ])) return SendClientMessageEx(playerid, -1, "ERROR:{FFFFFF}You're not near the object you want to edit.");
     new name[MAX_PLAYER_NAME];
     GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-    if (GetPlayerAdminLevel(playerid) < 1 && strcmp(FactionObject:Data[sapdObjectID][Owner], name)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}This object isn't yours, you can't edit it.");
+    if (GetPlayerAdminLevel(playerid) != 3 && strcmp(FactionObject:Data[sapdObjectID][Owner], name)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}This object isn't yours, you can't edit it.");
     EditingCopObjectID[playerid] = sapdObjectID;
     EditDynamicObject(playerid, FactionObject:Data[sapdObjectID][ObjID]);
     return 1;
 }
 
-stock SAPDObjectRemove(playerid, sapdObjectID) {
+stock FactionObject:Remove(playerid, sapdObjectID) {
     if (!Iter_Contains(COP_OBJECTS, sapdObjectID)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Object Does not Exist.");
     if (EditingCopObjectID[playerid] == sapdObjectID) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}You can't remove an object you're editing.");
     new name[MAX_PLAYER_NAME];
     GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-    if (GetPlayerAdminLevel(playerid) < 1 && strcmp(FactionObject:Data[sapdObjectID][Owner], name)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}This object isn't yours, you can't remove it.");
+    if (GetPlayerAdminLevel(playerid) != 3 && strcmp(FactionObject:Data[sapdObjectID][Owner], name)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}This object isn't yours, you can't remove it.");
     DestroyDynamicObjectEx(FactionObject:Data[sapdObjectID][ObjID]);
     DestroyDynamic3DTextLabel(FactionObject:Data[sapdObjectID][ObjLabel]);
     if (IsValidDynamicArea(FactionObject:Data[sapdObjectID][ObjArea])) DestroyDynamicArea(FactionObject:Data[sapdObjectID][ObjArea]);
@@ -279,7 +278,7 @@ stock FactionObject:AddSpeedcam(playerid, speedlimit) {
     return sapdObjectID;
 }
 
-stock UpdateSpeedCamLimit(playerid, sapdObjectID, speedlimit) {
+stock FactionObject:UpdateSpeedCamLimit(playerid, sapdObjectID, speedlimit) {
     if (!Iter_Contains(COP_OBJECTS, sapdObjectID)) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Object Does not Exist.");
     if (FactionObject:Data[sapdObjectID][Type] != OBJECT_TYPE_SPEEDCAM) return SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Object is not a speedcam.");
     FactionObject:Data[sapdObjectID][ObjData] = speedlimit;
@@ -299,64 +298,26 @@ UCP:OnInit(playerid, page) {
     new vehicleid = GetPlayerNearestVehicle(playerid, 10.0);
     new staticId = StaticVehicle:GetID(vehicleid);
     if (GetVehicleModel(vehicleid) != 433 || !StaticVehicle:IsValidID(staticId) || !IsArrayContainNumber(allow_faction, StaticVehicle:GetFactionID(staticId))) return 1;
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) && Faction:IsPlayerSigned(playerid)
-    ) UCP:AddCommand(playerid, "SAPD Objects", true);
+    if (IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) && Faction:IsPlayerSigned(playerid)) UCP:AddCommand(playerid, "SAPD Objects", true);
     return 1;
 }
 
 UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("SAPD Objects", inputtext)) return FactionObject:CommandMenu(playerid);
+    if (!response || page != 0 || !IsStringSame("SAPD Objects", inputtext)) return 1;
+    FactionObject:CommandMenu(playerid);
+    return ~1;
+}
+
+ASCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "SAPD Objects");
     return 1;
 }
 
-hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    new allow_faction[] = { 0, 1, 2, 3 };
-    if (!IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) || !Faction:IsPlayerSigned(playerid)) return 1;
-    if (IsStringContainWords(text, "sapd place")) {
-        new object[40];
-        if (!sscanf(GetNextWordFromString(text, "place"), "s[40]", object)) {
-            if (IsStringSame("speedcam", object)) {
-                SAPDObjectEdit(playerid, FactionObject:AddSpeedcam(playerid, 110));
-                return ~1;
-            }
-        }
-        FactionObject:CommandMenu(playerid);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "sapd edit")) {
-        new objectID;
-        if (sscanf(GetNextWordFromString(text, "edit"), "d", objectID)) {
-            SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}objectid required.");
-            return ~1;
-        }
-        SAPDObjectEdit(playerid, objectID);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "sapd remove")) {
-        new objectID;
-        if (sscanf(GetNextWordFromString(text, "remove"), "d", objectID)) {
-            SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}objectid required.");
-            return ~1;
-        }
-        SAPDObjectRemove(playerid, objectID);
-        return ~1;
-    }
-    if (IsStringContainWords(text, "set speedcam limit")) {
-        new speedcamID, speedcamLimit;
-        if (sscanf(GetNextWordFromString(text, "speedcam"), "d", speedcamID)) {
-            SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}Speedcam id required.");
-            return ~1;
-        }
-        if (sscanf(GetNextWordFromString(text, "limit"), "d", speedcamLimit)) {
-            SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}Speedcam limit required.");
-            return ~1;
-        }
-        UpdateSpeedCamLimit(playerid, speedcamID, speedcamLimit);
-        return ~1;
-    }
-    return 1;
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0 || !IsStringSame("SAPD Objects", inputtext)) return 1;
+    FactionObject:CommandMenu(playerid);
+    return ~1;
 }
 
 hook OnAccountRename(const OldName[], const NewName[]) {
@@ -400,15 +361,21 @@ FlexDialog:FactionObjectManageInput(playerid, response, listitem, const inputtex
 
 stock FactionObject:Manage(playerid, sapdObjectID) {
     new string[512];
-    strcat(string, "Teleport to object\n");
     strcat(string, "Edit object\n");
     strcat(string, "Remove Object\n");
+    if (FactionObject:Data[sapdObjectID][Type] == OBJECT_TYPE_SPEEDCAM) strcat(string, "Set speed limit\n");
+    strcat(string, "Teleport to object\n");
     return FlexPlayerDialog(playerid, "FactionObjectManage", DIALOG_STYLE_LIST, "Manage Object", string, "Select", "Close", sapdObjectID);
 }
 
 FlexDialog:FactionObjectManage(playerid, response, listitem, const inputtext[], sapdObjectID, const payload[]) {
     if (!response) return FactionObject:ManageInput(playerid);
-    if (IsStringSame(inputtext, "Edit object")) return SAPDObjectEdit(playerid, sapdObjectID);
+    if (IsStringSame(inputtext, "Edit object")) return FactionObject:Edit(playerid, sapdObjectID);
+    if (IsStringSame(inputtext, "Remove Object")) {
+        FactionObject:Remove(playerid, sapdObjectID);
+        return FactionObject:CommandMenu(playerid);
+    }
+    if (IsStringSame(inputtext, "Set speed limit")) return FactionObjectSetSpeedLimit(playerid, sapdObjectID);
     if (IsStringSame(inputtext, "Teleport to object")) {
         SetPlayerPosEx(playerid, FactionObject:Data[sapdObjectID][ObjX] + 1, FactionObject:Data[sapdObjectID][ObjY] + 1, FactionObject:Data[sapdObjectID][ObjZ] + 1.75);
         SetPlayerInteriorEx(playerid, FactionObject:Data[sapdObjectID][ObjInterior]);
@@ -416,11 +383,23 @@ FlexDialog:FactionObjectManage(playerid, response, listitem, const inputtext[], 
         AlexaMsg(playerid, "Teleported to object");
         return FactionObject:Manage(playerid, sapdObjectID);
     }
-    if (IsStringSame(inputtext, "Remove Object")) {
-        SAPDObjectRemove(playerid, sapdObjectID);
-        return FactionObject:CommandMenu(playerid);
-    }
     return 1;
+}
+
+stock FactionObjectSetSpeedLimit(playerid, sapdObjectID) {
+    return FlexPlayerDialog(
+        playerid, "FactionObjectSetSpeedLimit", DIALOG_STYLE_INPUT,
+        "Set speed limit", "Write a speed limit for this speed camera\nLimit: 10 to 300",
+        "Submit", "Cancel", sapdObjectID
+    );
+}
+
+FlexDialog:FactionObjectSetSpeedLimit(playerid, response, listitem, const inputtext[], sapdObjectID, const payload[]) {
+    if (!response) return FactionObject:Manage(playerid, sapdObjectID);
+    new limit;
+    if (sscanf(inputtext, "d", limit) || limit < 10 || limit > 300) return FactionObjectSetSpeedLimit(playerid, sapdObjectID);
+    FactionObject:UpdateSpeedCamLimit(playerid, sapdObjectID, limit);
+    return FactionObject:Manage(playerid, sapdObjectID);
 }
 
 stock FactionObject:Place(playerid) {

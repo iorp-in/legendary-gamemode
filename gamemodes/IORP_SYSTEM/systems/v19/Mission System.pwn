@@ -279,8 +279,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 // Alexa Missions
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (GetPlayerVIPLevel(playerid) < 1) return 1;
-    if (!IsStringContainWords(text, "missions")) return 1;
+    if (GetPlayerVIPLevel(playerid) < 1 || !IsStringSame(text, "missions")) return 1;
     InitMissionsList(playerid);
     return ~1;
 }

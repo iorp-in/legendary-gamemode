@@ -46,7 +46,7 @@ stock ACP:AddCommand(playerid, const command[], bool:top = false) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (strcmp("acp", cmd) || GetPlayerAdminLevel(playerid) < 1) return 1;
+    if (GetPlayerAdminLevel(playerid) < 1 || !IsStringSame("acp", cmd)) return 1;
     ACP:Init(playerid);
     return ~1;
 }
@@ -57,4 +57,4 @@ cmd:acp(playerid, const params[]) {
     return 1;
 }
 
-//#snippet init_acp ACP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tACP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_acp ACP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tACP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

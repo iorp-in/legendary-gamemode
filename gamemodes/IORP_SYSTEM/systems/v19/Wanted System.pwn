@@ -537,11 +537,9 @@ hook OnAccountDelete(const AccountName[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords("wanted database", text) && GetPlayerAdminLevel(playerid) > 5) {
-        WantedDatabase:Menu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (GetPlayerAdminLevel(playerid) != 3 || !IsStringSame("wanted database", text)) return 1;
+    WantedDatabase:Menu(playerid);
+    return ~1;
 }
 
 stock WantedDatabase:GiveTicket(playerid, targetid) {
@@ -643,13 +641,13 @@ FlexDialog:WantedDatabaseView(playerid, response, listitem, const inputtext[], p
     return WantedDatabase:ViewRecords(playerid, suspectName, page);
 }
 
-hook ApcpOnInit(playerid, targetid, page) {
+APCP:OnInit(playerid, targetid, page) {
     if (page != 1) return 1;
     if (GetPlayerWantedLevelEx(targetid)) APCP:AddCommand(playerid, "Clear All Wanted Levels");
     return 1;
 }
 
-hook ApcpOnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
+APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response || page != 1) return 1;
     if (IsStringSame("Clear All Wanted Levels", inputtext)) {
         WantedDatabase:ResetWantedLevel(targetid, sprintf("admin %s cleared this wanted level", GetPlayerNameEx(playerid)));

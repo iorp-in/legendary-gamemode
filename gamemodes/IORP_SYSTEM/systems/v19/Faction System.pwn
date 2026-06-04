@@ -3,6 +3,7 @@
 #define Max_Faction_Skin 10
 #define Max_Faction_Weapon 50
 #define MAX_Faction 50
+#define RESIGN_COOLDOWN 86400 // 1 day seconds
 
 enum Faction:PlayerDataEnum {
     FactionID,
@@ -659,11 +660,9 @@ stock Faction:FactionPullOver(playerid, targetid = -1) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringSame("factions", cmd) && (GetPlayerVIPLevel(playerid) > 0 || GetPlayerAdminLevel(playerid) > 0)) {
-        Faction:MenuList(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!IsStringSame("factions", cmd)) return 1;
+    if (GetPlayerVIPLevel(playerid) > 0 || GetPlayerAdminLevel(playerid) > 0) Faction:MenuList(playerid);
+    return ~1;
 }
 
 hook OnAccountRename(const OldName[], const NewName[]) {
@@ -754,7 +753,7 @@ stock Faction:ShowDirectJoin(playerid, factionid) {
     if (Faction:Data[factionid][AllowJoining] == 0) return AlexaMsg(playerid, "We are not accepting direct applications. contact faction leader.", Faction:GetName(factionid));
     new astring[1000];
     strcat(astring, "Do you want to join this faction?\n\n", sizeof astring);
-    strcat(astring, "once you have joined this faction, then you can not leave it for next 7 days\n", sizeof astring);
+    strcat(astring, "once you have joined this faction, then you can not leave it for next 24 hours\n", sizeof astring);
     strcat(astring, "if you need more time to decide your faction then cancel this opportunity\n", sizeof astring);
     return FlexPlayerDialog(
         playerid, "FactionShowDirectJoin", DIALOG_STYLE_MSGBOX,
@@ -815,15 +814,17 @@ stock Faction:MenuList(playerid) {
             )
         );
     }
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Create\tFaction\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Globel\tVehicle\tFaction\n");
+    if (IsPlayerMasterAdmin(playerid)) {
+        strcat(string, "Create\tFaction\n");
+        strcat(string, "Global\tVehicle\tFaction\n");
+    }
     return FlexPlayerDialog(playerid, "FactionMenuList", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Faction System]: {FFFFFF}Factions List", string, "select", "cancel");
 }
 
 FlexDialog:FactionMenuList(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
     if (!response) return 1;
     if (IsStringSame(inputtext, "Create")) return Faction:MenuAdminCreate(playerid);
-    if (IsStringSame(inputtext, "Globel")) return Faction:MenuAdminVehicle(playerid);
+    if (IsStringSame(inputtext, "Global")) return Faction:MenuAdminVehicle(playerid);
     new factionid = strval(inputtext);
     return Faction:ListOptions(playerid, factionid);
 }
@@ -832,8 +833,8 @@ stock Faction:ListOptions(playerid, factionid) {
     new string[1024];
     if (Faction:GetMemberCount(factionid) > 0) strcat(string, "See list of faction players\n");
     if (Faction:GetPlayerFID(playerid) == -1 && Faction:GetPlayerRequestID(playerid) == -1) strcat(string, "Apply for joining the faction\n");
-    if ((Faction:GetLeaderID(factionid) == playerid || GetPlayerAdminLevel(playerid) == 10) && Faction:GetPlayerRequestCount(factionid) > 0) strcat(string, "Accept the request of players\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Manage Faction\n");
+    if ((Faction:GetLeaderID(factionid) == playerid || GetPlayerAdminLevel(playerid) == 3) && Faction:GetPlayerRequestCount(factionid) > 0) strcat(string, "Accept the request of players\n");
+    if (GetPlayerAdminLevel(playerid) == 3) strcat(string, "Manage Faction\n");
     if (!strlen(string)) return Faction:MenuList(playerid);
     return FlexPlayerDialog(
         playerid, "FactionListOptions", DIALOG_STYLE_LIST,
@@ -963,7 +964,7 @@ stock Faction:ShowMemberList(playerid, factionid, bool:locker = false) {
 
 FlexDialog:FactionMenuMemberOption(playerid, response, listitem, const inputtext[], factionid, const payload[]) {
     new isLocker = strval(payload);
-    if (!response || (GetPlayerAdminLevel(playerid) < 8 && !Faction:IsPlayerLeader(playerid, factionid))) {
+    if (!response || (GetPlayerAdminLevel(playerid) != 3 && !Faction:IsPlayerLeader(playerid, factionid))) {
         if (isLocker) return Faction:ShowLocker(playerid, factionid);
         return Faction:MenuList(playerid);
     }
@@ -1052,10 +1053,10 @@ stock Faction:ShowLocker(playerid, factionid) {
         if (IsArrayContainNumber(allowedFactions, Faction:GetPlayerFID(playerid))) strcat(string, "Take Taser\n");
         // strcat(string, "Armour, Health, Weapon's\n");
         strcat(string, "Sign OFF\n");
-        if (IsStringSame(GetPlayerNameEx(playerid), Faction:GetLeaderName(factionid)) || GetPlayerAdminLevel(playerid) == 10) strcat(string, "Enable/Disable Auto Join\n");
-        if (IsStringSame(GetPlayerNameEx(playerid), Faction:GetLeaderName(factionid)) || GetPlayerAdminLevel(playerid) == 10) strcat(string, "Manage Faction Wage\n");
+        if (IsStringSame(GetPlayerNameEx(playerid), Faction:GetLeaderName(factionid)) || GetPlayerAdminLevel(playerid) == 3) strcat(string, "Enable/Disable Auto Join\n");
+        if (IsStringSame(GetPlayerNameEx(playerid), Faction:GetLeaderName(factionid)) || GetPlayerAdminLevel(playerid) == 3) strcat(string, "Manage Faction Wage\n");
         if (Faction:GetMemberCount(factionid) > 0) strcat(string, "Check Members List\n");
-        if ((gettime() - Database:GetInt(GetPlayerNameEx(playerid), "username", "LastJoinDate")) > 7 * 24 * 60 * 60) strcat(string, "Resign\n");
+        if ((gettime() - Database:GetInt(GetPlayerNameEx(playerid), "username", "LastJoinDate")) > RESIGN_COOLDOWN) strcat(string, "Resign\n");
     } else {
         strcat(string, "Sign In\n");
     }
@@ -1170,9 +1171,7 @@ FlexDialog:FactionUpdateRankWage(playerid, response, listitem, const inputtext[]
 
 stock Faction:MenuAdminCreate(playerid, const alert[] = "") {
     if (strlen(alert)) AlexaMsg(playerid, alert);
-    return FlexPlayerDialog(
-        playerid, "FactionMenuAdminCreate", DIALOG_STYLE_INPUT, "{4286f4}[Faction System]:{FFFFEE}Create Faction", "Enter Faction Name", "Create", "Close"
-    );
+    return FlexPlayerDialog(playerid, "FactionMenuAdminCreate", DIALOG_STYLE_INPUT, "{4286f4}[Faction System]:{FFFFEE}Create Faction", "Enter Faction Name", "Create", "Close");
 }
 
 FlexDialog:FactionMenuAdminCreate(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
@@ -1242,21 +1241,23 @@ FlexDialog:FactionMenuAdminVehicle(playerid, response, listitem, const inputtext
 stock Faction:MenuAdminManage(playerid, factionid) {
     new string[2000];
     strcat(string, "Action\t---\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Enable/Disable Auto Join\t%s\n", Faction:GetJoiningState(factionid) ? "Allowed" : "Not Allowed"));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Set Leader\t%s\n", Faction:GetLeaderName(factionid)));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Set Member Limit\t%d/%d\n", Faction:GetMemberCount(factionid), Faction:GetMemberLimit(factionid)));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Set Required Roleplay Score\t%d\n", Faction:GetFactionRequiredRP(factionid)));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, sprintf("Set Required Score\t%d\n", Faction:GetFactionRequiredScore(factionid)));
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Manage Rank\t\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "Manage Skin\t\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Manage Weapon\t\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Update Locker Position\t\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Update Color\t\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Update Zone Data\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, sprintf("Update Wage\t$%s\n", FormatCurrency(Faction:GetWage(factionid))));
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, sprintf("Update VaultID\t%d\n", Faction:GetVaultID(factionid)));
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Rename Faction\t\n");
-    if (GetPlayerAdminLevel(playerid) >= 10) strcat(string, "Remove Faction\t\n");
+    strcat(string, sprintf("Enable/Disable Auto Join\t%s\n", Faction:GetJoiningState(factionid) ? "Allowed" : "Not Allowed"));
+    strcat(string, sprintf("Set Leader\t%s\n", Faction:GetLeaderName(factionid)));
+    strcat(string, sprintf("Set Member Limit\t%d/%d\n", Faction:GetMemberCount(factionid), Faction:GetMemberLimit(factionid)));
+    strcat(string, sprintf("Set Required Roleplay Score\t%d\n", Faction:GetFactionRequiredRP(factionid)));
+    strcat(string, sprintf("Set Required Score\t%d\n", Faction:GetFactionRequiredScore(factionid)));
+    strcat(string, "Manage Rank\t\n");
+    strcat(string, "Manage Skin\t\n");
+    if (IsPlayerMasterAdmin(playerid)) {
+        strcat(string, "Manage Weapon\t\n");
+        strcat(string, "Update Locker Position\t\n");
+        strcat(string, "Update Color\t\n");
+        strcat(string, "Update Zone Data\n");
+        strcat(string, sprintf("Update Wage\t$%s\n", FormatCurrency(Faction:GetWage(factionid))));
+        strcat(string, sprintf("Update VaultID\t%d\n", Faction:GetVaultID(factionid)));
+        strcat(string, "Rename Faction\t\n");
+        strcat(string, "Remove Faction\t\n");
+    }
     return FlexPlayerDialog(playerid, "FactionMenuAdminManage", DIALOG_STYLE_TABLIST_HEADERS, "Faction Manage", string, "Select", "Close", factionid);
 }
 

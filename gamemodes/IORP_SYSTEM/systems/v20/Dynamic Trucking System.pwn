@@ -75,63 +75,6 @@ stock GetAllowedVehicleTrailerID(vehicleid) {
     return -1;
 }
 
-UCP:OnInit(playerid, page) {
-    if (page != 0) return 1;
-    if (!IsPlayerInAnyVehicle(playerid)) return 1;
-    new vehicleid = GetPlayerVehicleID(playerid);
-    new trailerid = GetVehicleTrailer(vehicleid);
-    if (trailerid != 0) vehicleid = trailerid;
-    new vehicleModal = GetVehicleModel(vehicleid);
-    if (!IsArrayContainNumber(DTruck_AllowedVehicleIds, vehicleModal)) return 1;
-    UCP:AddCommand(playerid, "Access Trailer", true);
-    UCP:AddCommand(playerid, "Check Trailer", true);
-    return 1;
-}
-
-UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    new vehicleid = GetPlayerVehicleID(playerid);
-    new trailerid = GetVehicleTrailer(vehicleid);
-    if (trailerid != 0) vehicleid = trailerid;
-    new vehicleModal = GetVehicleModel(vehicleid);
-    if (!response || !IsPlayerInAnyVehicle(playerid) || !IsArrayContainNumber(DTruck_AllowedVehicleIds, vehicleModal)) return 1;
-
-    if (IsStringSame("Access Trailer", inputtext)) {
-        DTruck:Init(playerid, vehicleid);
-        return ~1;
-    }
-
-    if (IsStringSame("Check Trailer", inputtext)) {
-        CallRemoteFunction("OnTrailerCheckInit", "dd", playerid, vehicleid);
-        return ~1;
-    }
-    return 1;
-}
-
-hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsPlayerInAnyVehicle(playerid)) {
-        return 1;
-    }
-
-    new vehicleid = GetPlayerVehicleID(playerid);
-    new trailerid = GetVehicleTrailer(vehicleid);
-    if (trailerid != 0) vehicleid = trailerid;
-    new vehicleModal = GetVehicleModel(vehicleid);
-    if (!IsArrayContainNumber(DTruck_AllowedVehicleIds, vehicleModal)) {
-        return 1;
-    }
-
-    if (IsStringContainWords(text, "access trailer")) {
-        DTruck:Init(playerid, vehicleid);
-        return ~1;
-    }
-
-    if (IsStringContainWords(text, "check trailer")) {
-        CallRemoteFunction("OnTrailerCheckInit", "dd", playerid, vehicleid);
-        return ~1;
-    }
-    return 1;
-}
-
 new DTruck_TrailerIDs[] = { 435, 450, 584, 591 };
 
 stock GetPlayerNearestTrailerID(playerid, Float:range = 5.0) {
@@ -143,6 +86,37 @@ stock GetPlayerNearestTrailerID(playerid, Float:range = 5.0) {
         }
     }
     return -1;
+}
+
+stock GetPlayerTrailerID(playerid) {
+    if (!IsPlayerInAnyVehicle(playerid)) return -1;
+    new vehicleid = GetPlayerVehicleID(playerid);
+    return GetAllowedVehicleTrailerID(vehicleid);
+}
+
+UCP:OnInit(playerid, page) {
+    new trailerid = GetPlayerTrailerID(playerid);
+    if (page != 0 || trailerid == -1) return 1;
+    UCP:AddCommand(playerid, "Access Trailer", true);
+    UCP:AddCommand(playerid, "Check Trailer", true);
+    return 1;
+}
+
+UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0) return 1;
+    new trailerid = GetPlayerTrailerID(playerid);
+    if (trailerid == -1) return 1;
+
+    if (IsStringSame("Access Trailer", inputtext)) {
+        DTruck:Init(playerid, trailerid);
+        return ~1;
+    }
+
+    if (IsStringSame("Check Trailer", inputtext)) {
+        CallRemoteFunction("OnTrailerCheckInit", "dd", playerid, trailerid);
+        return ~1;
+    }
+    return 1;
 }
 
 //#snippet init_dtruck hook DTruckOnInit(playerid, trailerid, page) {\n\tif(page != 0) return 1;\n\tDTruck:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nhook DTruckOnResponse(playerid, trailerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}

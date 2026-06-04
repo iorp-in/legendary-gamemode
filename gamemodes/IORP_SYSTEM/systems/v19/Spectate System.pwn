@@ -669,7 +669,7 @@ stock Spectate:Stop(playerid) {
 
 UCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    if (GetPlayerAdminLevel(playerid) >= 5 && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING) UCP:AddCommand(playerid, "Spectate Stop", true);
+    if (GetPlayerAdminLevel(playerid) == 3 && GetPlayerState(playerid) == PLAYER_STATE_SPECTATING) UCP:AddCommand(playerid, "Spectate Stop", true);
     return 1;
 }
 

@@ -257,8 +257,8 @@ hook OnAccountDelete(const AccountName[]) {
 
 stock DJ:OpenPanel(playerid) {
     new string[512];
-    if (GetPlayerAdminLevel(playerid) == 10 || DJ:IsPlayer(playerid)) strcat(string, "Play Music for All\n");
-    if (GetPlayerAdminLevel(playerid) == 10) strcat(string, "Play Direct URL\n");
+    if (GetPlayerAdminLevel(playerid) == 3 || DJ:IsPlayer(playerid)) strcat(string, "Play Music for All\n");
+    if (GetPlayerAdminLevel(playerid) == 3) strcat(string, "Play Direct URL\n");
     strcat(string, "Play Music\n");
     strcat(string, "View DJ PlayList\n");
     strcat(string, "Stop Current Stream\n");

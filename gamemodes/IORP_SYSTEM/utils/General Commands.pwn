@@ -21,7 +21,7 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
         return ~1;
     }
 
-    if (IsStringContainWords(text, "enable global chat, disable global chat") && GetPlayerAdminLevel(playerid) > 3) {
+    if (IsStringContainWords(text, "enable global chat, disable global chat") && GetPlayerAdminLevel(playerid) == 3) {
         if (GlobalChatMode) {
             GlobalChatMode = false;
             SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}disabled global chat");

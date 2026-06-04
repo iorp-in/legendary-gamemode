@@ -516,7 +516,7 @@ stock PersonalVehicle:Menu(playerid) {
     if (IsPlayerInAnyVehicle(playerid) && PersonalVehicle:GetID(GetPlayerVehicleID(playerid)) != 0) strcat(string, "{DCDC22}> {FFFB93}This Vehicle\n");
     strcat(string, "{DCDC22}> {FFFB93}My Own Vehicles\n");
     strcat(string, "{DCDC22}> {FFFB93}Vehicles That I Have Keys\n");
-    if (GetPlayerAdminLevel(playerid) >= 8) strcat(string, "{DCDC22}> {FFFB93}Admin Panel\n");
+    if (IsPlayerMasterAdmin(playerid)) strcat(string, "{DCDC22}> {FFFB93}Admin Panel\n");
     return FlexPlayerDialog(playerid, "PersonalVehicleMenu", DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
 }
 
@@ -622,7 +622,7 @@ stock PersonalVehicle:VehicleMenu(playerid, xid) {
     if (PersonalVehicle:IsPurchased(xid) && IsArrayContainNumber(allowedFaction, Faction:GetPlayerFID(playerid)) && Faction:IsPlayerSigned(playerid)) {
         strcat(string, "{FFA500}> {CACACA} Seize Vehicle\n");
     }
-    if (GetPlayerAdminLevel(playerid) >= 8) {
+    if (IsPlayerMasterAdmin(playerid)) {
         strcat(string, "{FFA500}> {CACACA} Set Price\n");
         strcat(string, "{FFA500}> {CACACA} Remove Mods\n");
         strcat(string, "{FFA500}> {CACACA} Seize Vehicle Admin\n");
@@ -948,7 +948,7 @@ FlexDialog:PersonalVehChangeKey(playerid, response, listitem, const inputtext[],
 }
 
 stock PersonalVehicle:SellMenu(playerid, xid) {
-    if (!PersonalVehicle:IsPlayerOwner(playerid, xid) && GetPlayerAdminLevel(playerid) < 8) {
+    if (!PersonalVehicle:IsPlayerOwner(playerid, xid) && !IsPlayerMasterAdmin(playerid)) {
         AlexaMsg(playerid, "{FF0000}[ERROR] {FFA500}Only the vehicle owner can use this feature!");
         return PersonalVehicle:VehicleMenu(playerid, xid);
     }
@@ -1390,7 +1390,7 @@ stock PersonalVehicle:ShowPurchaseMenu(playerid, xid) {
 
 FlexDialog:PersonalVehDirectPurchase(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
     if (!response) {
-        if (GetPlayerAdminLevel(playerid) < 8) RemovePlayerFromVehicle(playerid);
+        if (!IsPlayerMasterAdmin(playerid)) RemovePlayerFromVehicle(playerid);
         return 1;
     }
     new xid = PersonalVehicle:GetID(GetPlayerVehicleID(playerid));
@@ -1682,7 +1682,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
                     return 1;
                 }
             }
-            if (GetPlayerAdminLevel(playerid) < 1) RemovePlayerFromVehicle(playerid);
+            if (!IsPlayerMasterAdmin(playerid)) RemovePlayerFromVehicle(playerid);
             AlexaMsg(playerid, "this vehicle is impounded by law enforcement, please contact 911 for more info");
             return 1;
         }
@@ -1694,7 +1694,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
         if (!PersonalVehicle:IsPlayerOwner(playerid, xid) && !PersonalVehicle:IsHaveKey(playerid, xid)) {
             AlexaMsg(playerid, "{FF0000}[!] {F0AE0F}You don't have this car's keys!");
-            if (GetPlayerAdminLevel(playerid) < 8) RemovePlayerFromVehicle(playerid);
+            if (!IsPlayerMasterAdmin(playerid)) RemovePlayerFromVehicle(playerid);
             return 1;
         } else {
             if (PersonalVehicle:IsPlayerOwner(playerid, xid)) PersonalVehicle:UpdateLastUsage(xid);
@@ -1989,7 +1989,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "dealership system") || GetPlayerAdminLevel(playerid) < 8) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "dealership system")) return 1;
     PersonalVehicle:AdminPanel(playerid);
     return ~1;
 }

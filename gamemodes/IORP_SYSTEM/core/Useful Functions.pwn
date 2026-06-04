@@ -10,19 +10,6 @@ stock IsIpConnected(playerid) {
     return false;
 }
 
-stock IsIpOfNoneAdminConnected(playerid) {
-    new allip[33], playersip[33];
-    GetPlayerIp(playerid, playersip, sizeof(playersip));
-    foreach(new i:Player) {
-        if (IsPlayerConnected(i) && !IsPlayerNPC(i) && i != playerid) {
-            if (GetPlayerAdminLevel(i) == 10) continue;
-            GetPlayerIp(i, allip, sizeof(allip));
-            if (strcmp(allip, playersip, true) == 0) return true;
-        }
-    }
-    return false;
-}
-
 stock GetPlayerNameEx(playerid) {
     new string[MAX_PLAYER_NAME];
     format(string, sizeof string, "unknown");

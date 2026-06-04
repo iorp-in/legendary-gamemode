@@ -1,16 +1,13 @@
-hook ApcpOnInit(playerid, targetid, page) {
-    if (page != 1 || GetPlayerAdminLevel(playerid) < 10) return 1;
+APCP:OnInit(playerid, targetid, page) {
+    if (page != 1 || GetPlayerAdminLevel(playerid) != 3) return 1;
     APCP:AddCommand(playerid, "Manage Electronic Items");
     return 1;
 }
 
-hook ApcpOnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
-    if (page != 1 || !response) return 1;
-    if (IsStringSame("Manage Electronic Items", inputtext)) {
-        ManageElectronicItem(playerid, targetid);
-        return ~1;
-    }
-    return 1;
+APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
+    if (page != 1 || !response || !IsStringSame("Manage Electronic Items", inputtext)) return 1;
+    ManageElectronicItem(playerid, targetid);
+    return ~1;
 }
 
 stock ManageElectronicItem(adminid, playerid) {

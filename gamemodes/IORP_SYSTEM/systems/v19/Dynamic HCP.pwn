@@ -2,7 +2,6 @@ new HCP:StringTop[MAX_PLAYERS][2000];
 new HCP:String[MAX_PLAYERS][2000];
 
 stock HCP:Init(playerid, page = 0) {
-    if (GetPlayerAdminLevel(playerid) < 1) return 0;
     format(HCP:StringTop[playerid], 500, "");
     format(HCP:String[playerid], 2000, "");
     CallRemoteFunction("HcpOnInit", "dd", playerid, page);
@@ -46,7 +45,7 @@ stock HCP:AddCommand(playerid, const command[], bool:top = false) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (strcmp("help", cmd)) return 1;
+    if (!IsStringSame("help", cmd)) return 1;
     HCP:Init(playerid);
     return ~1;
 }
@@ -56,4 +55,4 @@ cmd:help(playerid, const params[]) {
     return 1;
 }
 
-//#snippet init_hcp HCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tHCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nHCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_hcp HCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tHCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nHCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

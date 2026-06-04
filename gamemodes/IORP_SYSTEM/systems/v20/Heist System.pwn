@@ -147,7 +147,7 @@ stock Heist:start(playerid, price) {
         return 0;
     }
 
-    if (gettime() - Database:GetInt(GetPlayerNameEx(playerid), "username", "LastHeist") < 5 * 60 && GetPlayerAdminLevel(playerid) < 8) {
+    if (GetPlayerAdminLevel(playerid) != 3 && gettime() - Database:GetInt(GetPlayerNameEx(playerid), "username", "LastHeist") < 5 * 60) {
         SendClientMessage(playerid, -1, "{FF0000}[Heist]:{FFFF00} can not start heist because you can rob only once in every 5 minutes");
         return 0;
     }

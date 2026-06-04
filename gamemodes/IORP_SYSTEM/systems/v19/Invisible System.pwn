@@ -62,24 +62,6 @@ stock InvisibleAuth:Command(adminid, playerid) {
     return 1;
 }
 
-hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "invisible mode") || GetPlayerAdminLevel(playerid) < 8) return 1;
-    if (InvisibleAuth:SystemStatus) {
-        InvisibleAuth:SystemStatus = false;
-        SendClientMessage(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} Invisible mode disabled");
-        foreach(new i:Player) {
-            InvisibleAuth:SetPlayer(i, false);
-        }
-    } else {
-        InvisibleAuth:SystemStatus = true;
-        SendClientMessage(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} Invisible mode enabled");
-        foreach(new i:Player) {
-            InvisibleAuth:SetPlayer(i, true);
-        }
-    }
-    return ~1;
-}
-
 hook OnPlayerEnableRPMODE(playerid) {
     if (!InvisibleAuth:GetSystemStatus()) InvisibleAuth:SetPlayer(playerid, true);
     return 1;
@@ -92,8 +74,8 @@ hook OnPlayerDisableRPMODE(playerid) {
 
 APCP:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
-    if (GetPlayerAdminLevel(playerid) >= 9 && !InvisibleAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Make Player Invisible");
-    if (GetPlayerAdminLevel(playerid) >= 9 && InvisibleAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Make Player Visible");
+    if (GetPlayerAdminLevel(playerid) == 3 && !InvisibleAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Make Player Invisible");
+    if (GetPlayerAdminLevel(playerid) == 3 && InvisibleAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Make Player Visible");
     return 1;
 }
 
@@ -114,4 +96,22 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         return ~1;
     }
     return 1;
+}
+
+hook OnAlexaResponse(playerid, const cmd[], const text[]) {
+    if (GetPlayerAdminLevel(playerid) != 3 || !IsStringSame(text, "invisible mode")) return 1;
+    if (InvisibleAuth:SystemStatus) {
+        InvisibleAuth:SystemStatus = false;
+        SendClientMessage(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} Invisible mode disabled");
+        foreach(new i:Player) {
+            InvisibleAuth:SetPlayer(i, false);
+        }
+    } else {
+        InvisibleAuth:SystemStatus = true;
+        SendClientMessage(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} Invisible mode enabled");
+        foreach(new i:Player) {
+            InvisibleAuth:SetPlayer(i, true);
+        }
+    }
+    return ~1;
 }

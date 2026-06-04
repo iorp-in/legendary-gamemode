@@ -9,11 +9,9 @@ stock Patch:GetHudStatus(playerid) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "patch status") && GetPlayerVIPLevel(playerid) > 0) {
-        Patch:Menu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!IsStringSame(text, "patch status")) return 1;
+    Patch:Menu(playerid);
+    return ~1;
 }
 
 UCP:OnInit(playerid, page) {

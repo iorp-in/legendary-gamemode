@@ -193,12 +193,9 @@ hook OnGameModeInit() {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (GetPlayerAdminLevel(playerid) < 8) return 1;
-    if (IsStringContainWords(text, "go to sumo map")) {
-        SetPlayerVirtualWorldEx(playerid, 999);
-        SetPlayerPosEx(playerid, 3315.849121, 934.257690, 90.015876);
-        AlexaMsg(playerid, "teleported to sumo map");
-        return ~1;
-    }
-    return 1;
+    if (GetPlayerAdminLevel(playerid) != 3 || !IsStringSame(text, "sumo map")) return 1;
+    SetPlayerVirtualWorldEx(playerid, 999);
+    SetPlayerPosEx(playerid, 3315.849121, 934.257690, 90.015876);
+    AlexaMsg(playerid, "teleported to sumo map");
+    return ~1;
 }

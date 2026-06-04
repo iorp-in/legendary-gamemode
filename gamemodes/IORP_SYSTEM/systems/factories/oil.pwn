@@ -489,10 +489,9 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "fuel factory") && GetPlayerAdminLevel(playerid) >= 8) {
-        return OilCompany:admin(playerid);
-    }
-    return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "fuel factory")) return 1;
+    OilCompany:admin(playerid);
+    return ~1;
 }
 
 stock OilCompany:LoadFuelMenu(playerid, tankid) {

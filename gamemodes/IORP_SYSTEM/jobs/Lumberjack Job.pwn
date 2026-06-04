@@ -1140,7 +1140,7 @@ ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "lumberjack system") || !IsPlayerMasterAdmin(playerid)) return 1;
+    if (!IsPlayerMasterAdmin(playerid) || !IsStringSame(text, "lumberjack system")) return 1;
     lumberjack_admin_panel(playerid);
     return ~1;
 }

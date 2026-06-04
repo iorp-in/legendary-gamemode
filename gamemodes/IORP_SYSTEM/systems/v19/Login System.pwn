@@ -410,7 +410,6 @@ public OnPlayerDataCheck(playerid, corrupt_check) {
     SetPlayerCameraPos(playerid, -894.3903, 727.4850, 53.2132);
     SetPlayerCameraLookAt(playerid, -895.3705, 727.6779, 53.1930, CAMERA_CUT);
     if (corrupt_check != Corrupt_Check[playerid]) return Kick(playerid);
-    //if(corrupt_check != Corrupt_Check[playerid] || IsIpOfNoneAdminConnected(playerid)) return Kick(playerid);
 
     if (cache_num_rows() > 0) {
         new username[MAX_PLAYER_NAME];
@@ -967,9 +966,9 @@ cmd:setadmin(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
 
     new Account[50], level;
-    if (sscanf(params, "s[50]i", Account, level)) return SendClientMessage(playerid, -1, "[USAGE]: /setadmin [Player] [level 0-10]");
+    if (sscanf(params, "s[50]i", Account, level)) return SendClientMessage(playerid, -1, "[USAGE]: /setadmin [Player] [level 0-3]");
     if (!IsValidAccount(RemoveMalChars(Account))) return SendClientMessage(playerid, -1, "[Alexa]: Account not Found");
-    if (level < 0 || level > 10) return SendClientMessage(playerid, -1, "[ERROR]: Invalid Admin Level: 0-10");
+    if (level < 0 || level > 3) return SendClientMessage(playerid, -1, "[ERROR]: Invalid Admin Level: 0-3");
 
     mysql_tquery(Database, sprintf("UPDATE `players` SET `adminLevel` = %d WHERE `Username` = \"%s\"", level, Account));
     SendClientMessage(playerid, -1, sprintf("You have set %s Admin level to %i", Account, level));
@@ -1181,7 +1180,7 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source) {
         strcat(PlayerStatus, sprintf("\tPlane Flying License: %s\n", (IsPlayerHavePlaneLicense(clickedplayerid)) ? ("Yes") : ("No")));
         strcat(PlayerStatus, sprintf("\tBoat Driving License: %s\n\n", (IsPlayerHaveBoatLicense(clickedplayerid)) ? ("Yes") : ("No")));
         strcat(PlayerStatus, sprintf("Money: %d\n", GetPlayerCash(clickedplayerid)));
-        if (GetPlayerAdminLevel(playerid) == 10) {
+        if (GetPlayerAdminLevel(playerid) == 3) {
             strcat(PlayerStatus, sprintf("Email: %s\n", pInfo[clickedplayerid][email]));
             new ip[50];
             GetPlayerIp(clickedplayerid, ip, sizeof ip);

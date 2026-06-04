@@ -229,8 +229,8 @@
 #include "IORP_SYSTEM/systems/v19/Static Vehicle Rent System.pwn" /////===== Static Vehicle Rent System =====/////
 //#include <YSI_Coding\y_hooks>
 // #include "IORP_SYSTEM/systems/v19/Vehicle Parachute.pwn" /////===== Vehicle Parachute System =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Textdraw System.pwn" /////===== Textdraw System =====/////
+// #include <YSI_Coding\y_hooks>
+// #include "IORP_SYSTEM/systems/v19/Textdraw System.pwn" /////===== Textdraw System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Death Medic System.pwn" /////===== Death Medic System =====/////
 #include <YSI_Coding\y_hooks>

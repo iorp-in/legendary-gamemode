@@ -27,12 +27,12 @@ hook OnVehicleDestroyed(vehicleid) {
 stock XenonMod:Uninstall(vehicleid) {
     if (vehicleid < 0 || vehicleid >= MAX_VEHICLES) return 1;
     DestroyDynamicObjectEx(XenonMod:Data[vehicleid][0]);
-    XenonMod:Data[vehicleid][0] = -1;
     DestroyDynamicObjectEx(XenonMod:Data[vehicleid][1]);
-    XenonMod:Data[vehicleid][1] = -1;
     DestroyDynamicObjectEx(XenonMod:Data[vehicleid][2]);
-    XenonMod:Data[vehicleid][2] = -1;
     DestroyDynamicObjectEx(XenonMod:Data[vehicleid][3]);
+    XenonMod:Data[vehicleid][0] = -1;
+    XenonMod:Data[vehicleid][1] = -1;
+    XenonMod:Data[vehicleid][2] = -1;
     XenonMod:Data[vehicleid][3] = -1;
     return 1;
 }

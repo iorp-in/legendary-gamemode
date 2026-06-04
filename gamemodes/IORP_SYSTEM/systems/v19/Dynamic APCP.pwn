@@ -46,14 +46,12 @@ stock APCP:AddCommand(playerid, const command[], bool:top = false) {
     return 1;
 }
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringContainWords(text, "aplayer") && GetPlayerAdminLevel(playerid) > 0) {
-        new targetid;
-        if (sscanf(GetNextWordFromString(text, "aplayer"), "u", targetid)) targetid = playerid;
-        if (!IsPlayerConnected(targetid)) targetid = playerid;
-        APCP:Init(playerid, targetid);
-        return ~1;
-    }
-    return 1;
+    if (GetPlayerAdminLevel(playerid) < 1 || !IsStringContainWords("aplayer", cmd)) return 1;
+    new targetid;
+    if (sscanf(GetNextWordFromString(text, "aplayer"), "u", targetid)) targetid = playerid;
+    if (!IsPlayerConnected(targetid)) targetid = playerid;
+    APCP:Init(playerid, targetid);
+    return ~1;
 }
 
 cmd:aplayer(playerid, const params[]) {
@@ -66,4 +64,4 @@ cmd:aplayer(playerid, const params[]) {
 }
 
 
-//#snippet init_apcp APCP:OnInit(playerid, targetid, page) {\n\tif(page != 0) return 1;\n\tAPCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nAPCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_apcp APCP:OnInit(playerid, targetid, page) {\n\tif(page != 0) return 1;\n\tAPCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nAPCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}
