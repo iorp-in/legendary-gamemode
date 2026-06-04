@@ -1170,7 +1170,7 @@ hook OnPlayerClickPlayer(playerid, clickedplayerid, source) {
     strcat(PlayerStatus, sprintf("Inactive Time:Year: %02d Month: %02d Week: %02d Days: %02d Hour: %02d Minute: %02d Second: %02d\n",
         pausetime / (365 * 24 * 60 * 60) % 365, pausetime / (30 * 24 * 60 * 60) % 30, pausetime / (7 * 24 * 60 * 60) % 7, pausetime / (24 * 60 * 60) % 24, pausetime / (60 * 60) % 24, pausetime / (60) % 60, pausetime % 60));
     strcat(PlayerStatus, sprintf("Faction: %s, Rank: %s\n", Faction:GetName(Faction:GetPlayerFID(clickedplayerid)), Faction:GetRankName(Faction:GetPlayerFID(clickedplayerid), Faction:GetPlayerRankID(clickedplayerid))));
-    if (GetPlayerAdminLevel(playerid) >= 1 || GetPlayerHelperStatus(playerid)) {
+    if (GetPlayerAdminLevel(playerid) >= 1) {
         strcat(PlayerStatus, sprintf("Location: %s, Interior: %d, Virtual World: %d\n\n", GetPlayerZoneName(clickedplayerid), GetPlayerInterior(clickedplayerid), GetPlayerVirtualWorld(clickedplayerid)));
         strcat(PlayerStatus, sprintf("Phone Number: %d\n", Phone:GetPlayerNumber(clickedplayerid)));
         strcat(PlayerStatus, sprintf("Driving License Status\n"));

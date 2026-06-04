@@ -12,8 +12,6 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic HCP.pwn" /////===== Dynamic HCP =====/////
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Dynamic VCP.pwn" /////===== Dynamic VCP =====/////
-#include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic Database System.pwn" /////===== Dynamic Database System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic Quick Actions.pwn" /////===== Dynamic Database System =====/////

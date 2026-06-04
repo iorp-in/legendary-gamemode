@@ -1,14 +1,3 @@
-hook OnGameModeInit() {
-    Database:AddColumn("playerdata", "alexa", "int", "0");
-    new string[2000];
-    strcat(string, "{db6600}Alexa: {FFFFEE}Acess all alexa commands using this format - /alexa [cmd]\n\n");
-    strcat(string, "{db6600}Chat Animation: {FFFFEE}enable/disable chat animation\n");
-    strcat(string, "{db6600}GPS System: {FFFFEE}gps\n");
-    strcat(string, "{db6600}Unbug System: {FFFFEE}i am buged, unbug me\n");
-    Doc:Add(0, Doc:GetFreeID(), "Alexa Commands", string);
-    return 1;
-}
-
 new EtShop:DataAlexa[MAX_PLAYERS];
 
 stock EtShop:IsAlexaActive(playerid) {

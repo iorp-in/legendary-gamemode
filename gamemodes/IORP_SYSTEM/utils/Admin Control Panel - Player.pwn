@@ -69,8 +69,6 @@ APCP:OnInit(playerid, targetid, page) {
     if (GetPlayerAdminLevel(playerid) >= 10) APCP:AddCommand(playerid, "Remove All License");
     if (GetPlayerAdminLevel(playerid) >= 8 && !BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As Beta Tester");
     if (GetPlayerAdminLevel(playerid) >= 8 && BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Remove Player As Beta Tester");
-    if (GetPlayerAdminLevel(playerid) >= 8 && !IsPlayerHelper(targetid)) APCP:AddCommand(playerid, "Set Player As Helper");
-    if (GetPlayerAdminLevel(playerid) >= 8 && IsPlayerHelper(targetid)) APCP:AddCommand(playerid, "Remove Player As Helper");
     if (GetPlayerAdminLevel(playerid) >= 8 && !DJ:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As DJ");
     if (GetPlayerAdminLevel(playerid) >= 8 && DJ:IsPlayer(targetid)) APCP:AddCommand(playerid, "Remove Player As DJ");
     if (GetPlayerAdminLevel(playerid) >= 5 && !GetPlayerMutedStatus(targetid)) APCP:AddCommand(playerid, "Mute Player");
@@ -328,20 +326,6 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         BetaTester:SetPlayer(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have removed %s as Beta Tester of server", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s removed you as Beta Tester of server", GetPlayerNameEx(playerid)));
-        APCP:Init(playerid, targetid);
-        return ~1;
-    }
-    if (IsStringSame("Set Player As Helper", inputtext)) {
-        SetPlayerHelper(targetid, true);
-        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have set %s as Helper of server", GetPlayerNameEx(targetid)));
-        SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s set you as Helper of server", GetPlayerNameEx(playerid)));
-        APCP:Init(playerid, targetid);
-        return ~1;
-    }
-    if (IsStringSame("Remove Player As Helper", inputtext)) {
-        SetPlayerHelper(targetid, false);
-        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have removed %s as Helper of server", GetPlayerNameEx(targetid)));
-        SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s removed you as Helper of server", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }

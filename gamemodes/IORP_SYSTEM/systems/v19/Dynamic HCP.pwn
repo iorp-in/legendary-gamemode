@@ -1,120 +1,59 @@
-#define MAX_HELP_DOC_ID 2000
-new Iterator:HelpDocIds < MAX_HELP_DOC_ID > ;
+new HCP:StringTop[MAX_PLAYERS][2000];
+new HCP:String[MAX_PLAYERS][2000];
 
-stock Doc:GetFreeID() {
-    new id = Iter_Free(HelpDocIds);
-    Iter_Add(HelpDocIds, id);
-    if (id == INVALID_ITERATOR_SLOT) Discord:SendManagement(sprintf("Invalid HelpDocID Passed: %d", id));
-    return id;
-}
-
-stock Doc:RemoveID(id) {
-    if (!Iter_Contains(HelpDocIds, id)) return ~1;
-    Iter_Remove(HelpDocIds, id);
+stock HCP:Init(playerid, page = 0) {
+    if (GetPlayerAdminLevel(playerid) < 1) return 0;
+    format(HCP:StringTop[playerid], 500, "");
+    format(HCP:String[playerid], 2000, "");
+    CallRemoteFunction("HcpOnInit", "dd", playerid, page);
     return 1;
 }
 
-stock Doc:TotalID() {
-    return MAX_HELP_DOC_ID;
-}
-
-stock Doc:GetTotalFreeID() {
-    return MAX_HELP_DOC_ID - Iter_Count(HelpDocIds);
-}
-
-stock Doc:GetTotalUsedID() {
-    return Iter_Count(HelpDocIds);
-}
-
-stock bool:Doc:IsValidID(id) {
-    if (Iter_Contains(HelpDocIds, id)) return true;
-    return false;
-}
-
-enum Doc:StringEnum {
-    HCP_page,
-    HCP_AdminLevel,
-    hcp_Title[100],
-    hcp_body[2000]
-};
-new Doc:String[MAX_HELP_DOC_ID][Doc:StringEnum];
-
-stock Doc:Add(page, docid, const DocTitle[], const DocData[], adminlevel = 0) {
-    if (!Doc:IsValidID(docid)) return printf("Invalid DocID: %d", docid);
-    Doc:String[docid][HCP_page] = page;
-    Doc:String[docid][HCP_AdminLevel] = adminlevel;
-    format(Doc:String[docid][hcp_Title], 100, "%s", DocTitle);
-    format(Doc:String[docid][hcp_body], 2000, "%s", DocData);
+forward HcpOnResponse(playerid, page, response, listitem, const inputtext[]);
+public HcpOnResponse(playerid, page, response, listitem, const inputtext[]) {
     return 1;
 }
 
-stock Doc:View(playerid, docid) {
-    if (!Doc:IsValidID(docid)) return SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE} Invalid DocID: %d", docid));
-    if (GetPlayerAdminLevel(playerid) < Doc:String[docid][HCP_AdminLevel]) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}You are not authorized to view this document.");
-    return FlexPlayerDialog(
-        playerid, "DocView", DIALOG_STYLE_MSGBOX,
-        sprintf("{4286f4}[Documentation]: {FFFFEE} %s", Doc:String[docid][hcp_Title]), Doc:String[docid][hcp_body],
-        "Thanks", "", docid
-    );
+forward HcpOnInit(playerid, page);
+public HcpOnInit(playerid, page) {
+    SortString(HCP:StringTop[playerid], HCP:StringTop[playerid]);
+    SortString(HCP:String[playerid], HCP:String[playerid]);
+    if (!strlen(HCP:String[playerid])) format(HCP:String[playerid], 2000, "Nothing On This Page.");
+    else HCP:AddCommand(playerid, "Next Page");
+    if (page != 0) HCP:AddCommand(playerid, "Back Page");
+    if (strlen(HCP:StringTop[playerid]) > 0) format(HCP:String[playerid], 2000, "%s\n%s", HCP:StringTop[playerid], HCP:String[playerid]);
+    return FlexPlayerDialog(playerid, "HcpOnInit", DIALOG_STYLE_LIST, sprintf("{4286f4}[Alexa]:{FFFFEE}Help Panel | Page: %d", page), HCP:String[playerid], "Select", "Close", page);
 }
 
-FlexDialog:DocView(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
-    return CallRemoteFunction("DocOnResponse", "dddd", playerid, extraid, response);
-}
-
-stock Doc:Init(playerid, page = 0) {
-    new string[2000];
-    foreach(new docid:HelpDocIds) {
-        if (!Doc:IsValidID(docid)) continue;
-        if (Doc:String[docid][HCP_page] != page) continue;
-        if (GetPlayerAdminLevel(playerid) < Doc:String[docid][HCP_AdminLevel]) continue;
-        strcat(string, sprintf("%d\t%s\n", docid, Doc:String[docid][hcp_Title]));
+FlexDialog:HcpOnInit(playerid, response, listitem, const inputtext[], page, const payload[]) {
+    if (response) {
+        if (IsStringSame("Nothing On This Page.", inputtext)) return HCP:Init(playerid, page);
+        else if (IsStringSame("Next Page", inputtext)) return HCP:Init(playerid, page + 1);
+        else if (IsStringSame("Back Page", inputtext)) return HCP:Init(playerid, page - 1);
     }
-    if (!strlen(string)) format(string, sizeof string, "Nothing On This Page\n");
-    else strcat(string, "Next Page\n");
-    if (page != 0) strcat(string, "Back Page\n");
-    format(string, sizeof string, "Doc ID\tDoc Title\n%s", string);
-    return FlexPlayerDialog(
-        playerid, "DocInit", DIALOG_STYLE_TABLIST_HEADERS, sprintf("{4286f4}[Alexa]: {FFFFEE}Documentation | Page: %d", page), string, "Thanks", "", page
-    );
+    return CallRemoteFunction("HcpOnResponse", "dddds", playerid, page, response, listitem, inputtext);
 }
 
-FlexDialog:DocInit(playerid, response, listitem, const inputtext[], page, const payload[]) {
-    if (IsStringSame("Nothing On This Page", inputtext) && response) return Doc:Init(playerid, page);
-    else if (IsStringSame("Next Page", inputtext) && response) return Doc:Init(playerid, page + 1);
-    else if (IsStringSame("Back Page", inputtext) && response) return Doc:Init(playerid, page - 1);
-    else if (!response && page > 0) return Doc:Init(playerid, page - 1);
-    else if (response) return Doc:View(playerid, strval(inputtext));
-    return 1;
-}
-
-forward DocOnResponse(playerid, docid, response);
-public DocOnResponse(playerid, docid, response) {
+stock HCP:AddCommand(playerid, const command[], bool:top = false) {
+    if (top) {
+        if (!strlen(HCP:StringTop[playerid])) format(HCP:StringTop[playerid], 2000, "%s", command);
+        else format(HCP:StringTop[playerid], 2000, "%s\n%s", HCP:StringTop[playerid], command);
+    } else {
+        if (!strlen(HCP:String[playerid])) format(HCP:String[playerid], 2000, "%s", command);
+        else format(HCP:String[playerid], 2000, "%s\n%s", HCP:String[playerid], command);
+    }
     return 1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (IsStringSame("help", cmd)) {
-        if (!IsPlayerAwaken(playerid)) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}You can't use help desk at bedtime.");
-        Doc:Init(playerid);
-        return ~1;
-    }
-
-    if (IsStringSame("doc", cmd)) {
-        if (!IsPlayerAwaken(playerid)) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}You can't use help desk at bedtime.");
-        new string[128];
-        GetSubString(text, cmd, string);
-        Doc:View(playerid, strval(string));
-        return ~1;
-    }
-
-    return 1;
+    if (strcmp("help", cmd)) return 1;
+    HCP:Init(playerid);
+    return ~1;
 }
 
 cmd:help(playerid, const params[]) {
-    if (!IsPlayerAwaken(playerid)) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}You can't use help desk at bedtime.");
-    Doc:Init(playerid);
+    HCP:Init(playerid);
     return 1;
 }
 
-//#snippet init_hcp hook Hcp_OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tHcp_AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nhook DocOnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_hcp HCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tHCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nHCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}

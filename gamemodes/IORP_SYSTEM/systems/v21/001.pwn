@@ -16,8 +16,6 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v21/Fridge System.pwn"
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v21/Helper Reward System.pwn"
-#include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v21/Server Self Lockdown.pwn"
 #include "IORP_SYSTEM/systems/v21/Zone Name.pwn"
 #include <YSI_Coding\y_hooks>

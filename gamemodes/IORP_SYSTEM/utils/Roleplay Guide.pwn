@@ -1,22 +1,13 @@
-new roleplay_rules;
-
-hook OnGameModeInit() {
-    roleplay_rules = Doc:GetFreeID();
-    new string[2000];
-    strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    strcat(string, "{FFFFEE}PLEASE READ THE R U L E S CAREFULLY AND THOROUGHLY.\n");
-    strcat(string, "{FFFFEE}Any broken rule lead you to permanent ban from server.\n");
-    strcat(string, "{FFFFEE}Thanks with love.\n");
-    strcat(string, "\n{FFFFEE}press ESC or Cancel to close roleplay rules\n");
-    strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    Doc:Add(0, roleplay_rules, "Roleplay Rules", string);
+HCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    HCP:AddCommand(playerid, "Roleplay Rules");
     return 1;
 }
 
-
-Doc:OnResponse(playerid, docid, response) {
-    if (docid == roleplay_rules) {
-        if (response) ShowRolePlayGuide(playerid);
+HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response) return 1;
+    if (IsStringSame("Roleplay Rules", inputtext)) {
+        ShowRolePlayGuide(playerid);
         return ~1;
     }
     return 1;

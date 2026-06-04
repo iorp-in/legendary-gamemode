@@ -1,34 +1,47 @@
-new lifeguide_docid, lifeguide_short_docid;
-
-hook OnGameModeInit() {
-    lifeguide_docid = Doc:GetFreeID();
-    lifeguide_short_docid = Doc:GetFreeID();
-    new string[2000];
-    strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}You are going to see your background history\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}You will get answers for this questions\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}Where did you came?\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}Where is your family?\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}How can you live your life here in SA?\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}And many other questions of your.\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}Do you want to continue???.\n");
-    strcat(string, "{db6600}[Life Guide]: {FFFFEE}Press ESC to cancel this tutorial???.\n");
-    strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    Doc:Add(0, lifeguide_docid, "Life Guide - Full Version", string);
-    Doc:Add(0, lifeguide_short_docid, "Life Guide", string);
+HCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    HCP:AddCommand(playerid, "Life Guide - Short Version");
+    HCP:AddCommand(playerid, "Life Guide - Full Version");
     return 1;
 }
 
-Doc:OnResponse(playerid, docid, response) {
-    if (docid == lifeguide_docid) {
-        if (response) ShowLifeGuide(playerid);
-        return ~1;
-    } else if (docid == lifeguide_short_docid) {
-        if (response) ShowLifeGuide_Short(playerid);
+HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0) return 1;
+
+    if (IsStringSame("Life Guide - Short Version", inputtext) || IsStringSame("Life Guide - Full Version", inputtext)) {
+
+        new string[2000];
+        strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}You are going to see your background history\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}You will get answers for this questions\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}Where did you came?\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}Where is your family?\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}How can you live your life here in SA?\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}And many other questions of your.\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}Do you want to continue???.\n");
+        strcat(string, "{db6600}[Life Guide]: {FFFFEE}Press ESC to cancel this tutorial???.\n");
+        strcat(string, "{db6600}---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+        new short = IsStringSame("Life Guide - Short Version", inputtext);
+        FlexPlayerDialog(playerid, short ? "LifeGuideShort" : "LifeGuideFull", DIALOG_STYLE_MSGBOX, "Life Guide", string, "Continue", "Cancel");
         return ~1;
     }
     return 1;
 }
+
+FlexDialog:LifeGuideShort(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
+    if (!response) return 1;
+    ShowLifeGuide_Short(playerid);
+    return 1;
+}
+
+
+FlexDialog:LifeGuideFull(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
+    if (!response) return 1;
+    ShowLifeGuide(playerid);
+    return 1;
+}
+
 
 enum LIFE_System_PlayerData_Enum {
     Float:Life_Sys_Pos[4],

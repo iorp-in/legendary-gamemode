@@ -336,52 +336,6 @@ hook OnMathResponse(playerid, const response[], offset) {
     return 1;
 }
 
-hook OnTranslateResponse(playerid, const response[], offset) {
-    if (offset != 111) return 1;
-    new output[144], res[144];
-    format(output, sizeof output, "%s", response);
-    strurldecode(res, output);
-    SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFFF}%s", res));
-    return 1;
-}
-
-VCP:OnInit(playerid, page) {
-    VCP:AddCommand(playerid, "All VIP Alexa Commands");
-    VCP:AddCommand(playerid, "All VIP Commands");
-    return 1;
-}
-
-VCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (!strcmp(inputtext, "All VIP Alexa Commands")) return Alexa_VipCommands(playerid);
-    if (!strcmp(inputtext, "All VIP Commands")) return VipCommands(playerid);
-    return 1;
-}
-
-stock VipCommands(playerid) {
-    new string[2000];
-    strcat(string, "{db6600}General Commands: {FFFFEE}/vsay, /vchat, /findbackpack\n");
-    FlexPlayerDialog(playerid, "VipCommands", DIALOG_STYLE_MSGBOX, "{4286f4}[Alexa]:{FFFFEE}VIP Control", string, "Okay", "");
-    return 1;
-}
-
-stock Alexa_VipCommands(playerid) {
-    new string[2000];
-    strcat(string, "{db6600}General Commands: {FFFFEE}vipweather, vipflamminghand, vipghostrider, viphouseint\n");
-    strcat(string, "{db6600}Vehicle Control: {FFFFEE}vipspawn, viprepair, viprefuel, vipmod, turn lights, open/close bonnet, open/close boot, lock/unlock doors, start/stop engine, turn on/of alarm, open/close windows\n");
-    strcat(string, "{db6600}License System: {FFFFEE}license\n");
-    strcat(string, "{db6600}DJ Panel: {FFFFEE}enable/disable/start/stop mp3/tts, start/stop mp3, play, dj panel\n");
-    strcat(string, "{db6600}Faction System: {FFFFEE}faction locker, factions\n");
-    strcat(string, "{db6600}Screen Control: {FFFFEE}clean/fix screen\n");
-    strcat(string, "{db6600}Minigame System: {FFFFEE}minigame, minigames, mini game\n");
-    strcat(string, "{db6600}General Commands: {FFFFEE}phone, tablet, answer call, pickup call, end call, hangup call, my number, dial\n");
-    strcat(string, "{db6600}Personal Vehicles: {FFFFEE}my cars, mycars\n");
-    strcat(string, "{db6600}Control Panels: {FFFFEE}pocket, scp, change skin, change password\n");
-    strcat(string, "{db6600}Patch System: {FFFFEE}patch status\n");
-    FlexPlayerDialog(playerid, "VipCommands", DIALOG_STYLE_MSGBOX, "{4286f4}[Alexa]:{FFFFEE}VIP Control", string, "Okay", "");
-    return 1;
-}
-
 CMD:vsay(playerid, const params[]) {
     if (GetPlayerAdminLevel(playerid) < 1) return 0;
     if (isnull(params)) {

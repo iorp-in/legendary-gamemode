@@ -76,12 +76,6 @@ public OnMathResponse(playerid, const response[], offset) {
     return 1;
 }
 
-forward OnTranslateResponse(playerid, const response[], offset);
-public OnTranslateResponse(playerid, const response[], offset) {
-    // printf("OnTranslateResponse: playerid: %d, response: %s, offset: %d", playerid, response, offset);
-    return 1;
-}
-
 forward OnIpInfoResponse(playerid, const ip[], const loc[], const country[], const region[], const city[], const org[], const timezone[], const postal[], offset);
 public OnIpInfoResponse(playerid, const ip[], const loc[], const country[], const region[], const city[], const org[], const timezone[], const postal[], offset) {
     // printf("playerid = %d, const ip[] = %s, const loc[] = %s, const country[] = %s, const region[] = %s, const city[] = %s, const org[] = %s, const timezone[] = %s, const postal[] = %s, offset = %d", playerid, ip, loc, country, region, city, org, timezone, postal, offset);

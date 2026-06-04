@@ -13,4 +13,6 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/utils/VIP Commands.pwn"
 #include <YSI_Coding\y_hooks>
+#include "IORP_SYSTEM/utils/Doc - Commands.pwn"
+#include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/utils/test.pwn" /////===== Test File =====/////

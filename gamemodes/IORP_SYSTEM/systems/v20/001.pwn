@@ -18,8 +18,6 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v20/Heist System.pwn"
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v20/Helper Role.pwn"
-#include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v20/Account Verification Discord.pwn"
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v20/Personal Radio.pwn"

@@ -90,24 +90,15 @@
 #define Apcp@OnInit(%0) hook ApcpOnInit(%0)
 #define Apcp@OnResponse(%0) hook ApcpOnResponse(%0)
 
-//scp
-#define SCP:%0 Scp@
-#define Scp@OnInit(%0) hook ScpOnInit(%0)
-#define Scp@OnResponse(%0) hook ScpOnResponse(%0)
-
-//vcp
-#define VCP:%0 Vcp@
-#define Vcp@OnInit(%0) hook VcpOnInit(%0)
-#define Vcp@OnResponse(%0) hook VcpOnResponse(%0)
-
 //QuickActions
 #define QuickActions:%0 QukActs@
 #define QukActs@OnInit(%0) hook QuickActionsOnInit(%0)
 #define QukActs@OnResponse(%0) hook QuickActionsOnResponse(%0)
 
 //doc
-#define Doc:%0 Doc@
-#define Doc@OnResponse(%0) hook DocOnResponse(%0)
+#define HCP:%0 Hcp@
+#define Hcp@OnInit(%0) hook HcpOnInit(%0)
+#define Hcp@OnResponse(%0) hook HcpOnResponse(%0)
 
 //truck
 #define DTruck:%0 DTruck@

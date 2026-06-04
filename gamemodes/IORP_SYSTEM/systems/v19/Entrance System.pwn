@@ -144,7 +144,7 @@ ASCP:OnInit(playerid, page) {
     return 1;
 }
 
-ACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (!response) return 1;
     if (IsStringSame("Entrance System", inputtext)) Entrance:AdminPanel(playerid);
     return 1;
