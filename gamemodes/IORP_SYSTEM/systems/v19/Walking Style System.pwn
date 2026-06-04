@@ -127,7 +127,7 @@ UCP:OnInit(playerid, page) {
 }
 
 UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response && page != 1) return 1;
+    if (!response || page != 1) return 1;
     if (IsStringSame("Set PED Style", inputtext)) {
         PlayerWalkingStyleMenu(playerid);
         return ~1;

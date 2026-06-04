@@ -17,13 +17,13 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
 }
 
 UCP:OnInit(playerid, page) {
-    if (page != 1) return 1;
+    if (page != 2) return 1;
     UCP:AddCommand(playerid, "Patch Settings");
     return 1;
 }
 
 UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response && page != 1) return 1;
+    if (!response || page != 2) return 1;
     if (IsStringSame("Patch Settings", inputtext)) { Patch:Menu(playerid); return ~1; }
     return 1;
 }

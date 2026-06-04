@@ -552,7 +552,7 @@ hook OnGameModeInit() {
     strcat(string, "{db6600}/unban: {FFFFEE}remove account ban.\n");
     strcat(string, "{db6600}/enableaccount: {FFFFEE}reactivate an account.\n");
     strcat(string, "{db6600}/disableaccount: {FFFFEE}permanently disable an account.\n");
-    strcat(string, "{db6600}/changepassword: {FFFFEE}change account password.\n");
+    strcat(string, "{db6600}/changeaccountpassword: {FFFFEE}change account password.\n");
     strcat(string, "{db6600}/updatename: {FFFFEE}rename an account.\n");
     strcat(string, "{db6600}/approvename: {FFFFEE}approve a name change request.\n");
     strcat(string, "{db6600}/rejectname: {FFFFEE}reject a name change request.\n");
@@ -584,7 +584,7 @@ hook OnGameModeInit() {
 }
 
 UCP:OnInit(playerid, page) {
-    if (page != 1) return 1;
+    if (page != 2) return 1;
     UCP:AddCommand(playerid, "Unbug me");
     UCP:AddCommand(playerid, "Clean Screen");
     UCP:AddCommand(playerid, "Fix Screen");
@@ -592,7 +592,7 @@ UCP:OnInit(playerid, page) {
 }
 
 UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response && page != 1) return 1;
+    if (!response || page != 2) return 1;
     if (!strcmp("Clean Screen", inputtext)) { clean_screen(playerid); return ~1; }
     if (!strcmp("Fix Screen", inputtext)) { fix_screen(playerid); return ~1; }
     if (!strcmp("Unbug me", inputtext)) { unbug(playerid); return ~1; }

@@ -234,32 +234,13 @@ cmd:getmasteradmins(playerid, const params[]) {
     return 1;
 }
 
-cmd:changepassword(playerid, const params[]) {
+cmd:changeaccountpassword(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
     new AccountName[50], newpass[50];
-    if (sscanf(params, "s[50]s[50]", AccountName, newpass)) return SendClientMessage(playerid, -1, "[USAGE]: /changepassword [AccountName] [Password]");
+    if (sscanf(params, "s[50]s[50]", AccountName, newpass)) return SendClientMessage(playerid, -1, "[USAGE]: /changeaccountpassword [AccountName] [Password]");
     if (!IsValidAccount(AccountName)) return SendClientMessage(playerid, -1, "[Alexa]: Account not Found");
-    if (strlen(newpass) < 8) return SendClientMessage(playerid, -1, "[Alexa]: Passwords must be at least 8 characters long.");
-
-    new nPassword[65], nSalt[11];
-    for (new i = 0; i < 10; i++) nSalt[i] = random(79) + 47;
-    nSalt[10] = 0;
-    SHA256_PassHash(newpass, nSalt, nPassword, sizeof(nPassword));
-
-    new DB_Query[512];
-    mysql_format(
-        Database,
-        DB_Query,
-        sizeof(DB_Query),
-        "UPDATE `players` SET `Password`=\"%s\", `Salt`=\"%s\" WHERE `Username`=\"%s\"",
-        nPassword,
-        RemoveMalChars(nSalt),
-        AccountName
-    );
-
-    new Cache:result = mysql_query(Database, DB_Query, true);
-    if (cache_affected_rows()) SendClientMessage(playerid, -1, sprintf("[Alexa]: you have changed %s login password to %s", AccountName, newpass));
-    else SendClientMessage(playerid, -1, "[Error]: Something went wrong or Account ID is invalid");
-    cache_delete(result);
+    if (strlen(newpass) < 8 || strlen(newpass) > 20) return SendClientMessage(playerid, -1, "[Alexa]: Passwords must be at least 8 characters long.");
+    if (changeAccountPassword(AccountName, newpass)) SendClientMessage(playerid, -1, sprintf("[Alexa]: you have changed %s login password to %s", AccountName, newpass));
+    else SendClientMessage(playerid, -1, "[Error]: Failed to update password");
     return 1;
 }

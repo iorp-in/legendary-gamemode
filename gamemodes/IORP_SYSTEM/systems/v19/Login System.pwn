@@ -1029,6 +1029,29 @@ stock MuteCommand(playerid, pID, bool:status) {
     return 1;
 }
 
+stock changeAccountPassword(const AccountName[], const passsword[]) {
+    new nPassword[65], nSalt[11];
+    for (new i = 0; i < 10; i++) nSalt[i] = random(79) + 47;
+    nSalt[10] = 0;
+    SHA256_PassHash(passsword, nSalt, nPassword, sizeof(nPassword));
+
+    new DB_Query[512];
+    mysql_format(
+        Database,
+        DB_Query,
+        sizeof(DB_Query),
+        "UPDATE `players` SET `Password`=\"%s\", `Salt`=\"%s\" WHERE `Username`=\"%s\"",
+        nPassword,
+        RemoveMalChars(nSalt),
+        AccountName
+    );
+
+    new Cache:result = mysql_query(Database, DB_Query, true);
+    new affected_rows = cache_affected_rows();
+    cache_delete(result);
+    return affected_rows;
+}
+
 hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart) {
     // printf("Give:playerid = %d, damagedid = %d, Float:amount = %f, weaponid = %d, bodypart = %d", playerid, damagedid, amount, weaponid, bodypart);
     if (!IsPlayerStreamedIn(playerid, damagedid) || !IsPlayerStreamedIn(damagedid, playerid)) return 0;
@@ -1210,20 +1233,39 @@ stock AutoLoginCommand(playerid) {
 }
 
 UCP:OnInit(playerid, page) {
-    if (page != 1) return 1;
+    if (page != 2) return 1;
     // if(GetPlayerAutoSpawn(playerid) == -1) UCP:AddCommand(playerid, "Enable AutoSpawn");
     // if(GetPlayerAutoSpawn(playerid) != -1) UCP:AddCommand(playerid, "Disable AutoSpawn");
+    UCP:AddCommand(playerid, "Change login password");
     UCP:AddCommand(playerid, "Enable/Disable Auto Login");
     UCP:AddCommand(playerid, "Logout");
     return 1;
 }
 
 UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response && page != 1) return 1;
+    if (!response || page != 2) return 1;
     // if (IsStringSame("Enable AutoSpawn", inputtext)) AutospawnCommand(playerid);
     // if (IsStringSame("Disable AutoSpawn", inputtext)) AutospawnCommand(playerid);
+    if (IsStringSame("Change login password", inputtext)) { ChangeLoginPassword(playerid); return ~1; }
     if (IsStringSame("Enable/Disable Auto Login", inputtext)) { AutoLoginCommand(playerid); return ~1; }
     if (IsStringSame("Logout", inputtext)) { LogoutCommand(playerid); return ~1; }
+    return 1;
+}
+
+stock ChangeLoginPassword(playerid) {
+    return FlexPlayerDialog(playerid, "ChangeLoginPassword", DIALOG_STYLE_INPUT, "Change login password", "Enter new password", "Submit", "Cancel");
+}
+
+FlexDialog:ChangeLoginPassword(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
+    if (!response) return 1;
+    if (strlen(inputtext) < 8 || strlen(inputtext) > 20) {
+        AlexaMsg(playerid, "Passwords must be at least 8 characters long", "Error", "4286f4");
+        ChangeLoginPassword(playerid);
+        return 1;
+    }
+
+    if (changeAccountPassword(GetPlayerNameEx(playerid), inputtext)) AlexaMsg(playerid, sprintf("you have changed login password to %s", inputtext));
+    else AlexaMsg(playerid, "Failed to update password", "Error", "4286f4");
     return 1;
 }
 
