@@ -28,8 +28,7 @@ public InvisibleUpdate() {
 
 hook OnPlayerConnect(playerid) {
     if (IsPlayerNPC(playerid)) return 1;
-    if (InvisibleAuth:SystemStatus) InvisibleAuth:SetPlayer(playerid, true);
-    else InvisibleAuth:SetPlayer(playerid, true);
+    InvisibleAuth:SetPlayer(playerid, InvisibleAuth:SystemStatus);
     return 1;
 }
 
@@ -74,24 +73,14 @@ hook OnPlayerDisableRPMODE(playerid) {
 
 APCP:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
-    if (GetPlayerAdminLevel(playerid) == 3 && !InvisibleAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Make Player Invisible");
-    if (GetPlayerAdminLevel(playerid) == 3 && InvisibleAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Make Player Visible");
+    APCP:AddCommand(playerid, InvisibleAuth:GetPlayer(targetid) ? "Make visible" : "Make invisible");
     return 1;
 }
 
 APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response || page != 0) return 1;
-    if (IsStringSame("Make Player Invisible", inputtext)) {
+    if (IsStringSame("Make visible", inputtext) || IsStringSame("Make invisible", inputtext)) {
         InvisibleAuth:Command(playerid, targetid);
-        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled %s invisible mode", GetPlayerNameEx(targetid)));
-        SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s enabled invisible mode for you", GetPlayerNameEx(playerid)));
-        APCP:Init(playerid, targetid);
-        return ~1;
-    }
-    if (IsStringSame("Make Player Visible", inputtext)) {
-        InvisibleAuth:Command(playerid, targetid);
-        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s invisible mode", GetPlayerNameEx(targetid)));
-        SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled invisible mode for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
@@ -100,18 +89,8 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     if (GetPlayerAdminLevel(playerid) != 3 || !IsStringSame(text, "invisible mode")) return 1;
-    if (InvisibleAuth:SystemStatus) {
-        InvisibleAuth:SystemStatus = false;
-        SendClientMessage(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} Invisible mode disabled");
-        foreach(new i:Player) {
-            InvisibleAuth:SetPlayer(i, false);
-        }
-    } else {
-        InvisibleAuth:SystemStatus = true;
-        SendClientMessage(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} Invisible mode enabled");
-        foreach(new i:Player) {
-            InvisibleAuth:SetPlayer(i, true);
-        }
-    }
+    InvisibleAuth:SystemStatus = !InvisibleAuth:SystemStatus;
+    AlexaMsg(playerid, InvisibleAuth:SystemStatus ? "Enabled" : "Disabled", "Invisible System");
+    InvisibleUpdate();
     return ~1;
 }
