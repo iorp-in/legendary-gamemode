@@ -2229,6 +2229,7 @@ FlexDialog:HouseAdminMenuSetPrice(playerid, response, listitem, const inputtext[
     if (!response) return House:AdminMenuManage(playerid, houseid);
     new newprice;
     if (sscanf(inputtext, "d", newprice) || newprice < 1) return House:AdminMenuSetPrice(playerid, houseid);
+    HouseData[houseid][Price] = newprice;
     mysql_tquery(Database, sprintf("UPDATE houses SET HousePrice=%d WHERE ID=%d", newprice, houseid));
     House:UpdateLabel(houseid);
     House:Save(houseid);
