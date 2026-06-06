@@ -326,8 +326,6 @@ CMD:gc(playerid, const params[]) {
 
     if (isStringHasIP(string)) {
         SendClientMessageEx(playerid, -1, "{db6600}[Alexa]: {FFFFEE}Your message has been blocked due {FF0000}advertise suspect{FFFFFF}, staff has been alerted.");
-        Discord:SendHelper(sprintf(":page_with_curl:**Report for %s: alexa detected advertisement **", GetPlayerNameEx(playerid)));
-        Discord:SendHelper(sprintf("message: **%s", string));
         return 1;
     }
 
@@ -557,18 +555,10 @@ cmd:report(playerid, const params[]) {
         return SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} invalid username, report can't be forwarded to administators");
     }
 
-    SendAdminLogMessage(sprintf("Report for %s by %s", pName, GetPlayerNameEx(playerid)), false);
-    SendAdminLogMessage(sprintf("Report: %s", rReason), false);
-    Discord:SendHelper(sprintf(":page_with_curl:**Report for %s by %s**", pName, GetPlayerNameEx(playerid)));
-    Discord:SendHelper(sprintf("**Report:** %s", rReason));
+    SendAdminLogMessage(sprintf("Report for %s by %s", pName, GetPlayerNameEx(playerid)));
+    SendAdminLogMessage(sprintf("Report: %s", rReason));
     SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} report forwarded to higher authorities, they will react to your report soon");
     SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} this command only send alerts does not file reports on forum, you have to file forum report yourself.");
-    return 1;
-}
-
-cmd:forum(playerid, const params[]) {
-    SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} from applying faction, reading newbie guides to doing many more things, create account on forum and connect with us.");
-    SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} forum link: https://forum.iorp.in");
     return 1;
 }
 

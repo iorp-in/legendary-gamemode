@@ -166,14 +166,14 @@ stock GunDrop:ProxDetector(Float:radius = 30.0, playerid, const text[], col1 = 0
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Drop Gun System");
+    ASCP:AddCommand(playerid, "Drop gun");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Drop Gun System", inputtext)) GunDrop:AdminMenu(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Drop gun", inputtext)) return 1;
+    GunDrop:AdminMenu(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

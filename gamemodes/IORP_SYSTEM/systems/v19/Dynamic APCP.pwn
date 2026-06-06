@@ -64,4 +64,4 @@ cmd:aplayer(playerid, const params[]) {
 }
 
 
-//#snippet init_apcp APCP:OnInit(playerid, targetid, page) {\n\tif(page != 0) return 1;\n\tAPCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nAPCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}
+//#snippet init_apcp APCP:OnInit(playerid, targetid, page) {\n\tif (page != 0) return 1;\n\tAPCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nAPCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

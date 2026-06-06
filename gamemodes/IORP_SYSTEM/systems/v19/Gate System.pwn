@@ -356,14 +356,14 @@ stock DynamicGate:CommandOpen(playerid) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Gate System");
+    ASCP:AddCommand(playerid, "Gate");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Gate System", inputtext)) DynamicGate:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Gate", inputtext)) return 1;
+    DynamicGate:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

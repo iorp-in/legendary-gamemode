@@ -1,16 +1,13 @@
 ASCP:OnInit(playerid, page) {
-    if (page != 1) return 1;
-    ASCP:AddCommand(playerid, "Reset In Hand Money");
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "Reset player cash");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Reset In Hand Money", inputtext)) {
-        ResetInHandMoney(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Reset player cash", inputtext)) return 1;
+    ResetInHandMoney(playerid);
+    return ~1;
 }
 
 stock ResetInHandMoney(playerid) {
@@ -21,9 +18,7 @@ stock ResetInHandMoney(playerid) {
 FlexDialog:ResetInHandMoney(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
     if (!response) return 1;
     new minBalance, resetAmount, limit;
-    if (sscanf(inputtext, "ddd", minBalance, resetAmount, limit) ||
-        minBalance < 0 || resetAmount < 0 || limit < 1
-    ) return ResetInHandMoney(playerid);
+    if (sscanf(inputtext, "ddd", minBalance, resetAmount, limit) || minBalance < 0 || resetAmount < 0 || limit < 1) return ResetInHandMoney(playerid);
 
     new Cache:mysql_cache = mysql_query(Database, sprintf("SELECT username, cash FROM players WHERE cash >  %d limit %d", minBalance, limit));
     new rows = cache_num_rows();

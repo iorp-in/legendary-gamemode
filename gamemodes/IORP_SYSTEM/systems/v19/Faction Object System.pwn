@@ -310,12 +310,12 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "SAPD Objects");
+    ASCP:AddCommand(playerid, "SAPD objects");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || page != 0 || !IsStringSame("SAPD Objects", inputtext)) return 1;
+    if (!response || page != 0 || !IsStringSame("SAPD objects", inputtext)) return 1;
     FactionObject:CommandMenu(playerid);
     return ~1;
 }

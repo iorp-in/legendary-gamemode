@@ -510,82 +510,73 @@ stock DynamicShopBusiness:Create3dText(shopid) {
 }
 
 hook GlobalHourInterval() {
-    foreach(new shopid:dynbusiness) {
-        if (DynamicShopBusiness:IsPurchased(shopid)) {
-            new beforeDay = 1;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new lastAccessedAt = DynamicShopBusiness:data[shopid][DynamicShopBusiness:LastAccessedAt];
-            new shopWillResetAt = lastAccessedAt + (DYNAMIC_SHOP_RESET_DAYS - beforeDay) * 86400;
-            if (shopWillResetAt >= mintime && shopWillResetAt < maxtime) {
-                if (!IsPlayerInServerByName(DynamicShopBusiness:GetOwner(shopid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, DynamicShopBusiness:GetOwner(shopid), sprintf("Shop %s [%d] will reset after 24 hours!!", DynamicShopBusiness:GetName(shopid), shopid),
-                        sprintf("Shop %s [%d] will reset after 24 hours!! Your shop will be taken by government due to long inactivity and no visit in shop for long time. you can stop this reset by visiting your shop within 24 hours.", DynamicShopBusiness:GetName(shopid), shopid));
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Shop %s [%d]\n\
-                Status: will reset within 24 hour\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", DynamicShopBusiness:GetOwner(shopid), DynamicShopBusiness:GetName(shopid), shopid));
-            }
-        }
-    }
-    foreach(new shopid:dynbusiness) {
-        if (DynamicShopBusiness:IsPurchased(shopid)) {
-            new beforeDay = 2;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new lastAccessedAt = DynamicShopBusiness:data[shopid][DynamicShopBusiness:LastAccessedAt];
-            new shopWillResetAt = lastAccessedAt + (DYNAMIC_SHOP_RESET_DAYS - beforeDay) * 86400;
-            if (shopWillResetAt >= mintime && shopWillResetAt < maxtime) {
-                if (!IsPlayerInServerByName(DynamicShopBusiness:GetOwner(shopid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, DynamicShopBusiness:GetOwner(shopid), sprintf("Shop %s [%d] will reset after 48 hours!!",
-                            DynamicShopBusiness:GetName(shopid), shopid),
-                        sprintf("Shop %s [%d] will reset after 48 hours!! Your shop will be taken by government due to long inactivity and no visit in shop for long time.\
-                         you can stop this reset by visiting your shop within 48 hours.", DynamicShopBusiness:GetName(shopid), shopid));
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Shop %s [%d]\n\
-                Status: will reset within 48 hour\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", DynamicShopBusiness:GetOwner(shopid), DynamicShopBusiness:GetName(shopid), shopid));
-            }
-        }
-    }
-    return 1;
-}
+    new currenttime = gettime();
+    new maxtime = currenttime + 3600;
 
-hook GlobalOneMinuteInterval() {
     foreach(new shopid:dynbusiness) {
         if (!DynamicShopBusiness:IsPurchased(shopid)) continue;
+
         new lastAccessedAt = DynamicShopBusiness:data[shopid][DynamicShopBusiness:LastAccessedAt];
-        if (gettime() - lastAccessedAt > DYNAMIC_SHOP_RESET_DAYS * 86400) {
-            if (!IsPlayerInServerByName(DynamicShopBusiness:GetOwner(shopid))) {
-                Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, DynamicShopBusiness:GetOwner(shopid), sprintf("Shop %s [%d] has been auto reset!!", DynamicShopBusiness:GetName(shopid), shopid),
-                    sprintf("Shop %s [%d] has been auto reset!! Your shop has been taken by government due to long inactivity and no visit in shop for long time.", DynamicShopBusiness:GetName(shopid), shopid));
-            }
-            Discord:SendNotification(sprintf("\
-            **Property Auto Reset Alert**\n\
-            ```\n\
-            Owner: %s\n\
-            Type: Shop %s [%d]\n\
-            Status: reseted\n\
-            Reason: due to owner not active\n\
-            ```\
-            ", DynamicShopBusiness:GetOwner(shopid), DynamicShopBusiness:GetName(shopid), shopid));
+        new resetAt = lastAccessedAt + (DYNAMIC_SHOP_RESET_DAYS * 86400);
+
+        // Auto reset
+        if (resetAt >= currenttime && resetAt < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                DynamicShopBusiness:GetOwner(shopid),
+                sprintf(
+                    "Shop %s [%d] has been auto reset!!",
+                    DynamicShopBusiness:GetName(shopid),
+                    shopid
+                ),
+                sprintf(
+                    "Shop %s [%d] has been auto reset!! Your shop has been taken by government due to long inactivity and no visit in shop for a long time.",
+                    DynamicShopBusiness:GetName(shopid),
+                    shopid
+                )
+            );
+
             DynamicShopBusiness:Reset(shopid);
+            continue;
+        }
+
+        // 48-hour warning
+        else if ((resetAt - 48 * 3600) >= currenttime && (resetAt - 48 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                DynamicShopBusiness:GetOwner(shopid),
+                sprintf(
+                    "Shop %s [%d] will reset after 48 hours!!",
+                    DynamicShopBusiness:GetName(shopid),
+                    shopid
+                ),
+                sprintf(
+                    "Shop %s [%d] will reset after 48 hours!! Your shop will be taken by government due to long inactivity and no visit in shop for a long time. You can stop this reset by visiting your shop within 48 hours.",
+                    DynamicShopBusiness:GetName(shopid),
+                    shopid
+                )
+            );
+        }
+
+        // 24-hour warning
+        else if ((resetAt - 24 * 3600) >= currenttime && (resetAt - 24 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                DynamicShopBusiness:GetOwner(shopid),
+                sprintf(
+                    "Shop %s [%d] will reset after 24 hours!!",
+                    DynamicShopBusiness:GetName(shopid),
+                    shopid
+                ),
+                sprintf(
+                    "Shop %s [%d] will reset after 24 hours!! Your shop will be taken by government due to long inactivity and no visit in shop for a long time. You can stop this reset by visiting your shop within 24 hours.",
+                    DynamicShopBusiness:GetName(shopid),
+                    shopid
+                )
+            );
         }
     }
+
     return 1;
 }
 
@@ -643,12 +634,12 @@ FlexDialog:BusinessDirect(playerid, response, listitem, const inputtext[], shopi
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Bussiness System");
+    ASCP:AddCommand(playerid, "Bussiness");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || !IsStringSame("Bussiness System", inputtext)) return 1;
+    if (!response || !IsStringSame("Bussiness", inputtext)) return 1;
     DynamicShopBusiness:AdminPanel(playerid);
     return ~1;
 }

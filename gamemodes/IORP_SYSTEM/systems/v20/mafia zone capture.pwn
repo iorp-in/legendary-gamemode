@@ -288,8 +288,6 @@ hook OnPlayerShootDynObj(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float
                     MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:FlashStartedAt] = gettime();
                     ZoneFlashForAll(MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:zoneObjectID], 0xFF0000AA);
                     SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FF0000} %s zone under attack", MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:title]));
-                    Discord:SendNotification(sprintf("⚔️ **%s** zone under attack ⚔️", MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:title]));
-                    Discord:SendFactionLobby(sprintf("⚔️ **%s** zone under attack ⚔️ @here", MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:title]));
                 }
             }
         }
@@ -407,12 +405,12 @@ public HealZoneProperty(playerid, propid) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Mafia System");
+    ASCP:AddCommand(playerid, "Mafia zone");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || !IsStringSame("Mafia System", inputtext)) return 1;
+    if (!response || !IsStringSame("Mafia zone", inputtext)) return 1;
     MafiaZoneSystem:AdminPanel(playerid);
     return ~1;
 }

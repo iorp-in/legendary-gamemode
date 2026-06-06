@@ -19,85 +19,78 @@ hook OnGameModeInit() {
 
 ACP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ACP:AddCommand(playerid, "All Vehicle Respawn");
-    ACP:AddCommand(playerid, "Set Weather");
-    ACP:AddCommand(playerid, "Clear Global Chat");
-    ACP:AddCommand(playerid, "Teleport to Vehicle by ID");
-    ACP:AddCommand(playerid, "Teleport using Coordinate");
-    ACP:AddCommand(playerid, "Give Weapons to All Player");
-    ACP:AddCommand(playerid, "Disarm All Player");
-    ACP:AddCommand(playerid, "Sign off All Faction Player");
-    ACP:AddCommand(playerid, "Give Vehicle to All");
-    ACP:AddCommand(playerid, "Get All player to your location");
-    ACP:AddCommand(playerid, "Freeze All Player");
-    ACP:AddCommand(playerid, "Unfreeze All Player");
-    ACP:AddCommand(playerid, "Set All Player Health");
-    ACP:AddCommand(playerid, "Set All Player Armour");
-    ACP:AddCommand(playerid, "Make All Invisible");
-    ACP:AddCommand(playerid, "Make All Visible");
+    ACP:AddCommand(playerid, "Respawn all vehicles");
+    ACP:AddCommand(playerid, "Change weather");
+    ACP:AddCommand(playerid, "Clear global chat");
+    ACP:AddCommand(playerid, "Teleport to vehicle by ID");
+    ACP:AddCommand(playerid, "Teleport to coordinates");
+    ACP:AddCommand(playerid, "Give weapon to all players");
+    ACP:AddCommand(playerid, "Disarm all players");
+    ACP:AddCommand(playerid, "Sign off all faction members");
+    ACP:AddCommand(playerid, "Give vehicle to all players");
+    ACP:AddCommand(playerid, "Bring all players");
+    ACP:AddCommand(playerid, "Freeze all players");
+    ACP:AddCommand(playerid, "Unfreeze all players");
+    ACP:AddCommand(playerid, "Set health for all players");
+    ACP:AddCommand(playerid, "Set armour for all players");
+    ACP:AddCommand(playerid, "Make all players invisible");
+    ACP:AddCommand(playerid, "Make all players visible");
 
     if (GetPlayerAdminLevel(playerid) == 3) {
-        ACP:AddCommand(playerid, "Set All Player Wanted Level");
-        ACP:AddCommand(playerid, "Reset All Player Wanted Level");
-        ACP:AddCommand(playerid, "Set All Player Skin");
-        ACP:AddCommand(playerid, "Kick All");
-        // ACP:AddCommand(playerid, "Reboot Server");
-        // ACP:AddCommand(playerid, "Hard Reboot Server");
+        ACP:AddCommand(playerid, "Set wanted level for all players");
+        ACP:AddCommand(playerid, "Clear wanted level for all players");
+        ACP:AddCommand(playerid, "Set skin for all players");
+        ACP:AddCommand(playerid, "Kick all players");
     }
+
+    if (IsPlayerMasterAdmin(playerid)) ACP:AddCommand(playerid, "Restart server");
     return 1;
 }
 
 ACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (!response) return 1;
     if (page != 0) return 1;
-    if (!strcmp("All Vehicle Respawn", inputtext)) {
+    if (!strcmp("Respawn all vehicles", inputtext)) {
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFCC66}%s{FFFFEE} Admin %s requested for respawn all unoccupied Vehicle's", GetPlayerNameEx(playerid)));
         respawnunoccupiedvehicle(true);
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Set Weather", inputtext)) {
+    if (!strcmp("Change weather", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetWeather, DIALOG_STYLE_INPUT, "Change server weather", "Enter Weather ID\nLimit:0 - 45", "Update", "Cancel");
         return ~1;
     }
-    if (!strcmp("Clear Global Chat", inputtext)) {
+    if (!strcmp("Clear global chat", inputtext)) {
         for (new i = 0; i < 100; i++) SendClientMessageToAll(COLOR_WHITE, " ");
         SendClientMessageToAll(COLOR_YELLOW, "Global Chat has been reset");
         SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}You have reset global chat");
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Reboot Server", inputtext)) {
+    if (!strcmp("Restart server", inputtext)) {
         SendClientMessageToAll(-1, "{4286f4}[Alexa]:{FFFFEE}Server Restarting...");
-        Discord:SendManagement("Server Reboot Initialized");
-        RebootServer();
-        return ~1;
-    }
-    if (!strcmp("Hard Reboot Server", inputtext)) {
-        SendClientMessageToAll(-1, "{4286f4}[Alexa]:{FFFFEE}Server Restarting...");
-        Discord:SendManagement("Server Hard Reboot Initialized");
         HardRebootServer();
         return ~1;
     }
-    if (!strcmp("Teleport to Vehicle by ID", inputtext)) {
+    if (!strcmp("Teleport to vehicle by ID", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetTelVehByID, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter VehicleID", "Teleport", "Close");
         return ~1;
     }
-    if (!strcmp("Teleport using Coordinate", inputtext)) {
+    if (!strcmp("Teleport to coordinates", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetTelUsCord, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [X] [Y] [Z]", "Teleport", "Close");
         return ~1;
     }
-    if (!strcmp("Give Weapons to All Player", inputtext)) {
+    if (!strcmp("Give weapon to all players", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetGiWeAlPl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [WeaponId] [Ammo]", "Submit", "Close");
         return ~1;
     }
-    if (!strcmp("Disarm All Player", inputtext)) {
+    if (!strcmp("Disarm all players", inputtext)) {
         foreach(new i:Player) ResetPlayerWeaponsEx(i);
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}All Players are disarmed by admin %s", GetPlayerNameEx(playerid)));
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Sign off All Faction Player", inputtext)) {
+    if (!strcmp("Sign off all faction members", inputtext)) {
         foreach(new i:Player) {
             if (Faction:IsPlayerSigned(i)) Faction:SignOff(i);
         }
@@ -105,11 +98,11 @@ ACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Give Vehicle to All", inputtext)) {
+    if (!strcmp("Give vehicle to all players", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetGiveVehtoAll, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Vehiclename/Vehicleid] [Color 1] [Color 2]", "Submit", "Close");
         return ~1;
     }
-    if (!strcmp("Get All player to your location", inputtext)) {
+    if (!strcmp("Bring all players", inputtext)) {
         new Float:x, Float:y, Float:z, int, worldid;
         int = GetPlayerInterior(playerid);
         worldid = GetPlayerVirtualWorld(playerid);
@@ -119,54 +112,53 @@ ACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Freeze All Player", inputtext)) {
+    if (!strcmp("Freeze all players", inputtext)) {
         foreach(new i:Player) freeze(i);
         SendClientMessageToAll(COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE}Admin %s freezed all players", GetPlayerNameEx(playerid)));
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Unfreeze All Player", inputtext)) {
+    if (!strcmp("Unfreeze all players", inputtext)) {
         foreach(new i:Player) unfreeze(i);
         SendClientMessageToAll(COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE}Admin %s unfreezed all players", GetPlayerNameEx(playerid)));
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Set All Player Health", inputtext)) {
+    if (!strcmp("Set health for all players", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetStAlPlHlt, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Health]", "Submit", "Close");
         return ~1;
     }
-    if (!strcmp("Set All Player Armour", inputtext)) {
+    if (!strcmp("Set armour for all players", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetStAlPlArm, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Armour]", "Submit", "Close");
         return ~1;
     }
-    if (!strcmp("Make All Invisible", inputtext)) {
+    if (!strcmp("Make all players invisible", inputtext)) {
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}All Players invisible mode a has been activated by admin %s", GetPlayerNameEx(playerid)));
         foreach(new i:Player) InvisibleAuth:SetPlayer(i, true);
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Make All Visible", inputtext)) {
+    if (!strcmp("Make all players visible", inputtext)) {
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}All Players invisible mode a has been deactivated by admin %s", GetPlayerNameEx(playerid)));
         foreach(new i:Player) InvisibleAuth:SetPlayer(i, false);
         ACP:Init(playerid, page);
         return ~1;
     }
-    if (!strcmp("Set All Player Skin", inputtext)) {
+    if (!strcmp("Set skin for all players", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetStAlPlSkin, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [SkinID]", "Submit", "Close");
         return ~1;
     }
-    if (!strcmp("Set All Player Wanted Level", inputtext)) {
+    if (!strcmp("Set wanted level for all players", inputtext)) {
         ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetStAlPlWnLvl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Wantedlevel] [Reason]", "Submit", "Close");
         return ~1;
     }
-    if (!strcmp("Reset All Player Wanted Level", inputtext)) {
+    if (!strcmp("Clear wanted level for all players", inputtext)) {
         foreach(new i:Player) WantedDatabase:ResetWantedLevel(i, sprintf("admin %s reseted this record", GetPlayerNameEx(playerid)));
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}All Players wanted level has been reset by admin %s", GetPlayerNameEx(playerid)));
         return ~1;
     }
-    if (!strcmp("Kick All", inputtext)) {
+    if (!strcmp("Kick all players", inputtext)) {
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}Admin %s kicked all players", GetPlayerNameEx(playerid)));
-        Discord:SendManagement(sprintf("[Alexa]:Admin %s kicked all players", GetPlayerNameEx(playerid)));
         SetTimerEx("kickall", 1000, false, "i", playerid);
         ACP:Init(playerid, page);
         return ~1;
@@ -303,7 +295,7 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
         if (sscanf(inputtext, "is[512]", level, reason)) { ShowPlayerDialogEx(playerid, AllPlayer:dialogid, AllPlayer:OffsetStAlPlWnLvl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Wantedlevel] [Reason]", "Submit", "Close"); return ~1; }
         if (level > 6 || level < 0) { SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Maximum wanted level limit is 6"); return ~1; }
         foreach(new i:Player) SetPlayerWantedLevelEx(i, level);
-        format(string, sizeof string, "{4286f4}[Alexa]:{FFFFEE}Admin %s set all player wanted level %d for %s", GetPlayerNameEx(playerid), level, reason);
+        format(string, sizeof string, "{4286f4}[Alexa]:{FFFFEE}Admin %s Set wanted level for all players %d for %s", GetPlayerNameEx(playerid), level, reason);
         SendClientMessageToAll(COLOR_GREY, string);
         ACP:Init(playerid);
         return ~1;

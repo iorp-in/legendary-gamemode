@@ -452,14 +452,14 @@ FlexDialog:RegisterRemoveMenu(playerid, response, listitem, const inputtext[], e
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Register Hack System");
+    ASCP:AddCommand(playerid, "Register hack");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Register Hack System", inputtext)) RegisterHacking:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Register hack", inputtext)) return 1;
+    RegisterHacking:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

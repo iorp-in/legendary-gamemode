@@ -197,9 +197,6 @@ stock Heist:start(playerid, price) {
     InvisibleAuth:SetPlayer(playerid, false);
     CallRemoteFunction("OnHeistStart", "dd", playerid, price);
     WantedDatabase:GiveWantedLevel(playerid, sprintf("heist worth $%s", FormatCurrency(price)), 6, false);
-
-    Discord:SendNotification(sprintf("⚔️ robbery in progress at **%s** ⚔️", zonename));
-    Discord:SendFactionLobbyLaw(sprintf("⚔️ robbery in progress at **%s** ⚔️ @here", zonename));
     return 1;
 }
 

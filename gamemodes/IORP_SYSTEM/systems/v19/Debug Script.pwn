@@ -4,7 +4,7 @@ new Iterator:DebugIds < Max_Debug_ID > ;
 new Debug:DataTitle[Max_Debug_ID][100];
 stock Debug:GetID(const FunctionName[]) {
     new id = Iter_Free(DebugIds);
-    if (id == INVALID_ITERATOR_SLOT) return Discord:SendManagement(sprintf("Invalid ScriptDebugID Passed:%d", id));
+    if (id == INVALID_ITERATOR_SLOT) return print(sprintf("Invalid ScriptDebugID Passed:%d", id));
     Iter_Add(DebugIds, id);
     format(Debug:DataTitle[id], 100, "%s", FunctionName);
     return id;
@@ -65,14 +65,14 @@ stock Debug:SendMessage(debugid, const message[]) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Debug System");
+    ASCP:AddCommand(playerid, "Debug");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Debug System", inputtext)) Debug:MainMenu(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Debug", inputtext)) return 1;
+    Debug:MainMenu(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

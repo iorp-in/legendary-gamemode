@@ -175,7 +175,7 @@ public OnPlayerTeleport(playerid, Float:distance) {
     else freezetime = 5 * 10 * 1000;
     freezeEx(playerid, freezetime);
     SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}we have freezed you for %d seconds for security reasons, please avoid mods and hacks from being banned.", freezetime / 1000));
-    SendAdminLogMessage(sprintf("%s done a unauthorized teleport, distance: %f", GetPlayerNameEx(playerid), distance), false);
+    SendAdminLogMessage(sprintf("%s done a unauthorized teleport, distance: %f", GetPlayerNameEx(playerid), distance));
     Player_TeleportCount[playerid]++;
     return 1;
 }

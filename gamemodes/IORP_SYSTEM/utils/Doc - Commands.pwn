@@ -19,19 +19,14 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/discord: {FFFFEE}link to: https://discord.gg/Xq9k3hr\n");
         strcat(info, "{db6600}/report: {FFFFEE}report player to administrators.\n");
         strcat(info, "{db6600}/eject: {FFFFEE}eject other player from vehicle.\n");
-        strcat(info, "{db6600}/vc: {FFFFEE}to chat on voice chat selected frequnecy.\n");
-        strcat(info, "{db6600}/vcset: {FFFFEE}to select voice frequency\n");
-        strcat(info, "{db6600}/vcstatus: {FFFFEE}to check voice chat members and status\n");
         strcat(info, "{db6600}/alexa: {FFFFEE}to talk with Alexa, your personal assistant who obeys your command.\n");
-        strcat(info, "{db6600}/pocket or /p: {FFFFEE}to open your pocket, all in one solution for commands\n");
+        strcat(info, "{db6600}/pocket or /p or H+SPACE: {FFFFEE}to open your pocket, all in one solution for commands\n");
         strcat(info, "{db6600}/anim: {FFFFEE}to perform animations\n");
         strcat(info, "{db6600}/gc: {FFFFEE}to talk in global chat\n");
         strcat(info, "{db6600}/admins: {FFFFEE}check online management staff\n");
         strcat(info, "{db6600}/s: {FFFFEE}to talk with nearest player using TTS\n");
         strcat(info, "{db6600}/pm, /rpm, /nopm: {FFFFEE}personal message commands\n");
-        strcat(info, "{db6600}/vip: {FFFFEE}open vip menu\n");
         strcat(info, "{db6600}/bitcoin: {FFFFEE}open premium player shop\n");
-        strcat(info, "{db6600}/phelp: {FFFFEE}show pong cmds\n");
         strcat(info, "{db6600}-----------------------------------------------------------------------------------------------n");
         ShowInfo(playerid, "General Commands", info);
         return ~1;
@@ -90,7 +85,6 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}General:{FFFFEE} help, unbug me, chat animation, achievements, race system\n");
         strcat(info, "{db6600}General:{FFFFEE} hide/show motives, sleep/awake mode\n");
         strcat(info, "{db6600}Utilities:{FFFFEE} pocket, gps, patch status, clean/fix screen\n");
-        strcat(info, "{db6600}Event:{FFFFEE} skyfall, espawn\n");
 
         if (GetPlayerVIPLevel(playerid) > 0) {
             strcat(info, "\n");
@@ -164,9 +158,9 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/getadmins: {FFFFEE}view all admins.\n");
         strcat(info, "{db6600}/getmasteradmins: {FFFFEE}view all master admins.\n");
         strcat(info, "{db6600}/getalldebt: {FFFFEE}view all players with debt.\n");
-        strcat(info, "{db6600}/getplayerdebt: {FFFFEE}view a player's debt history.\n");
-        strcat(info, "{db6600}/giveplayerdebt: {FFFFEE}assign debt to a player.\n");
-        strcat(info, "{db6600}/resetplayerdebt: {FFFFEE}reset a player's debt.\n");
+        strcat(info, "{db6600}/getdebt: {FFFFEE}view a player's debt history.\n");
+        strcat(info, "{db6600}/givedebt: {FFFFEE}assign debt to a player.\n");
+        strcat(info, "{db6600}/resetdebt: {FFFFEE}reset a player's debt.\n");
         strcat(info, "{db6600}/setbankpassword: {FFFFEE}change bank account password.\n");
         strcat(info, "{db6600}/enablebankaccount: {FFFFEE}enable a bank account.\n");
         strcat(info, "{db6600}/disablebankaccount: {FFFFEE}disable a bank account.\n");
@@ -177,13 +171,5 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         return ~1;
     }
 
-    return 1;
-}
-
-stock ShowInfo(playerid, const caption[], const info[]) {
-    return FlexPlayerDialog(playerid, "ShowInfo", DIALOG_STYLE_MSGBOX, caption, info, "Okay", "");
-}
-
-FlexDialog:ShowInfo(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
     return 1;
 }

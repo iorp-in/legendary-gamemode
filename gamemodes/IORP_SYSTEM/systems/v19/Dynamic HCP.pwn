@@ -55,4 +55,4 @@ cmd:help(playerid, const params[]) {
     return 1;
 }
 
-//#snippet init_hcp HCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tHCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nHCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}
+//#snippet init_hcp HCP:OnInit(playerid, page) {\n\tif (page != 0) return 1;\n\tHCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nHCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

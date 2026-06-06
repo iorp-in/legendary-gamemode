@@ -375,14 +375,14 @@ public OnPlayerRequestShop(playerid, shopid) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Shop System");
+    ASCP:AddCommand(playerid, "Shop");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Shop System", inputtext)) Shop:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Shop", inputtext)) return 1;
+    Shop:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

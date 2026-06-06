@@ -15,14 +15,14 @@ public HintMessageShow() {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Hint Messages System");
+    ASCP:AddCommand(playerid, "Hint messages");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Hint Messages System", inputtext)) HintMessages:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Hint messages", inputtext)) return 1;
+    HintMessages:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

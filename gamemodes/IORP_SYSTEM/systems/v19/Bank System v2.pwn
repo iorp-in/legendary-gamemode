@@ -471,14 +471,6 @@ public OnBankAccountLogin(playerid, id) {
         CurrentAccountID[playerid] = id;
         Bank:ShowMenu(playerid);
 
-        if (!IsStringSame(GetPlayerNameEx(playerid), Bank:GetOwner(CurrentAccountID[playerid]))) Discord:LogTransaction(
-            sprintf(
-                ":moneybag:** Transaction Alert** :moneybag:\n**Player:** %s [%d]\n\
-                **Log:** logged someone else account id %d (%s)",
-                GetPlayerNameEx(playerid), playerid, CurrentAccountID[playerid], Bank:GetOwner(CurrentAccountID[playerid])
-            )
-        );
-
         new query[96];
         mysql_format(Database, query, sizeof(query), "UPDATE bankAccounts SET LastAccess=UNIX_TIMESTAMP() WHERE ID=%d && Disabled=0", id);
         mysql_tquery(Database, query);
@@ -492,7 +484,7 @@ forward OnBankAccountDeposit(playerid, amount);
 public OnBankAccountDeposit(playerid, amount) {
     if (cache_affected_rows() > 0) {
         SendClientMessageEx(playerid, 0x3498DBFF, sprintf("BANK: {FFFFFF}Successfully deposited {2ECC71}%s.", FormatCurrencyEx(amount)));
-        GivePlayerCash(playerid, -amount, sprintf("deposit in bank account %d", CurrentAccountID[playerid]), 0);
+        GivePlayerCash(playerid, -amount, sprintf("deposit in bank account %d", CurrentAccountID[playerid]));
         Bank:SaveLog(playerid, TYPE_DEPOSIT, CurrentAccountID[playerid], -1, amount);
     } else SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Transaction failed.");
 
@@ -504,7 +496,7 @@ forward OnBankAccountWithdraw(playerid, amount);
 public OnBankAccountWithdraw(playerid, amount) {
     if (cache_affected_rows() > 0) {
         SendClientMessageEx(playerid, 0x3498DBFF, sprintf("BANK: {FFFFFF}Successfully withdrawn {2ECC71}%s.", FormatCurrencyEx(amount)));
-        GivePlayerCash(playerid, amount, sprintf("withdrawn from bank account %d", CurrentAccountID[playerid]), 0);
+        GivePlayerCash(playerid, amount, sprintf("withdrawn from bank account %d", CurrentAccountID[playerid]));
         Bank:SaveLog(playerid, TYPE_WITHDRAW, CurrentAccountID[playerid], -1, -amount);
     } else SendClientMessageEx(playerid, -1, "{4286f4}[Error]:{FFFFEE}Transaction failed.");
     Bank:ShowMenu(playerid);
@@ -588,15 +580,15 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 ASCP:OnInit(playerid, page) {
-    if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Bank System");
+    if(page != 0) return 1;
+    ASCP:AddCommand(playerid, "Bank");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Bank System", inputtext)) Bank:AdminShowMenu(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Bank", inputtext)) return 1;
+    Bank:AdminShowMenu(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
@@ -725,16 +717,6 @@ FlexDialog:BankMenuDeposit(playerid, response, listitem, const inputtext[], extr
         return Bank:MenuDeposit(playerid);
     }
 
-    if (amount >= 30000) Discord:LogTransaction(
-        sprintf(
-            ":moneybag:** Transaction Alert** :moneybag:\n**Player:** %s [%d]\n**Amount:** $%s\n\
-            **Log:** deposit in account id %d (%s) %s",
-            GetPlayerNameEx(playerid), playerid, FormatCurrency(amount),
-            CurrentAccountID[playerid], Bank:GetOwner(CurrentAccountID[playerid]),
-            amount > 99000 ? ("\n\n<@&597292999227211777> confirm the source") : ("")
-        )
-    );
-
     mysql_tquery(
         Database, sprintf("UPDATE bankAccounts SET Balance=Balance+%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]),
         "OnBankAccountDeposit", "ii", playerid, amount
@@ -759,11 +741,13 @@ FlexDialog:BankMenuWithdraw(playerid, response, listitem, const inputtext[], ext
     if (!response) return Bank:ShowMenu(playerid);
     new amount;
     if (sscanf(inputtext, "d", amount) || amount < 1 || amount > Bank:GetBalance(CurrentAccountID[playerid])) return Bank:MenuWithdraw(playerid);
+
     // max limit 99,000,000
     if (amount > (Bank:IsUsingAtm(playerid) ? 50000 : 99000000)) {
         AlexaMsg(playerid, "{4286f4}You can't withdraw less than $1 or more than $99,000,000 at once. ($50,000 at once on ATMs)");
         return Bank:MenuWithdraw(playerid);
     }
+
     if (!IsTimePassedForPlayer(playerid, "bankwithdraw", 180)) {
         AlexaMsg(playerid, sprintf(
             "{4286f4}your last transaction is pending at bank end, please try after %s",
@@ -771,15 +755,6 @@ FlexDialog:BankMenuWithdraw(playerid, response, listitem, const inputtext[], ext
         ));
         return Bank:MenuWithdraw(playerid);
     }
-    if (amount >= 50000) Discord:LogTransaction(
-        sprintf(
-            ":moneybag:** Transaction Alert** :moneybag:\n**Player:** %s [%d]\n**Amount:** $%s\n\
-            **Log:** withdraw from account id %d (%s) %s",
-            GetPlayerNameEx(playerid), playerid, FormatCurrency(amount),
-            CurrentAccountID[playerid], Bank:GetOwner(CurrentAccountID[playerid]),
-            amount > 99000 ? ("\n\n<@&597292999227211777> confirm the source") : ("")
-        )
-    );
 
     mysql_tquery(
         Database, sprintf("UPDATE bankAccounts SET Balance=Balance-%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]),
@@ -831,17 +806,6 @@ FlexDialog:BankMenuTransferAmount(playerid, response, listitem, const inputtext[
         ));
         return Bank:MenuTransferAmount(playerid, toaccountid);
     }
-
-    if (amount >= 50000) Discord:LogTransaction(
-        sprintf(
-            ":moneybag:** Bank Transaction Alert** :moneybag:\n**Player:** %s [%d]\n**Amount:** $%s\n\
-            **Log:** transfered from bank account id %d (%s) to account id %d (%s)\nReason: %s%s",
-            GetPlayerNameEx(playerid), playerid, FormatCurrency(amount),
-            CurrentAccountID[playerid], Bank:GetOwner(CurrentAccountID[playerid]),
-            toaccountid, Bank:GetOwner(toaccountid), reason,
-            amount > 99000 ? ("\n\n<@&597292999227211777> confirm the source") : ("")
-        )
-    );
 
     if (!Bank:IsAccountAcitve(toaccountid)) return AlexaMsg(playerid, "Transaction failed");
     AlexaMsg(playerid, sprintf("Successfully transferred {2ECC71}%s {FFFFFF}to account ID {F1C40F}%d.", "BANK", amount, toaccountid));

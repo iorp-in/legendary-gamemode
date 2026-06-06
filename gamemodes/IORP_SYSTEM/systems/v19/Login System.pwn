@@ -135,16 +135,7 @@ public GetPlayerCash(playerid) {
     return pInfo[playerid][Cash];
 }
 
-stock GivePlayerCash(playerid, money, const log[], alertDiscord = 1) {
-    // Alert Price 999,999
-    if ((money > 299999 || money < -299999) && alertDiscord) {
-        Discord:LogTransaction(
-            sprintf(
-                ":moneybag:** Transaction Alert** :moneybag:\n**Player:** %s [%d]\n**Amount:** $%s\n**Log:** %s\n\n<@&597292999227211777>",
-                GetPlayerNameEx(playerid), playerid, FormatCurrency(money), log
-            )
-        );
-    }
+stock GivePlayerCash(playerid, money, const log[]) {
     pInfo[playerid][Cash] += money;
     ResetMoneyBar(playerid);
     UpdateMoneyBar(playerid, pInfo[playerid][Cash]);
@@ -529,6 +520,7 @@ stock Registration_Menu(playerid) {
 
 forward OnPlayerLogin(playerid);
 public OnPlayerLogin(playerid) {
+    LogEx(sprintf("[Login] [%s]: PlayerId: %d IP: %s", GetPlayerNameEx(playerid), playerid, GetPlayerIpEx(playerid)));
     pInfo[playerid][loginAt] = gettime();
     StopAudioStreamForPlayer(playerid);
     SetPlayerCash(playerid, GetPlayerCash(playerid));
@@ -604,6 +596,7 @@ hook OnPlayerConnect(playerid) {
 
 stock Connect_Login_Init(playerid) {
     if (IsPlayerNPC(playerid)) return 1;
+    LogEx(sprintf("[Join] [%s]: PlayerId: %d IP: %s", GetPlayerNameEx(playerid), playerid, GetPlayerIpEx(playerid)));
     ///=== Resetting player information ===///
     pInfo[playerid][loginAt] = gettime();
     format(pInfo[playerid][email], 150, "indianoceanroleplay@gmail.com");
@@ -650,6 +643,7 @@ public OnPlayerLoginCheck(playerid) {
 }
 
 hook OnPlayerDisconnect(playerid, reason) {
+    LogEx(sprintf("[Leave] [%s]: PlayerId: %d", GetPlayerNameEx(playerid), playerid));
     Corrupt_Check[playerid]++;
     if (IsPlayerLoggedIn(playerid)) UpdatePlayerDB(playerid);
     if (cache_is_valid(GetPlayerPlayer_Cache(playerid))) cache_delete(GetPlayerPlayer_Cache(playerid)), SetPlayerPlayer_Cache(playerid, MYSQL_INVALID_CACHE);
@@ -1140,7 +1134,6 @@ public OnPlayerKilled(playerid, killerid, weaponid) {
 //             BanPlayer(killerid, 24 * 60, sprintf("Extended ban: Deathmatch of %s", GetPlayerNameEx(playerid)));
 //         } else {
 //             BanPlayer(killerid, Random(10, 20), sprintf("Deathmatch of %s", GetPlayerNameEx(playerid)));
-//             Discord:SendHelper(sprintf(":page_with_curl:** %s banned %s for deathmatch. **", GetPlayerNameEx(playerid), GetPlayerNameEx(killerid)));
 //             SetPlayerKilledBy(playerid, -1);
 //         }
 //         return ~1;

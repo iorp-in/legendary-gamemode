@@ -470,10 +470,8 @@ cmd:rpverify(playerid, const params[]) {
     }
     Roleplay:Verify(rpid, status);
     if (status == 1) {
-        Discord:SendHelper(sprintf("%s verified roleplay id: %d", GetPlayerNameEx(playerid), rpid));
         AlexaMsg(playerid, sprintf("roleplay %d status updated to verified", rpid));
     } else {
-        Discord:SendHelper(sprintf("%s unverified roleplay id: %d", GetPlayerNameEx(playerid), rpid));
         AlexaMsg(playerid, sprintf("roleplay %d status updated to unverified", rpid));
     }
     return 1;

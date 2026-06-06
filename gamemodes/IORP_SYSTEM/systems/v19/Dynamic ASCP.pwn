@@ -56,4 +56,4 @@ cmd:ascp(playerid, const params[]) {
     return 1;
 }
 
-//#snippet init_ascp ASCP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tASCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}
+//#snippet init_ascp ASCP:OnInit(playerid, page) {\n\tif (page != 0) return 1;\n\tASCP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

@@ -805,3 +805,11 @@ stock SendClientMessageToMafia(const message[]) {
 stock DestroyDynamicObjectEx(objectid) {
     return DestroyDynamicObject(objectid);
 }
+
+stock ShowInfo(playerid, const caption[], const info[]) {
+    return FlexPlayerDialog(playerid, "ShowInfo", DIALOG_STYLE_MSGBOX, caption, info, "Okay", "");
+}
+
+FlexDialog:ShowInfo(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
+    return 1;
+}

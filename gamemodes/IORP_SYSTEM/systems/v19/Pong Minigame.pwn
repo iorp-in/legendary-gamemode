@@ -152,14 +152,34 @@ CMD:pinfo(playerid, params[]) {
     return 1;
 }
 
-CMD:phelp(playerid, params[]) {
-    SendClientMessageEx(playerid, 0xCCFFDD56, "[PONG] Commands");
-    SendClientMessageEx(playerid, 0xCCFFDD56, "/phost|phostlocal|pjoin|pstart|pexit|pend");
-    SendClientMessageEx(playerid, 0xCCFFDD56, "/pscore|prounds|pspeed [value]");
-    if (GetPlayerAdminLevel(playerid) == 3) {
-        SendClientMessageEx(playerid, 0xAAFFCC88, "[PONG] Admin Commands");
-        SendClientMessageEx(playerid, 0xAAFFCC88, "/pcreate|pinfo");
-        SendClientMessageEx(playerid, 0xAAFFCC88, "/pdestroy [id]");
-    }
+HCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    HCP:AddCommand(playerid, "Pong minigame");
     return 1;
+}
+
+HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0 || !IsStringSame("Pong minigame", inputtext)) return 1;
+    new info[2000];
+    format(info, sizeof(info), "");
+
+    strcat(info, "{db6600}/phost {FFFFEE}- Host a nearby pong game.\n");
+    strcat(info, "{db6600}/phostlocal {FFFFEE}- Host a private local pong game.\n");
+    strcat(info, "{db6600}/pjoin {FFFFEE}- Join a nearby pong game.\n");
+    strcat(info, "{db6600}/pstart {FFFFEE}- Start your hosted pong game.\n");
+    strcat(info, "{db6600}/pend {FFFFEE}- End the current pong game.\n");
+    strcat(info, "{db6600}/pexit {FFFFEE}- Exit the current pong game.\n");
+    strcat(info, "{db6600}/pscore [1-20] {FFFFEE}- Set target score.\n");
+    strcat(info, "{db6600}/prounds [1-20] {FFFFEE}- Set number of rounds.\n");
+    strcat(info, "{db6600}/pspeed [0.5-5.0] {FFFFEE}- Set ball speed.\n");
+
+    if (GetPlayerAdminLevel(playerid) == 3) {
+        strcat(info, "\n{db6600}>> Admin Commands\n");
+        strcat(info, "{db6600}/pcreate {FFFFEE}- Create a pong game.\n");
+        strcat(info, "{db6600}/pdestroy [id] {FFFFEE}- Destroy a pong game.\n");
+        strcat(info, "{db6600}/pinfo {FFFFEE}- View nearby pong game information.\n");
+    }
+
+    ShowInfo(playerid, "Pong Minigame", info);
+    return ~1;
 }

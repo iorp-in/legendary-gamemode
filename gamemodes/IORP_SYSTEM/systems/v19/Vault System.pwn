@@ -154,12 +154,12 @@ stock vault:addcash(id, cash, type, const log[]) {
 
 stock vault:PlayerVault(playerid, playeramount, const playerlog[], vaultid, vaultamount, const vaultlog[]) {
     if (!IsPlayerConnected(playerid)) {
-        SendAdminLogMessage(sprintf("invalid vault [%d] transfer occured due inactive playerid [%d], investigation required", vaultid, playerid), true);
-        SendAdminLogMessage(sprintf("[Player Log]: %s", playerlog), true);
+        SendAdminLogMessage(sprintf("invalid vault [%d] transfer occured due inactive playerid [%d], investigation required", vaultid, playerid));
+        SendAdminLogMessage(sprintf("[Player Log]: %s", playerlog));
         return 0;
     }
     if (!vault:isValidID(vaultid)) {
-        SendAdminLogMessage(sprintf("invalid vault [%d] transfer occured, investigation required", vaultid), true);
+        SendAdminLogMessage(sprintf("invalid vault [%d] transfer occured, investigation required", vaultid));
         return 0;
     }
     GivePlayerCash(playerid, playeramount, playerlog);
@@ -302,7 +302,6 @@ FlexDialog:MenuVaultoVault(playerid, response, listitem, const inputtext[], vaul
         !vault:isValidID(toVaultId) || toVaultId == vaultid || cash < 1 ||
         vault:getBalance(vaultid) < cash
     ) return vault:MenuVaultoVault(playerid, vaultid);
-    Discord:LogVault(sprintf(":money_with_wings: **%s transfered $%s to vault %s [%d] from vault %s [%d]**\nReason: ``%s``", GetPlayerNameEx(playerid), FormatCurrency(cash), vault:GetName(toVaultId), toVaultId, vault:GetName(vaultid), vaultid, reason));
     vault:addcash(toVaultId, cash, Vault_Transaction_Vault_To_Vault, sprintf("deposited in vault %d from vault %d by %s, Reason: %s", toVaultId, vaultid, GetPlayerNameEx(playerid), reason));
     vault:addcash(vaultid, -cash, Vault_Transaction_Vault_To_Vault, sprintf("deposited in vault %d from vault %d by %s, Reason: %s", toVaultId, vaultid, GetPlayerNameEx(playerid), reason));
     return vault:access(playerid, vaultid);
@@ -316,7 +315,6 @@ FlexDialog:MenuCastoVault(playerid, response, listitem, const inputtext[], vault
     if (!response) return vault:transfer(playerid, vaultid);
     new cash, reason[50];
     if (sscanf(inputtext, "ds[50]", cash, reason) || GetPlayerCash(playerid) < cash || cash < 1) return vault:MenuCastoVault(playerid, vaultid);
-    Discord:LogVault(sprintf(":money_with_wings: **%s deposited $%s in vault %s [%d]**\nReason: ``%s``", GetPlayerNameEx(playerid), FormatCurrency(cash), vault:GetName(vaultid), vaultid, reason));
     GivePlayerCash(playerid, -cash, sprintf("deposited in vault %s [%d]", vault:GetName(vaultid), vaultid));
     vault:addcash(vaultid, cash, Vault_Transaction_Cash_To_Vault, sprintf("deposited in vault %s [%d] by %s, Reason: %s", vault:GetName(vaultid), vaultid, GetPlayerNameEx(playerid), reason));
     return vault:access(playerid, vaultid);
@@ -330,7 +328,6 @@ FlexDialog:MenuVaultoCash(playerid, response, listitem, const inputtext[], vault
     if (!response) return vault:transfer(playerid, vaultid);
     new cash, reason[50];
     if (sscanf(inputtext, "ds[50]", cash, reason) || vault:getBalance(vaultid) < cash || cash < 1) return vault:MenuVaultoCash(playerid, vaultid);
-    Discord:LogVault(sprintf(":money_with_wings: **%s withdrawal $%s from vault %s [%d]**\nReason: ``%s``", GetPlayerNameEx(playerid), FormatCurrency(cash), vault:GetName(vaultid), vaultid, reason));
     GivePlayerCash(playerid, cash, sprintf("withdrawal from vault %s [%d], Reason: %s", vault:GetName(vaultid), vaultid, reason));
     vault:addcash(vaultid, -cash, Vault_Transaction_Vault_To_Cash, sprintf("withdrawal from vault %s [%d] by %s", vault:GetName(vaultid), vaultid, GetPlayerNameEx(playerid)));
     return vault:access(playerid, vaultid);

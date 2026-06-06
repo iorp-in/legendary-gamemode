@@ -1,16 +1,13 @@
 ASCP:OnInit(playerid, page) {
-    if (page != 1) return 1;
-    ASCP:AddCommand(playerid, "Reset Bank Accounts");
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "Reset bank accounts");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Reset Bank Accounts", inputtext)) {
-        ResetBankAccountBal(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Reset bank accounts", inputtext)) return 1;
+    ResetBankAccountBal(playerid);
+    return ~1;
 }
 
 stock ResetBankAccountBal(playerid) {

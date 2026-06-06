@@ -760,14 +760,14 @@ FlexDialog:SafeManageSafe(playerid, response, listitem, const inputtext[], safei
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Safe Hack system");
+    ASCP:AddCommand(playerid, "Safe hack");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Safe Hack system", inputtext)) SafeHacking:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Safe hack", inputtext)) return 1;
+    SafeHacking:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

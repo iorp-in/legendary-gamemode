@@ -31,7 +31,6 @@ cmd:changename(playerid, const params[]) {
     format(PlayerAcpData[playerid][requestedName], 20, "%s", nName);
     SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} remember, management only accept this request when you have applied on forum with same details.");
     SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} your request has been sent to management, please wait until you hear from them.");
-    Discord:SendStaff(sprintf("%s [%d] has requested name change to: %s\nto approve type this request type :approvename %s or :rejectname %s\n\n<@&597292999227211777>", GetPlayerNameEx(playerid), playerid, nName, GetPlayerNameEx(playerid), GetPlayerNameEx(playerid)));
     foreach(new i:Player) {
         if (IsPlayerMasterAdmin(i)) {
             SendClientMessage(i, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} %s requested new name: %s", GetPlayerNameEx(playerid), nName));
@@ -73,8 +72,7 @@ stock ApproveNameChange(playerid) {
     format(nName[1], 50, "%s", PlayerAcpData[playerid][requestedName]);
     SetPlayerRequestNameChange(playerid, false);
     SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} your name change request has been accepted by admin %s", GetPlayerNameEx(playerid)));
-    Discord:SendHelper(sprintf(":notepad_spiral: %s name updated with with %s", nName[0], nName[1]));
-    SendAdminLogMessage(sprintf("{4286f4}[Alexa]:{FFFFEE} %s name updated with %s", GetPlayerNameEx(playerid), nName[0], nName[1]), false);
+    SendAdminLogMessage(sprintf("{4286f4}[Alexa]:{FFFFEE} %s name updated with %s", GetPlayerNameEx(playerid), nName[0], nName[1]));
     Kick(playerid);
     AccountRename(nName[0], nName[1]);
     return 1;

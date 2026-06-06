@@ -4,7 +4,7 @@ new Iterator:Dialog_IDs < MAX_DIALOG_ID > ;
 stock Dialog:GetFreeID() {
     new id = Iter_Free(Dialog_IDs);
     Iter_Add(Dialog_IDs, id);
-    if (id == INVALID_ITERATOR_SLOT) Discord:SendManagement(sprintf("Invalid DialogID Passed: %d", id));
+    if (id == INVALID_ITERATOR_SLOT) print(sprintf("Invalid DialogID Passed: %d", id));
     return id;
 }
 

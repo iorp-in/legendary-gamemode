@@ -642,36 +642,20 @@ FlexDialog:PersonalVehOptions(playerid, response, listitem, const inputtext[], e
     if (!PersonalVehicle:IsValidID(xid)) return AlexaMsg(playerid, "{FF0000}[!] {F0AE0F}Couldn't find the vehicle!");
 
     if (IsStringSame(inputtext, ">  Seize Vehicle")) {
-        if (!IsPlayerInServerByName(PersonalVehicle:GetOwner(xid))) {
-            Email:Send(
-                ALERT_TYPE_PROPERTY_EXPIRE,
-                PersonalVehicle:GetOwner(xid),
-                sprintf(
-                    "Vehicle %s with plate %s [%d] has seized by %s (%s)!!",
-                    PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid,
-                    GetPlayerNameEx(playerid), Faction:GetName(Faction:GetPlayerFID(playerid))
-                ),
-                sprintf(
-                    "Vehicle %s with plate %s [%d] has seized by %s (%s)!! \
-                    you can raise a case with justice department if this was not acknowledged by you before.",
-                    PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid,
-                    GetPlayerNameEx(playerid), Faction:GetName(Faction:GetPlayerFID(playerid))
-                )
-            );
-        }
-        Discord:SendNotification(sprintf("\
-        **Property Seized Alert**\n\
-        ```\n\
-        Owner: %s\n\
-        Type: Vehicle\n\
-        Model: %s\n\
-        Plate: %s\n\
-        Status: seized\n\
-        Reason: seize by %s (%s)\n\
-        ```", PersonalVehicle:GetOwner(xid), PersonalVehicle:GetName(xid),
-            PersonalVehicle:GetPlate(xid),
-            GetPlayerNameEx(playerid), Faction:GetName(Faction:GetPlayerFID(playerid))
-        ));
+        Email:Send(
+            ALERT_TYPE_PROPERTY_EXPIRE,
+            PersonalVehicle:GetOwner(xid),
+            sprintf(
+                "Vehicle %s with plate %s [%d] has seized by %s (%s)!!",
+                PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid,
+                GetPlayerNameEx(playerid), Faction:GetName(Faction:GetPlayerFID(playerid))
+            ),
+            sprintf(
+                "Vehicle %s with plate %s [%d] has seized by %s (%s)!! you can raise a case with justice department if this was not acknowledged by you before.",
+                PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid,
+                GetPlayerNameEx(playerid), Faction:GetName(Faction:GetPlayerFID(playerid))
+            )
+        );
         PersonalVehicle:SeizeVehicle(xid);
         return PersonalVehicle:VehicleMenu(playerid, xid);
     }
@@ -1416,92 +1400,83 @@ FlexDialog:PersonalVehDirectPurchase(playerid, response, listitem, const inputte
     return AlexaMsg(playerid, "{00BD00}[!] {00FF00}You have succesfully bought this vehicle! You can manage your vehicles by using {ECB021}your pocket");
 }
 
-hook GlobalOneMinuteInterval() {
-    foreach(new xid:xVehicles) {
-        PersonalVehicle:SaveID(xid);
-        if (PersonalVehicle:IsPurchased(xid) && gettime() > 1621123200) {
-            if (gettime() - PersonalVehicle:GetLastUsage(xid) > VEHICLE_RESET_DAY * 86400 && PersonalVehicle:AutoResetState(xid)) {
-                if (!IsPlayerInServerByName(PersonalVehicle:GetOwner(xid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, PersonalVehicle:GetOwner(xid), sprintf("Vehicle %s with plate %s [%d] has been auto reset!!",
-                            PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid),
-                        sprintf("Vehicle %s with plate %s [%d] has been auto reset!! Your vehicle has been taken by government due to not driven in long time.",
-                            PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid));
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Vehicle\n\
-                Model: %s\n\
-                Plate: %s\n\
-                Status: reseted\n\
-                Reason: due to not driven in long time\n\
-                ```\
-                ", PersonalVehicle:GetOwner(xid), PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid)));
-                PersonalVehicle:SeizeVehicle(xid);
-            }
-        }
-    }
-    return 1;
-}
-
 hook GlobalHourInterval() {
+    new currenttime = gettime();
+    new maxtime = currenttime + 3600;
+
     foreach(new xid:xVehicles) {
-        if (PersonalVehicle:IsPurchased(xid) && gettime() > 1621123200) {
-            new beforeDay = 1;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new vehicleWillResetAt = PersonalVehicle:GetLastUsage(xid) + (VEHICLE_RESET_DAY - beforeDay) * 86400;
-            if (vehicleWillResetAt >= mintime && vehicleWillResetAt < maxtime && PersonalVehicle:AutoResetState(xid)) {
-                if (!IsPlayerInServerByName(PersonalVehicle:GetOwner(xid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, PersonalVehicle:GetOwner(xid), sprintf("Vehicle %s with plate %s [%d] will reset after 24 hours!!",
-                            PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid),
-                        sprintf("Vehicle %s with plate %s [%d] will reset after 24 hours!! Your vehicle will be taken by government due to not driven in long time.\
-                         you can stop this reset by driving your vehicle within 24 hours.", PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid));
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Vehicle\n\
-                Model: %s\n\
-                Plate: %s\n\
-                Status: will reset within 24 hour.\n\
-                Reason: due to not driven in long time\n\
-                ```\
-                ", PersonalVehicle:GetOwner(xid), PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid)));
+        if (!PersonalVehicle:IsPurchased(xid)) continue;
+        if (!PersonalVehicle:AutoResetState(xid)) continue;
+
+        new resetAt = PersonalVehicle:GetLastUsage(xid) + (VEHICLE_RESET_DAY * 86400);
+
+        // Vehicle expires within this hour
+        if (resetAt >= currenttime && resetAt < maxtime) {
+            if (!IsPlayerInServerByName(PersonalVehicle:GetOwner(xid))) {
+                Email:Send(
+                    ALERT_TYPE_PROPERTY_EXPIRE,
+                    PersonalVehicle:GetOwner(xid),
+                    sprintf(
+                        "Vehicle %s with plate %s [%d] has been auto reset!!",
+                        PersonalVehicle:GetName(xid),
+                        PersonalVehicle:GetPlate(xid),
+                        xid
+                    ),
+                    sprintf(
+                        "Vehicle %s with plate %s [%d] has been auto reset!! Your vehicle has been taken by government due to not being driven for a long time.",
+                        PersonalVehicle:GetName(xid),
+                        PersonalVehicle:GetPlate(xid),
+                        xid
+                    )
+                );
             }
+
+            PersonalVehicle:SeizeVehicle(xid);
+            PersonalVehicle:SaveID(xid);
+            continue;
+        }
+
+        // 48-hour warning
+        else if ((resetAt - 48 * 3600) >= currenttime && (resetAt - 48 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                PersonalVehicle:GetOwner(xid),
+                sprintf(
+                    "Vehicle %s with plate %s [%d] will reset after 48 hours!!",
+                    PersonalVehicle:GetName(xid),
+                    PersonalVehicle:GetPlate(xid),
+                    xid
+                ),
+                sprintf(
+                    "Vehicle %s with plate %s [%d] will reset after 48 hours!! Your vehicle will be taken by government due to not being driven for a long time. You can stop this reset by driving your vehicle within 48 hours.",
+                    PersonalVehicle:GetName(xid),
+                    PersonalVehicle:GetPlate(xid),
+                    xid
+                )
+            );
+        }
+
+        // 24-hour warning
+        else if ((resetAt - 24 * 3600) >= currenttime && (resetAt - 24 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                PersonalVehicle:GetOwner(xid),
+                sprintf(
+                    "Vehicle %s with plate %s [%d] will reset after 24 hours!!",
+                    PersonalVehicle:GetName(xid),
+                    PersonalVehicle:GetPlate(xid),
+                    xid
+                ),
+                sprintf(
+                    "Vehicle %s with plate %s [%d] will reset after 24 hours!! Your vehicle will be taken by government due to not being driven for a long time. You can stop this reset by driving your vehicle within 24 hours.",
+                    PersonalVehicle:GetName(xid),
+                    PersonalVehicle:GetPlate(xid),
+                    xid
+                )
+            );
         }
     }
-    foreach(new xid:xVehicles) {
-        if (PersonalVehicle:IsPurchased(xid) && gettime() > 1621123200) {
-            new beforeDay = 2;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new vehicleWillResetAt = PersonalVehicle:GetLastUsage(xid) + (VEHICLE_RESET_DAY - beforeDay) * 86400;
-            if (vehicleWillResetAt >= mintime && vehicleWillResetAt < maxtime && PersonalVehicle:AutoResetState(xid)) {
-                if (!IsPlayerInServerByName(PersonalVehicle:GetOwner(xid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, PersonalVehicle:GetOwner(xid), sprintf("Vehicle %s with plate %s [%d] will reset after 48 hours!!",
-                            PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid),
-                        sprintf("Vehicle %s with plate %s [%d] will reset after 48 hours!! Your vehicle will be taken by government due to not driven in long time.\
-                         you can stop this reset by driving your vehicle within 48 hours.", PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid), xid));
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Vehicle\n\
-                Model: %s\n\
-                Plate: %s\n\
-                Status: will reset within 48 hour.\n\
-                Reason: due to not driven in long time\n\
-                ```\
-                ", PersonalVehicle:GetOwner(xid), PersonalVehicle:GetName(xid), PersonalVehicle:GetPlate(xid)));
-            }
-        }
-    }
+
     return 1;
 }
 
@@ -1955,19 +1930,6 @@ FlexDialog:XvImpoundReason(playerid, response, listitem, const inputtext[], xid,
             )
         );
     }
-    Discord:SendNotification(sprintf("\
-        **Property Impounded Alert**\n\
-        ```\n\
-        Owner: %s\n\
-        Type: Vehicle\n\
-        Model: %s\n\
-        Plate: %s\n\
-        Status: impounded\n\
-        Reason: impound by %s (%s) cuase of %s\n\
-        ```", PersonalVehicle:GetOwner(xid), PersonalVehicle:GetName(xid),
-        PersonalVehicle:GetPlate(xid),
-        GetPlayerNameEx(playerid), Faction:GetName(Faction:GetPlayerFID(playerid)), impoundReason
-    ));
 
     format(PersonalVehicle:Data[xid][xv_ImpoundBy], 50, "%s", GetPlayerNameEx(playerid));
     format(PersonalVehicle:Data[xid][xv_ImpoundReason], 100, "%s", impoundReason);
@@ -1978,14 +1940,14 @@ FlexDialog:XvImpoundReason(playerid, response, listitem, const inputtext[], xid,
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Dealership System");
+    ASCP:AddCommand(playerid, "Dealership");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Dealership System", inputtext)) PersonalVehicle:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Dealership", inputtext)) return 1;
+    PersonalVehicle:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

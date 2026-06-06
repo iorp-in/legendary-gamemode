@@ -21,21 +21,21 @@ hook OnPlayerConnect(playerid) {
 
 APCP:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
-    if (GetPlayerAdminLevel(playerid) == 3 && !InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Enable Player Invincible Mode");
-    if (GetPlayerAdminLevel(playerid) == 3 && InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Disable Player Invincible Mode");
+    if (GetPlayerAdminLevel(playerid) == 3 && !InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Enable invincible mode");
+    if (GetPlayerAdminLevel(playerid) == 3 && InvicableAuth:GetPlayer(targetid)) APCP:AddCommand(playerid, "Disable invincible mode");
     return 1;
 }
 
 APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response || page != 0) return 1;
-    if (IsStringSame("Enable Player Invincible Mode", inputtext)) {
+    if (IsStringSame("Enable invincible mode", inputtext)) {
         InvicableAuth:SetPlayer(targetid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled %s invincible mode", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s enabled invincible mode for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Player Invincible Mode", inputtext)) {
+    if (IsStringSame("Disable invincible mode", inputtext)) {
         InvicableAuth:SetPlayer(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s invincible mode", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled invincible mode for you", GetPlayerNameEx(playerid)));

@@ -57,4 +57,4 @@ cmd:acp(playerid, const params[]) {
     return 1;
 }
 
-//#snippet init_acp ACP:OnInit(playerid, page) {\n\tif(page != 0) return 1;\n\tACP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}
+//#snippet init_acp ACP:OnInit(playerid, page) {\n\tif (page != 0) return 1;\n\tACP:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

@@ -98,10 +98,10 @@ cmd:getalldebt(playerid, const params[]) {
     return 1;
 }
 
-cmd:getplayerdebt(playerid, const params[]) {
+cmd:getdebt(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
     new account[100];
-    if (sscanf(params, "s[100]", account)) return SendClientMessage(playerid, -1, "[USAGE]: /getplayerdebt [player name]");
+    if (sscanf(params, "s[100]", account)) return SendClientMessage(playerid, -1, "[USAGE]: /getdebt [player name]");
     if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
     new Cache:cache_id = mysql_query(Database, sprintf("SELECT debt FROM playerdata WHERE username = \"%s\" AND debt > 0", account));
     if (!cache_num_rows()) {
@@ -131,10 +131,10 @@ cmd:getplayerdebt(playerid, const params[]) {
     return 1;
 }
 
-cmd:giveplayerdebt(playerid, const params[]) {
+cmd:givedebt(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
     new account[100], debt, reason[100];
-    if (sscanf(params, "s[100]ds[100]", account, debt, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /giveplayerdebt [player name] [amount] [reason]");
+    if (sscanf(params, "s[100]ds[100]", account, debt, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /givedebt [player name] [amount] [reason]");
     if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
     if (debt < 1) return SendClientMessage(playerid, -1, "[ERROR]: Debt amount must be greater than 0.");
     mysql_tquery(Database, sprintf("UPDATE `playerdata` SET Debt = Debt + %d WHERE `Username` = \"%s\" LIMIT 1", debt, account));
@@ -155,10 +155,10 @@ cmd:giveplayerdebt(playerid, const params[]) {
     return 1;
 }
 
-cmd:resetplayerdebt(playerid, const params[]) {
+cmd:resetdebt(playerid, const params[]) {
     if (!IsPlayerMasterAdmin(playerid)) return 0;
     new account[100], reason[1000];
-    if (sscanf(params, "s[100]s[1000]", account, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /resetplayerdebt [player name] [reason]");
+    if (sscanf(params, "s[100]s[1000]", account, reason)) return SendClientMessage(playerid, -1, "[USAGE]: /resetdebt [player name] [reason]");
     if (!IsValidAccount(account)) return SendClientMessage(playerid, -1, "[ERROR]: Invalid player account.");
 
     new Cache:cache_id = mysql_query(Database, sprintf("SELECT debt FROM playerdata WHERE username = \"%s\" AND debt > 0", account));

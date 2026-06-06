@@ -21,7 +21,6 @@ stock CrashServer() {
 
 forward FuncCrashServer();
 public FuncCrashServer() {
-    Discord:SendManagement("hard rebooting...");
     print("hard rebooting...");
     SendRconCommand("exit");
     // strfind("qwe", "asd", true, -100);

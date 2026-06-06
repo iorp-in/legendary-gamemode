@@ -138,14 +138,14 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Dynamic Object System");
+    ASCP:AddCommand(playerid, "Dynamic object");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Dynamic Object System", inputtext)) DynObjectAdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Dynamic object", inputtext)) return 1;
+    DynObjectAdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

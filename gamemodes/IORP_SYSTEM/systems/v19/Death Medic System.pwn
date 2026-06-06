@@ -212,19 +212,6 @@ public CRPFinished(patientid, doctorid, fee) {
     if (!IsPlayerConnected(patientid)) return 1;
     if (IsPlayerConnected(doctorid)) {
         if (fee > 0) {
-            if (GetPlayerCash(patientid) < 0) {
-                Discord:LogTransaction(sprintf(
-                    "** Medic revived a player with minus money **\n\
-                    ```\
-                    Amount: $%s\n\
-                    Doctor: %s ($%s)\n\
-                    Patient: %s ($%s)\n\
-                    <@&597292999227211777>\n\
-                    ```", FormatCurrency(fee),
-                    GetPlayerNameEx(doctorid), FormatCurrency(GetPlayerCash(doctorid)),
-                    GetPlayerNameEx(patientid), FormatCurrency(GetPlayerCash(patientid))
-                ));
-            }
             GivePlayerCash(doctorid, fee, sprintf("revive fee from %s", GetPlayerNameEx(patientid)));
             GivePlayerCash(patientid, -fee, sprintf("revive fee paid to %s", GetPlayerNameEx(doctorid)));
         }

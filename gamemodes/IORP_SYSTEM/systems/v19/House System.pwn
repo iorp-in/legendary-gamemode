@@ -610,86 +610,71 @@ hook OnPlayerDeath(playerid, killerid, reason) {
     return 1;
 }
 
-hook GlobalOneMinuteInterval() {
+hook GlobalHourInterval() {
+    new currenttime = gettime();
+    new maxtime = currenttime + 3600;
+
     foreach(new houseid:Houses) {
-        if (House:IsPurchased(houseid)) {
-            if (House:GetLastEntered(houseid) > 0 && gettime() - House:GetLastEntered(houseid) > HOUSE_RESET_DAY * 86400 && House:GetAutoReset(houseid)) {
-                if (!IsPlayerInServerByName(House:GetOwner(houseid))) {
-                    Email:Send(
-                        ALERT_TYPE_PROPERTY_EXPIRE, House:GetOwner(houseid), sprintf("House %s has been auto reset!!", House:GetName(houseid)),
-                        sprintf("House %s [%d] has been auto reset!! Your house has been taken by government due to long inactivity and no visit in house for long time.",
-                            House:GetName(houseid), houseid
-                        )
-                    );
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: House %s [%d]\n\
-                Status: reseted\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", House:GetOwner(houseid), House:GetName(houseid), houseid));
-                House:Reset(houseid);
+        if (!House:IsPurchased(houseid)) continue;
+        if (!House:GetAutoReset(houseid)) continue;
+
+        new lastEntered = House:GetLastEntered(houseid);
+        if (lastEntered <= 0) continue;
+
+        new resetAt = lastEntered + (HOUSE_RESET_DAY * 86400);
+
+        // Auto reset
+        if (resetAt >= currenttime && resetAt < maxtime) {
+            if (!IsPlayerInServerByName(House:GetOwner(houseid))) {
+                Email:Send(
+                    ALERT_TYPE_PROPERTY_EXPIRE,
+                    House:GetOwner(houseid),
+                    sprintf("House %s has been auto reset!!", House:GetName(houseid)),
+                    sprintf(
+                        "House %s [%d] has been auto reset!! Your house has been taken by government due to long inactivity and no visit in house for a long time.",
+                        House:GetName(houseid),
+                        houseid
+                    )
+                );
             }
+
+            House:Reset(houseid);
+            House:Save(houseid);
+            continue;
         }
+
+
+        // 48-hour warning
+        else if ((resetAt - 48 * 3600) >= currenttime && (resetAt - 48 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                House:GetOwner(houseid),
+                sprintf("House %s [%d] will reset after 48 hours!!", House:GetName(houseid), houseid),
+                sprintf(
+                    "House %s [%d] will reset after 48 hours!! Your house will be taken by government due to long inactivity and no visit in house for a long time. You can stop this reset by visiting your house within 48 hours.",
+                    House:GetName(houseid),
+                    houseid
+                )
+            );
+        }
+
+        // 24-hour warning
+        else if ((resetAt - 24 * 3600) >= currenttime && (resetAt - 24 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                House:GetOwner(houseid),
+                sprintf("House %s [%d] will reset after 24 hours!!", House:GetName(houseid), houseid),
+                sprintf(
+                    "House %s [%d] will reset after 24 hours!! Your house will be taken by government due to long inactivity and no visit in house for a long time. You can stop this reset by visiting your house within 24 hours.",
+                    House:GetName(houseid),
+                    houseid
+                )
+            );
+        }
+
         House:Save(houseid);
     }
-    return 1;
-}
 
-hook GlobalHourInterval() {
-    foreach(new houseid:Houses) {
-        if (House:IsPurchased(houseid)) {
-            new beforeDay = 1;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new houseWillResetAt = House:GetLastEntered(houseid) + (HOUSE_RESET_DAY - beforeDay) * 86400;
-            if (houseWillResetAt >= mintime && houseWillResetAt < maxtime && House:GetAutoReset(houseid)) {
-                if (!IsPlayerInServerByName(House:GetOwner(houseid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, House:GetOwner(houseid), sprintf("House %s [%d] will reset after 24 hours!!", House:GetName(houseid), houseid),
-                        sprintf("House %s [%d] will reset after 24 hours!! Your house will be taken by government due to long inactivity and no visit in house for long time. you can stop this reset by visiting your house within 24 hours.", House:GetName(houseid), houseid));
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: House %s [%d]\n\
-                Status: will reset within 24 hour\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", House:GetOwner(houseid), House:GetName(houseid), houseid));
-            }
-        }
-    }
-    foreach(new houseid:Houses) {
-        if (House:IsPurchased(houseid)) {
-            new beforeDay = 2;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new houseWillResetAt = House:GetLastEntered(houseid) + (HOUSE_RESET_DAY - beforeDay) * 86400;
-            if (houseWillResetAt >= mintime && houseWillResetAt < maxtime && House:GetAutoReset(houseid)) {
-                if (!IsPlayerInServerByName(House:GetOwner(houseid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, House:GetOwner(houseid), sprintf("House %s [%d] will reset after 48 hours!!", House:GetName(houseid), houseid),
-                        sprintf("House %s [%d] will reset after 48 hours!! Your house will be taken by government due to long inactivity and no visit in house for long time. \
-                        you can stop this reset by visiting your house within 48 hours.", House:GetName(houseid), houseid)
-                    );
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: House %s [%d]\n\
-                Status: will reset within 48 hour\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", House:GetOwner(houseid), House:GetName(houseid), houseid));
-            }
-        }
-    }
     return 1;
 }
 

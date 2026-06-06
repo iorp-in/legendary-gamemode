@@ -599,76 +599,54 @@ hook OnGameModeExit() {
     return 1;
 }
 
-hook GlobalOneMinuteInterval() {
+hook GlobalHourInterval() {
+    new currenttime = gettime();
+    new maxtime = currenttime + 3600; // next hour
+
     foreach(new bussid:fuelBusiness) {
-        if (PumpBusiness:IsPurchased(bussid) && gettime() - PumpBusiness:data[bussid][PumpBusiness:lastAccessAt] > FUEL_RESET_INTERVAL * 86400) {
+        if (!PumpBusiness:IsPurchased(bussid)) continue;
+        new resetAt = PumpBusiness:data[bussid][PumpBusiness:lastAccessAt] + (FUEL_RESET_INTERVAL * 86400);
+
+        // Auto reset
+        if (resetAt >= currenttime && resetAt < maxtime) {
             if (!IsPlayerInServerByName(PumpBusiness:GetOwner(bussid))) {
-                Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, PumpBusiness:GetOwner(bussid), sprintf("fuel business [%d] has been auto reset!!", bussid),
-                    sprintf("fuel business [%d] has been auto reset!! Your fuel business has been taken by government due to not used by you in long time.", bussid)
+                Email:Send(
+                    ALERT_TYPE_PROPERTY_EXPIRE,
+                    PumpBusiness:GetOwner(bussid),
+                    sprintf("fuel business [%d] has been auto reset!!", bussid),
+                    sprintf(
+                        "fuel business [%d] has been auto reset!! Your fuel business has been taken by government due to not being used for a long time.",
+                        bussid
+                    )
                 );
             }
-            Discord:SendNotification(sprintf("\
-            **Property Auto Reset Alert**\n\
-            ```\n\
-            Owner: %s\n\
-            Type: Fuel Station [%d]\n\
-            Status: reseted\n\
-            Reason: due to owner not active\n\
-            ```\
-            ", PumpBusiness:GetOwner(bussid), bussid));
-            PumpBusiness:Reset(bussid);
-        }
-    }
-    return 1;
-}
 
-hook GlobalHourInterval() {
-    foreach(new bussid:fuelBusiness) {
-        if (PumpBusiness:IsPurchased(bussid)) {
-            new beforeDay = 1;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new houseWillResetAt = PumpBusiness:data[bussid][PumpBusiness:lastAccessAt] + (FUEL_RESET_INTERVAL - beforeDay) * 86400;
-            if (houseWillResetAt >= mintime && houseWillResetAt < maxtime) {
-                if (!IsPlayerInServerByName(PumpBusiness:GetOwner(bussid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, PumpBusiness:GetOwner(bussid), "Your fuel business will reset after 24 hours!!", "Your fuel business will reset after 24 hours!! Your fuel business will be taken by government due to long inactivity and no visit in business for long time. you can stop this reset by visiting your business within 24 hours.");
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Fuel Station [%d]\n\
-                Status: will reset within 24 hour\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", PumpBusiness:GetOwner(bussid), bussid));
-            }
+            PumpBusiness:Reset(bussid);
+            continue;
+        }
+
+
+        // 48-hour warning
+        else if ((resetAt - 48 * 3600) >= currenttime && (resetAt - 48 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                PumpBusiness:GetOwner(bussid),
+                "Your fuel business will reset after 48 hours!!",
+                "Your fuel business will reset after 48 hours!! Your fuel business will be taken by government due to long inactivity and no visit in business for a long time. You can stop this reset by visiting your business within 48 hours."
+            );
+        }
+
+        // 24-hour warning
+        else if ((resetAt - 24 * 3600) >= currenttime && (resetAt - 24 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                PumpBusiness:GetOwner(bussid),
+                "Your fuel business will reset after 24 hours!!",
+                "Your fuel business will reset after 24 hours!! Your fuel business will be taken by government due to long inactivity and no visit in business for a long time. You can stop this reset by visiting your business within 24 hours."
+            );
         }
     }
-    foreach(new bussid:fuelBusiness) {
-        if (PumpBusiness:IsPurchased(bussid)) {
-            new beforeDay = 2;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new houseWillResetAt = PumpBusiness:data[bussid][PumpBusiness:lastAccessAt] + (FUEL_RESET_INTERVAL - beforeDay) * 86400;
-            if (houseWillResetAt >= mintime && houseWillResetAt < maxtime) {
-                if (!IsPlayerInServerByName(PumpBusiness:GetOwner(bussid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, PumpBusiness:GetOwner(bussid), "Your fuel business will reset after 48 hours!!", "Your fuel business will reset after 48 hours!! Your fuel business will be taken by government due to long inactivity and no visit in business for long time. you can stop this reset by visiting your business within 48 hours.");
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Fuel Station [%d]\n\
-                Status: will reset within 48 hour\n\
-                Reason: due to owner not active\n\
-                ```\
-                ", PumpBusiness:GetOwner(bussid), bussid));
-            }
-        }
-    }
+
     return 1;
 }
 
@@ -889,12 +867,12 @@ stock PumpBusiness:RefuelStart(playerid) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Fuel System");
+    ASCP:AddCommand(playerid, "Fuel");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || !IsStringSame("Fuel System", inputtext)) return 1;
+    if (!response || !IsStringSame("Fuel", inputtext)) return 1;
     PumpBusiness:AdminMenu(playerid);
     return ~1;
 }

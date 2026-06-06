@@ -57,7 +57,6 @@ stock OnGameModeInitEx() {
 forward RemovePassword();
 public RemovePassword() {
     SendRconCommand("password 0");
-    Discord:SendGeneral("all set, you can join server now...");
     return 1;
 }
 
@@ -146,7 +145,6 @@ public OnGameModeExit() {
     DestroyAllDynamic3DTextLabels();
     DestroyAllDynamicAreas();
     mysql_close(Database); // Closing the database.
-    Discord:SendManagement("Server Shutdown");
     return 1;
 }
 
@@ -498,7 +496,7 @@ public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
 }
 
 public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags) {
-    LogNormal(sprintf("[CMD] [%s][%s]: %s", GetPlayerNameEx(playerid), cmd, FormatMention(params)));
+    LogEx(sprintf("[CMD] [%s][%s]: %s", GetPlayerNameEx(playerid), cmd, FormatMention(params)));
 
     if (result != 1) {
         UnknownCommand:Show(playerid);
@@ -559,7 +557,7 @@ public OnPlayerText(playerid, text[]) {
         callcmd::alexa(playerid, text);
     }
 
-    LogNormal(sprintf("[Text] [%s]: %s", GetPlayerNameEx(playerid), FormatMention(text)));
+    LogEx(sprintf("[Text] [%s]: %s", GetPlayerNameEx(playerid), FormatMention(text)));
     return 0;
 }
 
@@ -582,7 +580,6 @@ public OnRconCommand(cmd[]) {
 public OnRconLoginAttempt(ip[], password[], success) {
     if (!success) //If the password was incorrect
     {
-        Discord:SendManagement(sprintf("FAILED RCON LOGIN BY IP %s USING PASSWORD %s", ip, password));
         new pip[16];
         foreach(new i:Player) //Loop through all players
         {
@@ -597,9 +594,8 @@ public OnRconLoginAttempt(ip[], password[], success) {
     return 1;
 }
 
-stock SendAdminLogMessage(const message[], bool:discord = true) {
+stock SendAdminLogMessage(const message[]) {
     foreach(new i:Player) if (GetPlayerAdminLevel(i) > 0) SendClientMessage(i, -1, sprintf("{4286f4}[Admin Log]:{FFCC66}%s", message));
-    if (discord) Discord:LogAdmin(sprintf("[Admin Log]: %s", message));
     return 1;
 }
 

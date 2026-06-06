@@ -528,14 +528,14 @@ cmd:findbackpack(playerid, const params[]) {
     return 1;
 }
 
-ACP:OnInit(playerid, page) {
+ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Backpack System");
+    ASCP:AddCommand(playerid, "Backpack");
     return 1;
 }
 
-ACP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || page != 0 || !IsStringSame("Backpack System", inputtext)) return 1;
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0 || !IsStringSame("Backpack", inputtext)) return 1;
     Backpack:AdminMenu(playerid);
     return ~1;
 }

@@ -174,14 +174,14 @@ public DestroyVehicleEx(vehicleid) {
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Static Vehicle System");
+    ASCP:AddCommand(playerid, "Static vehicle");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Static Vehicle System", inputtext)) StaticVehicle:AdminPanel(playerid);
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Static vehicle", inputtext)) return 1;
+    StaticVehicle:AdminPanel(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

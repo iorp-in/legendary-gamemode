@@ -703,82 +703,49 @@ stock FoodStall:DeductResourceForHotDog(foodid) {
     return 1;
 }
 
-hook GlobalOneMinuteInterval() {
-    foreach(new foodid:Foods) {
-        if (FoodStall:IsPurchased(foodid)) {
-            if (gettime() - FoodStall:GetLastAccess(foodid) > FOOD_SHOP_RESET_DAY * 86400 && !IsStringSame(FoodStall:GetOwner(foodid), "Harry_James")) {
-                if (!IsPlayerInServerByName(FoodStall:GetOwner(foodid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, FoodStall:GetOwner(foodid), sprintf("food stall [%d] has been auto reset!!", foodid),
-                        sprintf("food stall [%d] has been auto reset!! Your food stall has been taken by government due to not used by you in long time.", foodid)
-                    );
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Food Stall [%d]\n\
-                Status: reseted\n\
-                Reason: due to not used in long time\n\
-                ```\
-                ", FoodStall:GetOwner(foodid), foodid));
-                FoodStall:Reset(foodid);
-            }
-        }
-    }
-    return 1;
-}
-
 hook GlobalHourInterval() {
+    new currenttime = gettime();
+    new maxtime = currenttime + 3600; // next hour
+
     foreach(new foodid:Foods) {
-        if (FoodStall:IsPurchased(foodid)) {
-            new beforeDay = 1;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new stallWillResetAt = FoodStall:GetLastAccess(foodid) + (FOOD_SHOP_RESET_DAY - beforeDay) * 86400;
-            if (stallWillResetAt >= mintime && stallWillResetAt < maxtime && !IsStringSame(FoodStall:GetOwner(foodid), "Harry_James")) {
-                if (!IsPlayerInServerByName(FoodStall:GetOwner(foodid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, FoodStall:GetOwner(foodid), sprintf("food stall [%d] will reset after 24 hours!!", foodid),
-                        sprintf("food stall [%d] will reset after 24 hours!! you can stop this reset by visitng your food stall within 24 hours.", foodid)
-                    );
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Food Stall [%d]\n\
-                Status: will reset within 24 hours\n\
-                Reason: due to not used in long time\n\
-                ```\
-                ", FoodStall:GetOwner(foodid), foodid));
-            }
+        if (!FoodStall:IsPurchased(foodid)) continue;
+        if (IsStringSame(FoodStall:GetOwner(foodid), "Harry_James")) continue;
+
+        new lastAccess = FoodStall:GetLastAccess(foodid);
+        new resetAt = lastAccess + (FOOD_SHOP_RESET_DAY * 86400);
+
+        // Already expired
+        if (resetAt >= currenttime && resetAt < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                FoodStall:GetOwner(foodid),
+                sprintf("food stall [%d] has been auto reset!!", foodid),
+                sprintf("food stall [%d] has been auto reset!! Your food stall has been taken by government due to not being used for a long time.", foodid)
+            );
+            continue;
+        }
+
+        // 48-hour warning
+        else if ((resetAt - 48 * 3600) >= currenttime && (resetAt - 48 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                FoodStall:GetOwner(foodid),
+                sprintf("food stall [%d] will reset after 48 hours!!", foodid),
+                sprintf("food stall [%d] will reset after 48 hours!! You can stop this reset by visiting your food stall within 48 hours.", foodid)
+            );
+        }
+
+        // 24-hour warning
+        else if ((resetAt - 24 * 3600) >= currenttime && (resetAt - 24 * 3600) < maxtime) {
+            Email:Send(
+                ALERT_TYPE_PROPERTY_EXPIRE,
+                FoodStall:GetOwner(foodid),
+                sprintf("food stall [%d] will reset after 24 hours!!", foodid),
+                sprintf("food stall [%d] will reset after 24 hours!! You can stop this reset by visiting your food stall within 24 hours.", foodid)
+            );
         }
     }
-    foreach(new foodid:Foods) {
-        if (FoodStall:IsPurchased(foodid)) {
-            new beforeDay = 2;
-            new currenttime = gettime();
-            new mintime = currenttime;
-            new maxtime = currenttime + 60 * 60;
-            new stallWillResetAt = FoodStall:GetLastAccess(foodid) + (FOOD_SHOP_RESET_DAY - beforeDay) * 86400;
-            if (stallWillResetAt >= mintime && stallWillResetAt < maxtime && !IsStringSame(FoodStall:GetOwner(foodid), "Harry_James")) {
-                if (!IsPlayerInServerByName(FoodStall:GetOwner(foodid))) {
-                    Email:Send(ALERT_TYPE_PROPERTY_EXPIRE, FoodStall:GetOwner(foodid), sprintf("food stall [%d] will reset after 48 hours!!", foodid),
-                        sprintf("food stall [%d] will reset after 24 hours!! you can stop this reset by visitng your food stall within 48 hours.", foodid)
-                    );
-                }
-                Discord:SendNotification(sprintf("\
-                **Property Auto Reset Alert**\n\
-                ```\n\
-                Owner: %s\n\
-                Type: Food Stall [%d]\n\
-                Status: will reset within 48 hours\n\
-                Reason: due to not used in long time\n\
-                ```\
-                ", FoodStall:GetOwner(foodid), foodid));
-            }
-        }
-    }
+
     return 1;
 }
 
@@ -1863,17 +1830,14 @@ FlexDialog:MenuUpdateFoodPrice(playerid, response, listitem, const inputtext[], 
 
 ASCP:OnInit(playerid, page) {
     if (page != 0) return 1;
-    ASCP:AddCommand(playerid, "Food System");
+    ASCP:AddCommand(playerid, "Food");
     return 1;
 }
 
 ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response) return 1;
-    if (IsStringSame("Food System", inputtext)) {
-        FoodStall:AdminMenu(playerid);
-        return ~1;
-    }
-    return 1;
+    if (!response || page != 0 || !IsStringSame("Food", inputtext)) return 1;
+    FoodStall:AdminMenu(playerid);
+    return ~1;
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {

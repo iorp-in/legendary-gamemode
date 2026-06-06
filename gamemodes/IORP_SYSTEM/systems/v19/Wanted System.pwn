@@ -484,7 +484,6 @@ hook OnPlayerDeath(playerid, killerid, reason) {
     if (IsPlayerConnected(killerid)) {
         if (WantedDatabase:IsInJail(killerid)) {
             SendClientMessageEx(playerid, -1, "{4286f4}[Alexa]:{FF0000} I am sorry, one of our player did not followed rules, but I have taken action against him.");
-            Discord:SendHelper(sprintf(":page_with_curl:** %s killed %s in jail. **", GetPlayerNameEx(killerid), GetPlayerNameEx(playerid)));
             if (gettime() - Database:GetInt(GetPlayerNameEx(killerid), "username", "LastJailKick") < 15 * 60) {
                 SendClientMessageEx(killerid, -1, "{4286f4}[Alexa]:{FF0000} Hello, I am alexa again. I told you but you did not listened.");
                 SendClientMessageEx(killerid, -1, "{4286f4}[Alexa]:{FF0000} I am banning you for next 6 hours to teach you some respect.");
@@ -492,7 +491,6 @@ hook OnPlayerDeath(playerid, killerid, reason) {
                 UnixToHuman(gettime() + 6 * 60 * 60, unbantime);
                 mysql_tquery(Database, sprintf("UPDATE `players` set bantime = %d, banreason = \"%s\" WHERE `Username` = \"%s\" LIMIT 1", gettime() + 6 * 60 * 60, "jail evade by alexa", GetPlayerNameEx(killerid)));
                 SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE} I banned %s for %s", GetPlayerNameEx(killerid), "jail evade by alexa"));
-                Discord:SendHelper(sprintf("[Alexa]: I banned %s till %s for %s", GetPlayerNameEx(killerid), unbantime, "jail evade by alexa"));
                 KickPlayer(killerid);
             } else {
                 Database:UpdateInt(gettime(), GetPlayerNameEx(killerid), "username", "LastJailKick");
@@ -643,13 +641,13 @@ FlexDialog:WantedDatabaseView(playerid, response, listitem, const inputtext[], p
 
 APCP:OnInit(playerid, targetid, page) {
     if (page != 1) return 1;
-    if (GetPlayerWantedLevelEx(targetid)) APCP:AddCommand(playerid, "Clear All Wanted Levels");
+    if (GetPlayerWantedLevelEx(targetid)) APCP:AddCommand(playerid, "Clear all wanted levels");
     return 1;
 }
 
 APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[]) {
     if (!response || page != 1) return 1;
-    if (IsStringSame("Clear All Wanted Levels", inputtext)) {
+    if (IsStringSame("Clear all wanted levels", inputtext)) {
         WantedDatabase:ResetWantedLevel(targetid, sprintf("admin %s cleared this wanted level", GetPlayerNameEx(playerid)));
         return ~1;
     }

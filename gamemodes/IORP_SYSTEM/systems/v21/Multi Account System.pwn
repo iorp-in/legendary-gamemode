@@ -19,10 +19,10 @@ hook OnPlayerLogin(playerid) {
             cache_get_value_name_int(i, "timestamp", timestamp);
             UnixToHuman(timestamp, timeunix);
             strcat(string, sprintf("     > accessed %s account at %s\n", nName, timeunix));
-            SendAdminLogMessage(sprintf("%s logged %s account before current account at %s (multiple account detected)", GetPlayerNameEx(playerid), nName, timeunix), false);
+            SendAdminLogMessage(sprintf("%s logged %s account before current account at %s (multiple account detected)", GetPlayerNameEx(playerid), nName, timeunix));
         }
         strcat(string, "```");
-        Discord:LogMultiAccount(string);
+        // Discord:LogMultiAccount(string);
     }
     cache_delete(mysql_cache);
     return 1;

@@ -30,75 +30,75 @@ APCP:OnInit(playerid, targetid, page) {
     if (!IsPlayerFreezed(targetid)) APCP:AddCommand(playerid, "Freeze");
     else APCP:AddCommand(playerid, "Unfreeze");
 
-    APCP:AddCommand(playerid, "Get Player to your location");
-    APCP:AddCommand(playerid, "Teleport to Player");
-    APCP:AddCommand(playerid, "Set Interior");
-    APCP:AddCommand(playerid, "Set Virtual World");
-    APCP:AddCommand(playerid, "Set Wanted Level");
-    APCP:AddCommand(playerid, "Jail Player");
+    APCP:AddCommand(playerid, "Bring player");
+    APCP:AddCommand(playerid, "Go to player");
+    APCP:AddCommand(playerid, "Change interior");
+    APCP:AddCommand(playerid, "Change virtual world");
+    APCP:AddCommand(playerid, "Change wanted level");
+    APCP:AddCommand(playerid, "Jail player");
 
     if (IsPlayerMasterAdmin(playerid)) {
-        APCP:AddCommand(playerid, "Give Money");
-        APCP:AddCommand(playerid, "Set Money");
-        APCP:AddCommand(playerid, "Set Score");
+        APCP:AddCommand(playerid, "Give money");
+        APCP:AddCommand(playerid, "Set money");
+        APCP:AddCommand(playerid, "Set score");
     }
 
     if (GetPlayerAdminLevel(playerid) == 3) {
         APCP:AddCommand(playerid, "Spawn Vehicle");
-        APCP:AddCommand(playerid, "Set Vehicle Color");
-        APCP:AddCommand(playerid, "Give Weapon");
-        APCP:AddCommand(playerid, "Set Health");
-        APCP:AddCommand(playerid, "Set Armour");
-        APCP:AddCommand(playerid, "Set Skin");
-        APCP:AddCommand(playerid, "Disarm Player");
-        APCP:AddCommand(playerid, "Kick Player");
-        APCP:AddCommand(playerid, "Ban Player");
-        APCP:AddCommand(playerid, "Give All License");
-        APCP:AddCommand(playerid, "Remove All License");
+        APCP:AddCommand(playerid, "Change vehicle color");
+        APCP:AddCommand(playerid, "Give weapon");
+        APCP:AddCommand(playerid, "Change health");
+        APCP:AddCommand(playerid, "Change armour");
+        APCP:AddCommand(playerid, "Change skin");
+        APCP:AddCommand(playerid, "Disarm player");
+        APCP:AddCommand(playerid, "Kick player");
+        APCP:AddCommand(playerid, "Ban player");
+        APCP:AddCommand(playerid, "Grant all licenses");
+        APCP:AddCommand(playerid, "Revoke all licenses");
 
-        if (GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) APCP:AddCommand(playerid, "Spectate");
+        if (GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) APCP:AddCommand(playerid, "Spectate player");
 
         if (IsPlayerRequestNameChange(targetid)) {
-            APCP:AddCommand(playerid, "Accept Name Change Request");
-            APCP:AddCommand(playerid, "Reject Name Change Request");
+            APCP:AddCommand(playerid, "Approve name change", true);
+            APCP:AddCommand(playerid, "Reject name change", true);
         }
 
-        if (!GetPlayerRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable Vehicle Repair");
-        else APCP:AddCommand(playerid, "Disable Vehicle Repair");
+        if (!GetPlayerRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable vehicle repair");
+        else APCP:AddCommand(playerid, "Disable vehicle repair");
 
-        if (!GetPlayerAutoRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable Automatic Vehicle Repair");
-        else APCP:AddCommand(playerid, "Disable Automatic Vehicle Repair");
+        if (!GetPlayerAutoRepairAuth(targetid)) APCP:AddCommand(playerid, "Enable auto repair");
+        else APCP:AddCommand(playerid, "Disable auto repair");
 
-        if (!FuelAuth:IsActive(targetid)) APCP:AddCommand(playerid, "Enable Vehicle Refuel");
-        else APCP:AddCommand(playerid, "Disable Vehicle Refuel");
+        if (!FuelAuth:IsActive(targetid)) APCP:AddCommand(playerid, "Enable vehicle refuel");
+        else APCP:AddCommand(playerid, "Disable vehicle refuel");
 
-        if (!FuelAuth:IsAutoActive(targetid)) APCP:AddCommand(playerid, "Enable Automatic Vehicle Refuel");
-        else APCP:AddCommand(playerid, "Disable Automatic Vehicle Refuel");
+        if (!FuelAuth:IsAutoActive(targetid)) APCP:AddCommand(playerid, "Enable auto refuel");
+        else APCP:AddCommand(playerid, "Disable auto refuel");
 
-        if (!GetPlayerTPAuth(targetid)) APCP:AddCommand(playerid, "Enable Quick Teleportation");
-        else APCP:AddCommand(playerid, "Disable Quick Teleportation");
+        if (!GetPlayerTPAuth(targetid)) APCP:AddCommand(playerid, "Enable quick teleport");
+        else APCP:AddCommand(playerid, "Disable quick teleport");
 
-        if (IsCuff_Player(targetid)) APCP:AddCommand(playerid, "Uncuff Player");
-        else APCP:AddCommand(playerid, "Cuff Player");
-        if (IsCES_FollowPlayer(targetid)) APCP:AddCommand(playerid, "Disable Follow up Player");
-        else APCP:AddCommand(playerid, "Enable Follow up Player");
+        if (IsCuff_Player(targetid)) APCP:AddCommand(playerid, "UnCuff player");
+        else APCP:AddCommand(playerid, "Cuff player");
+        if (IsCES_FollowPlayer(targetid)) APCP:AddCommand(playerid, "Disable follow mode");
+        else APCP:AddCommand(playerid, "Enable follow mode");
 
-        if (!GetPlayerTeleportKickStatus(targetid)) APCP:AddCommand(playerid, "Enable Teleport Kick");
-        else APCP:AddCommand(playerid, "Disable Teleport Kick");
+        if (!GetPlayerTeleportKickStatus(targetid)) APCP:AddCommand(playerid, "Enable teleport kick");
+        else APCP:AddCommand(playerid, "Disable teleport kick");
 
-        if (!BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As Beta Tester");
-        else APCP:AddCommand(playerid, "Remove Player As Beta Tester");
+        if (!BetaTester:IsPlayer(targetid)) APCP:AddCommand(playerid, "Add beta tester");
+        else APCP:AddCommand(playerid, "Remove beta tester");
 
         // if (!DJ:IsPlayer(targetid)) APCP:AddCommand(playerid, "Set Player As DJ");
         // else APCP:AddCommand(playerid, "Remove Player As DJ");
 
-        if (!GetPlayerMutedStatus(targetid)) APCP:AddCommand(playerid, "Mute Player");
-        else APCP:AddCommand(playerid, "UnMute Player");
+        if (!GetPlayerMutedStatus(targetid)) APCP:AddCommand(playerid, "Mute player");
+        else APCP:AddCommand(playerid, "Unmute player");
 
-        if (Faction:GetPlayerFID(targetid) == -1) APCP:AddCommand(playerid, "Set Player Faction");
+        if (Faction:GetPlayerFID(targetid) == -1) APCP:AddCommand(playerid, "Assign faction");
         else {
-            APCP:AddCommand(playerid, "Show Faction Locker");
-            APCP:AddCommand(playerid, "Remove Player from his Faction");
+            APCP:AddCommand(playerid, "Open faction locker");
+            APCP:AddCommand(playerid, "Remove from faction");
         }
     }
     return 1;
@@ -140,91 +140,91 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Accept Name Change Request", inputtext)) {
+    if (IsStringSame("Approve name change", inputtext)) {
         ApproveNameChange(targetid);
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Reject Name Change Request", inputtext)) {
+    if (IsStringSame("Reject name change", inputtext)) {
         RejectNameChange(targetid);
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Vehicle Repair", inputtext)) {
+    if (IsStringSame("Enable vehicle repair", inputtext)) {
         SetPlayerRepairAuth(targetid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled %s quick vehicle repair", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s enabled quick vehicle repair for you, press 2/+ to repair vehicle", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Vehicle Repair", inputtext)) {
+    if (IsStringSame("Disable vehicle repair", inputtext)) {
         SetPlayerRepairAuth(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s quick vehicle repair", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled quick vehicle repair for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Automatic Vehicle Repair", inputtext)) {
+    if (IsStringSame("Enable auto repair", inputtext)) {
         SetPlayerAutoRepairAuth(targetid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled %s automatic vehicle repair", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s enabled automatic vehicle repair for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Automatic Vehicle Repair", inputtext)) {
+    if (IsStringSame("Disable auto repair", inputtext)) {
         SetPlayerAutoRepairAuth(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s automatic vehicle repair", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled automatic vehicle repair for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Vehicle Refuel", inputtext)) {
+    if (IsStringSame("Enable vehicle refuel", inputtext)) {
         FuelAuth:SetActive(targetid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled %s quick vehicle refuel", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s enabled quick vehicle refuel for you, press 2/+ to refuel vehicle", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Vehicle Refuel", inputtext)) {
+    if (IsStringSame("Disable vehicle refuel", inputtext)) {
         FuelAuth:SetActive(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s quick vehicle refuel", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled quick vehicle refuel", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Automatic Vehicle Refuel", inputtext)) {
+    if (IsStringSame("Enable auto refuel", inputtext)) {
         FuelAuth:SetAutoActive(targetid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled %s automatic vehicle refuel", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s enabled automatic vehicle refuel for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Automatic Vehicle Refuel", inputtext)) {
+    if (IsStringSame("Disable auto refuel", inputtext)) {
         FuelAuth:SetAutoActive(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s automatic vehicle refuel", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled automatic vehicle refuel for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Quick Teleportation", inputtext)) {
+    if (IsStringSame("Enable quick teleport", inputtext)) {
         SetPlayerTPAuth(playerid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s quick teleportation", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled quick teleportation for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Quick Teleportation", inputtext)) {
+    if (IsStringSame("Disable quick teleport", inputtext)) {
         SetPlayerTPAuth(playerid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled %s quick teleportation", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s disabled quick teleportation for you", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Spectate", inputtext)) {
+    if (IsStringSame("Spectate player", inputtext)) {
         Spectate:Start(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Get Player to your location", inputtext)) {
+    if (IsStringSame("Bring player", inputtext)) {
         if (!Tryg3D::IsPlayerSpawned(targetid)) {
             SendClientMessageEx(playerid, COLOR_GREY, "{4286f4}[Error]:{FFFFEE} wait for the player to spawn");
             return ~1;
@@ -244,31 +244,31 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Uncuff Player", inputtext)) {
+    if (IsStringSame("UnCuff player", inputtext)) {
         Uncuff_Player(targetid);
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you has been uncuffed by admin %s", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Cuff Player", inputtext)) {
+    if (IsStringSame("Cuff player", inputtext)) {
         Cuff_Player(targetid);
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you has been cuffed by admin %s", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Follow up Player", inputtext)) {
+    if (IsStringSame("Disable follow mode", inputtext)) {
         CES_StopFollowPlayer(targetid);
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you are not following anyone (admin %s)", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Follow up Player", inputtext)) {
+    if (IsStringSame("Enable follow mode", inputtext)) {
         CES_FollowPlayer(targetid, playerid);
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you are following admin %s", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Teleport to Player", inputtext)) {
+    if (IsStringSame("Go to player", inputtext)) {
         if (!Tryg3D::IsPlayerSpawned(targetid)) { SendClientMessageEx(playerid, COLOR_GREY, "{4286f4}[Error]:{FFFFEE} wait for the player to spawn"); return ~1; }
         new Float:x, Float:y, Float:z, Float:a, int, worldid;
         int = GetPlayerInterior(targetid);
@@ -285,21 +285,21 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Enable Teleport Kick", inputtext)) {
+    if (IsStringSame("Enable teleport kick", inputtext)) {
         SetPlayerTeleportKickStatus(targetid, true);
         SendClientMessageEx(playerid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you have enabled unauthorised teleport for %s ", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE}you are granted permission by %s for unauthorised teleports", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disable Teleport Kick", inputtext)) {
+    if (IsStringSame("Disable teleport kick", inputtext)) {
         SetPlayerTeleportKickStatus(targetid, false);
         SendClientMessageEx(playerid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disabled unauthorised teleport for %s ", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE}you are disabled permission by %s for unauthorised teleports", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Jail Player", inputtext)) {
+    if (IsStringSame("Jail player", inputtext)) {
         WantedDatabase:SendJail(targetid);
         WantedDatabase:JailPlayer(targetid);
         SendClientMessageEx(playerid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you are sent %s to jail", GetPlayerNameEx(targetid)));
@@ -307,14 +307,14 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Disarm Player", inputtext)) {
+    if (IsStringSame("Disarm player", inputtext)) {
         ResetPlayerWeaponsEx(targetid);
         SendClientMessageEx(playerid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you have disarmed %s", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you has been disarmed by admin %s", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Give All License", inputtext)) {
+    if (IsStringSame("Grant all licenses", inputtext)) {
         DriverPlayerData[targetid][LightMotor] = true;
         DriverPlayerData[targetid][HeavyMotor] = true;
         DriverPlayerData[targetid][TwoWheelerMotor] = true;
@@ -327,7 +327,7 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Remove All License", inputtext)) {
+    if (IsStringSame("Revoke all licenses", inputtext)) {
         DriverPlayerData[targetid][LightMotor] = false;
         DriverPlayerData[targetid][HeavyMotor] = false;
         DriverPlayerData[targetid][TwoWheelerMotor] = false;
@@ -340,14 +340,14 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Set Player As Beta Tester", inputtext)) {
+    if (IsStringSame("Add beta tester", inputtext)) {
         BetaTester:SetPlayer(targetid, true);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have set %s as Beta Tester of server", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s set you as Beta Tester of server", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Remove Player As Beta Tester", inputtext)) {
+    if (IsStringSame("Remove beta tester", inputtext)) {
         BetaTester:SetPlayer(targetid, false);
         SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have removed %s as Beta Tester of server", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} admin %s removed you as Beta Tester of server", GetPlayerNameEx(playerid)));
@@ -368,34 +368,34 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
     //     APCP:Init(playerid, targetid);
     //     return ~1;
     // }
-    if (IsStringSame("Mute Player", inputtext)) {
+    if (IsStringSame("Mute player", inputtext)) {
         MuteCommand(playerid, targetid, true);
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("UnMute Player", inputtext)) {
+    if (IsStringSame("Unmute player", inputtext)) {
         MuteCommand(playerid, targetid, false);
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Show Faction Locker", inputtext)) {
+    if (IsStringSame("Open faction locker", inputtext)) {
         Faction:ShowLocker(targetid, Faction:GetPlayerFID(targetid));
         return ~1;
     }
-    if (IsStringSame("Remove Player from his Faction", inputtext)) {
+    if (IsStringSame("Remove from faction", inputtext)) {
         Faction:RemovePlayerFaction(playerid, targetid);
         APCP:Init(playerid, targetid);
         return ~1;
     }
-    if (IsStringSame("Set Player Faction", inputtext)) {
+    if (IsStringSame("Assign faction", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSePlFa, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Faction Panel", "Enter [FactionID] [RankID]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Kick Player", inputtext)) {
+    if (IsStringSame("Kick player", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetKiPl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Reason]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Ban Player", inputtext)) {
+    if (IsStringSame("Ban player", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetBaPl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Mins] [Reason]", "Submit", "Close", targetid);
         return ~1;
     }
@@ -403,47 +403,47 @@ APCP:OnResponse(playerid, targetid, page, response, listitem, const inputtext[])
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSpVeh, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [VehicleID / VehicleName] [Color 1] [Color 2]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Vehicle Color", inputtext)) {
+    if (IsStringSame("Change vehicle color", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeVehCol, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Color 1] [Color 2]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Give Weapon", inputtext)) {
+    if (IsStringSame("Give weapon", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetGiWep, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [WeaponID] [Ammo]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Give Money", inputtext)) {
+    if (IsStringSame("Give money", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetGiMon, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Money]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Money", inputtext)) {
+    if (IsStringSame("Set money", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeMon, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Money]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Health", inputtext)) {
+    if (IsStringSame("Change health", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeHel, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Health]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Armour", inputtext)) {
+    if (IsStringSame("Change armour", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeArm, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Armour]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Score", inputtext)) {
+    if (IsStringSame("Set score", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeScore, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Score]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Skin", inputtext)) {
+    if (IsStringSame("Change skin", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeSkin, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [SkinID]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Interior", inputtext)) {
+    if (IsStringSame("Change interior", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeInt, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [InteriorID]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Virtual World", inputtext)) {
+    if (IsStringSame("Change virtual world", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeViWo, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [VirtualWorldID]", "Submit", "Close", targetid);
         return ~1;
     }
-    if (IsStringSame("Set Wanted Level", inputtext)) {
+    if (IsStringSame("Change wanted level", inputtext)) {
         ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeWaLe, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Levels] [Fineable? 0/1] [Reason]", "Submit", "Close", targetid);
         return ~1;
     }
@@ -473,7 +473,6 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
         if (sscanf(inputtext, "s[512]", reason)) { ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetKiPl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Reason]", "Submit", "Close", targetid); return ~1; }
         if (!IsPlayerConnected(targetid)) { ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetKiPl, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [Reason]", "Submit", "Close", targetid); return ~1; }
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}Admin %s kicked %s for %s", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason));
-        Discord:SendHelper(sprintf("[Alexa]: Admin %s kicked %s for %s", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason));
         SetTimerEx("kick", 1000, false, "i", targetid);
         return ~1;
     }
@@ -487,7 +486,6 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
         UnixToHuman(gettime() + mins * 60, unbantime);
         mysql_tquery(Database, sprintf("UPDATE `players` set bantime = %d, banreason = \"%s\" WHERE `Username` = \"%s\" LIMIT 1", gettime() + mins * 60, reason, GetPlayerNameEx(targetid)));
         SendClientMessageToAll(-1, sprintf("{4286f4}[Alexa]:{FFFFEE}Admin %s banned %s for %s", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason));
-        Discord:SendHelper(sprintf("[Alexa]: Admin %s banned %s till %s for %s", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), unbantime, reason));
         KickPlayer(targetid);
         APCP:Init(playerid, targetid);
         return ~1;
@@ -551,7 +549,7 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
         }
         ChangeVehicleColor(GetPlayerVehicleID(targetid), ColorOne, ColorTwo);
         if (playerid == targetid) SendClientMessageEx(playerid, COLOR_GREY, "{4286f4}[Alexa]:{FFFFEE} you reset your vehicle color");
-        else SendClientMessageEx(playerid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you reset vehicle color of %s", GetPlayerNameEx(targetid)));
+        else SendClientMessageEx(playerid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE} you reChange vehicle color of %s", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, COLOR_GREY, sprintf("{4286f4}[Alexa]:{FFFFEE}Your vehicle color has been reset by admin %s", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
@@ -639,7 +637,7 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
         if (!IsPlayerConnected(targetid)) { ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeSkin, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [SkinID]", "Submit", "Close", targetid); return ~1; }
         if (skinid < 0 || skinid > 299) { ShowPlayerDialogEx(playerid, PlayerAdmin:dialogid, PlayerAdmin:OffsetSetSeSkin, DIALOG_STYLE_INPUT, "{4286f4}[Alexa]:{FFFFEE}Admin Control Panel", "Enter [SkinID]", "Submit", "Close", targetid); return ~1; }
         SetPlayerSkinEx(targetid, skinid);
-        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have reset skin of %s", GetPlayerNameEx(targetid)));
+        SendClientMessageEx(playerid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE} you have reChange skin of %s", GetPlayerNameEx(targetid)));
         SendClientMessageEx(targetid, -1, sprintf("{4286f4}[Alexa]:{FFFFEE}Your skin has been reset by Admin %s", GetPlayerNameEx(playerid)));
         APCP:Init(playerid, targetid);
         return ~1;
