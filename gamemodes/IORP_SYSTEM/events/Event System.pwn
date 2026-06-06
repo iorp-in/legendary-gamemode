@@ -183,6 +183,12 @@ hook OnPlayerDisconnect(playerid, reason) {
     return 1;
 }
 
+hook OnPlayerRequestShop(playerid, shopid) {
+    if (shopid != SHOP_ID_EVENTS) return 1;
+    Event:MainMenu(playerid);
+    return ~1;
+}
+
 stock Event:MainMenu(playerid) {
     new string[2000];
     strcat(string, "#\tName\tStatus\tMin Score Required\n");

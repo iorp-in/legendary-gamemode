@@ -219,7 +219,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 18) return 1;
+    if (shopid != SHOP_ID_NUCLEAR_LAUNCH_SITE) return 1;
     MissileStartCommand(playerid);
     return ~1;
 }

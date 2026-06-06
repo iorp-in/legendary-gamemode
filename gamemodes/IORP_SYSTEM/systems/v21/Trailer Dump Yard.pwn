@@ -1,5 +1,5 @@
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 42) return 1;
+    if (shopid != SHOP_ID_TRAILER_DUMP_YARD) return 1;
     if (!IsPlayerInAnyVehicle(playerid) || GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return ~1;
     new vehicleid = GetPlayerVehicleID(playerid);
     new trailerid = GetAllowedVehicleTrailerID(vehicleid);

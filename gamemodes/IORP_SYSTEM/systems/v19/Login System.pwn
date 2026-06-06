@@ -1269,7 +1269,7 @@ FlexDialog:ChangeLoginPassword(playerid, response, listitem, const inputtext[], 
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 37) return 1;
+    if (shopid != SHOP_ID_CHANGE_SKIN) return 1;
     ChangeSkin(playerid);
     return ~1;
 }

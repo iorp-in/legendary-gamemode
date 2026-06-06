@@ -34,7 +34,7 @@ cmd:refund(playerid, const params[]) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 38) return 1;
+    if (shopid != SHOP_ID_REFUND) return 1;
     Refund:ShowRefunds(playerid);
     return ~1;
 }

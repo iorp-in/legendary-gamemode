@@ -282,7 +282,7 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 33) return 1;
+    if (shopid != SHOP_ID_WEAPON_LICENSE) return 1;
     new allowedFactions[] = { 0, 1, 2, 3, 4 };
     if (Faction:IsPlayerSigned(playerid) && IsArrayContainNumber(allowedFactions, Faction:GetPlayerFID(playerid)) && Faction:GetPlayerRankID(playerid) <= 4) {
         new string[512];

@@ -54,7 +54,7 @@ FlexDialog:AadhaarMenuShowCard(playerid, response, listitem, const inputtext[], 
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 17) return 1;
+    if (shopid != SHOP_ID_AADHAAR_CARD) return 1;
     AadhaarCard:ShopMenu(playerid);
     return ~1;
 }

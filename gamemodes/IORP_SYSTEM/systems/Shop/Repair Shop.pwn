@@ -45,12 +45,20 @@ stock ModShop:IsMechanicAvailable() {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 2) return 1;
-    if (!IsPlayerInAnyVehicle(playerid) || GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return ~1;
-    new vehicleid = GetPlayerVehicleID(playerid);
-    if (!IsValidVehicle(vehicleid)) return ~1;
-    ModShop:ShowRepairMenu(playerid);
-    return ~1;
+    if (shopid == SHOP_ID_MOD_SHOP) {
+        ModShop:ShowModMenu(playerid);
+        return ~1;
+    }
+
+    if (shopid == SHOP_ID_REPAIR) {
+        if (!IsPlayerInAnyVehicle(playerid) || GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return ~1;
+        new vehicleid = GetPlayerVehicleID(playerid);
+        if (!IsValidVehicle(vehicleid)) return ~1;
+        ModShop:ShowRepairMenu(playerid);
+        return ~1;
+    }
+
+    return 1;
 }
 
 stock ModShop:ShowRepairMenu(playerid) {

@@ -164,7 +164,7 @@ stock Course:ViewDegree(playerid, courseid, toplayer) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 29) return 1;
+    if (shopid != SHOP_ID_GRADUATION_SYSTEM) return 1;
     Course:ShowMenu(playerid);
     return ~1;
 }

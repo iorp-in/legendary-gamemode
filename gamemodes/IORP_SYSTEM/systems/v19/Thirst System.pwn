@@ -768,7 +768,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid == 26) {
+    if (shopid == SHOP_ID_PLAYER_BATH) {
         Motive:PlayerData[playerid][freezedForBath] = true;
         new seconds = GetNeedStatePercent(playerid, HygieneCode) > 50 ? Random(15, 60) : Random(30, 100);
         freezeEx(playerid, seconds * 1000);
@@ -780,7 +780,7 @@ hook OnPlayerRequestShop(playerid, shopid) {
         SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}you can interupt this by pressing enter, which is not recommanded");
         return ~1;
     }
-    if (shopid == 27) {
+    if (shopid == SHOP_ID_PLAYER_PEE) {
         new seconds = Random(15, 60);
         SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}your player doing pee, rest yourself meanwhile he/she is done.");
         SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}you can interupt this by pressing enter, which is not recommanded");

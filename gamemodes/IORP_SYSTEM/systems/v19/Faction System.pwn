@@ -678,21 +678,21 @@ hook OnAccountDelete(const AccountName[]) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid == 5) return Faction:MenuList(playerid);
-    if (shopid == 7) return Faction:ShowLocker(playerid, 0);
-    if (shopid == 8) return Faction:ShowLocker(playerid, 1);
-    if (shopid == 9) return Faction:ShowLocker(playerid, 2);
-    if (shopid == 10) return Faction:ShowLocker(playerid, 3);
-    if (shopid == 11) return Faction:ShowLocker(playerid, 4);
-    if (shopid == 12) return Faction:ShowLocker(playerid, 5);
-    if (shopid == 13) return Faction:ShowLocker(playerid, 6);
-    if (shopid == 14) return Faction:ShowLocker(playerid, 7);
-    if (shopid == 15) return Faction:ShowLocker(playerid, 8);
-    if (shopid == 16) return Faction:ShowLocker(playerid, 9);
-    if (shopid == 23) return Faction:ShowLocker(playerid, 10);
-    if (shopid == 39) return Faction:ShowLocker(playerid, 11);
-    if (shopid == 40) return Faction:ShowLocker(playerid, 12);
-    if (shopid == 41) return Faction:ShowLocker(playerid, 13);
+    if (shopid == SHOP_ID_FACTION_MENU) return Faction:MenuList(playerid);
+    if (shopid == SHOP_ID_FACTION_SAGD) return Faction:ShowLocker(playerid, FACTION_ID_SAGD);
+    if (shopid == SHOP_ID_FACTION_SAAF) return Faction:ShowLocker(playerid, FACTION_ID_SAAF);
+    if (shopid == SHOP_ID_FACTION_SAPD) return Faction:ShowLocker(playerid, FACTION_ID_SAPD);
+    if (shopid == SHOP_ID_FACTION_SWAT) return Faction:ShowLocker(playerid, FACTION_ID_SWAT);
+    if (shopid == SHOP_ID_FACTION_SAND) return Faction:ShowLocker(playerid, FACTION_ID_SAND);
+    if (shopid == SHOP_ID_FACTION_CF) return Faction:ShowLocker(playerid, FACTION_ID_CF);
+    if (shopid == SHOP_ID_FACTION_SAMD) return Faction:ShowLocker(playerid, FACTION_ID_SAMD);
+    if (shopid == SHOP_ID_FACTION_CMC) return Faction:ShowLocker(playerid, FACTION_ID_CMC);
+    if (shopid == SHOP_ID_FACTION_GSF) return Faction:ShowLocker(playerid, FACTION_ID_GSF);
+    if (shopid == SHOP_ID_FACTION_BM) return Faction:ShowLocker(playerid, FACTION_ID_BM);
+    if (shopid == SHOP_ID_FACTION_CMB) return Faction:ShowLocker(playerid, FACTION_ID_CMB);
+    if (shopid == SHOP_ID_FACTION_DOM) return Faction:ShowLocker(playerid, FACTION_ID_DOM);
+    if (shopid == SHOP_ID_FACTION_SATD) return Faction:ShowLocker(playerid, FACTION_ID_SATD);
+    if (shopid == SHOP_ID_FACTION_IOPL) return Faction:ShowLocker(playerid, FACTION_ID_IOPL);
     return 1;
 }
 

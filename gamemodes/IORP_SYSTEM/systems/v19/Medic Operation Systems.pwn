@@ -294,7 +294,7 @@ hook OnDialogResponseEx(playerid, dialogid, offsetid, response, listitem, const 
 // 
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid == 30 && Faction:GetPlayerFID(playerid) == SAMD_ID && Faction:IsPlayerSigned(playerid)) { operation:ShowMenu(playerid); return ~1; }
+    if (shopid == SHOP_ID_MEDIC_OPERATION_SYSTEM && Faction:GetPlayerFID(playerid) == SAMD_ID && Faction:IsPlayerSigned(playerid)) { operation:ShowMenu(playerid); return ~1; }
     return 1;
 }
 

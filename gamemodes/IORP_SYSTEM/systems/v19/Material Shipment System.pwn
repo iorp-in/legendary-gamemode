@@ -440,7 +440,7 @@ public OnRequestShipment(playerid, shipmentID, quantity) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 28) return 1;
+    if (shopid != SHOP_ID_MATERIAL_SHIPMENT_SYSTEM) return 1;
     Shipment:Menu(playerid);
     return ~1;
 }

@@ -424,8 +424,9 @@ Float:GetDistance(playerid, Float:x2, Float:y2, Float:z2) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid == 24) ShowMenuForPlayer(actionmenu, playerid);
-    return 1;
+    if (shopid != SHOP_ID_VALKYRIE_BASE) return 1;
+    ShowMenuForPlayer(actionmenu, playerid);
+    return ~1;
 }
 
 public OnPlayerSelectedMenuRow(playerid, row) {

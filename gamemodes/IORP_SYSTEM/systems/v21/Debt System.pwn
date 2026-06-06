@@ -35,7 +35,7 @@ stock Debt:OfflineGiveOrTake(username[], amount, const log[]) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 36) return 1;
+    if (shopid != SHOP_ID_DEBT_MENU) return 1;
     DebtPayMenu(playerid);
     return ~1;
 }

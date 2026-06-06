@@ -1,5 +1,5 @@
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 35) return 1;
+    if (shopid != SHOP_ID_LSPD_SELF_JAIL) return 1;
     if (GetPlayerWantedLevelEx(playerid) < 1) { SendClientMessage(playerid, -1, "{4286f4}[SAPD]:{0000CD} you don't have any criminal records, you clean. Have a good day."); return ~1; }
     if (Heist:GetOnlineCops() > 0) { SendClientMessage(playerid, -1, "{4286f4}[SAPD]:{0000CD} you can not self surrender when cops are online, please contact 911."); return ~1; }
     SelfJailMenu(playerid);

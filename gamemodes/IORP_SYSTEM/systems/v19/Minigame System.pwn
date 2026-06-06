@@ -18,7 +18,7 @@ FlexDialog:MinigameMenu(playerid, response, listitem, const inputtext[], extraid
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 22) return 1;
+    if (shopid != SHOP_ID_MINIGAME) return 1;
     ShowMiniGameMenu(playerid);
     return ~1;
 }

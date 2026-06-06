@@ -148,3 +148,9 @@ FlexDialog:WeaponPurchaseFromBuss(playerid, response, listitem, const inputtext[
     SendClientMessage(playerid, -1, sprintf("{4286f4}[Shop]: {FFFFFF} you have purchased %s weapon with %d ammo", GetWeaponNameEx(weaponid), ammo));
     return 1;
 }
+
+hook OnPlayerRequestShop(playerid, shopid) {
+    if (shopid != SHOP_ID_WEAPON) return 1;
+    WeaponShopMenu(playerid);
+    return ~1;
+}

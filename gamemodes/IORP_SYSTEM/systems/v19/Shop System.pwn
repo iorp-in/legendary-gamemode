@@ -370,9 +370,6 @@ stock Shop:RequestID(playerid, shopid) {
 
 forward OnPlayerRequestShop(playerid, shopid);
 public OnPlayerRequestShop(playerid, shopid) {
-    if (shopid == 0) return WeaponShopMenu(playerid);
-    if (shopid == 3) return ModShop:ShowModMenu(playerid);
-    if (shopid == 6) return Event:MainMenu(playerid);
     return 1;
 }
 
@@ -393,3 +390,5 @@ hook OnAlexaResponse(playerid, const cmd[], const text[]) {
     Shop:AdminPanel(playerid);
     return ~1;
 }
+
+//#snippet onshoprequest hook OnPlayerRequestShop(playerid, shopid) {\n\tif (shopid != 0) return 1;\n\treturn ~1;\n}

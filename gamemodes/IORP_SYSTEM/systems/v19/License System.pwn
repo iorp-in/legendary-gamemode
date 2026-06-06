@@ -366,7 +366,7 @@ hook OnPlayerEnterDynRaceCP(playerid, checkpointid) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 19) return 1;
+    if (shopid != SHOP_ID_LICENSE_SYSTEM) return 1;
     dltest_cmd(playerid);
     return 1;
 }

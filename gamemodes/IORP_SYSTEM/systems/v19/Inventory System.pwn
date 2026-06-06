@@ -435,7 +435,7 @@ FlexDialog:IventoryShopOpen(playerid, response, listitem, const inputtext[], ext
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 20) return 1;
+    if (shopid != SHOP_ID_INVENTORY_SYSTEM) return 1;
     IventoryShopOpen(playerid);
     return ~1;
 }

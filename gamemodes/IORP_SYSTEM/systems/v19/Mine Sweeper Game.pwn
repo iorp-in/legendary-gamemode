@@ -191,7 +191,7 @@ stock cmd_minesweeper(playerid) {
 }
 
 hook OnPlayerRequestShop(playerid, shopid) {
-    if (shopid != 31) return 1;
+    if (shopid != SHOP_ID_MINE_SWEEPER_GAME) return 1;
     cmd_minesweeper(playerid);
     return ~1;
 }
