@@ -1,5 +1,3 @@
-
-
 new SSN_Player_Skin[MAX_PLAYERS];
 forward OnPlayerSkinChange(playerid, newskin, oldskin);
 public OnPlayerSkinChange(playerid, newskin, oldskin) {
@@ -7,9 +5,8 @@ public OnPlayerSkinChange(playerid, newskin, oldskin) {
 }
 
 hook OnPlayerUpdateEx(playerid) {
-    if(IsPlayerNPC(playerid)) return 1;
     new skin = GetPlayerSkin(playerid);
-    if(skin != SSN_Player_Skin[playerid]) CallRemoteFunction("OnPlayerSkinChange", "udd", playerid, skin, SSN_Player_Skin[playerid]);
+    if (skin != SSN_Player_Skin[playerid]) CallRemoteFunction("OnPlayerSkinChange", "udd", playerid, skin, SSN_Player_Skin[playerid]);
     SSN_Player_Skin[playerid] = skin;
     return 1;
 }

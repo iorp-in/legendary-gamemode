@@ -70,7 +70,6 @@ stock DeactivateResetOriginalPos(playerid) {
 
 forward ResetOriginalPos(playerid);
 public ResetOriginalPos(playerid) {
-    if (IsPlayerPaused(playerid)) return 1;
     if (!IsPlayerInAnyVehicle(playerid)) SetPlayerPos(playerid, AC_Position[playerid][0], AC_Position[playerid][1], AC_Position[playerid][2]);
     else SetVehiclePosEx(GetPlayerVehicleID(playerid), AC_Position[playerid][0], AC_Position[playerid][1], AC_Position[playerid][2]);
     if (IsPlayerInRangeOfPoint(playerid, 25.0, AC_Position[playerid][0], AC_Position[playerid][1], AC_Position[playerid][2])) DeactivateResetOriginalPos(playerid);

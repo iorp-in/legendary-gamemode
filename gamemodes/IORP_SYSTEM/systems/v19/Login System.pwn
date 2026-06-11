@@ -663,7 +663,7 @@ hook OnPlayerDisconnect(playerid, reason) {
 // }
 
 hook OnPlayerUpdateEx(playerid) {
-    if (!IsPlayerConnected(playerid) || !IsPlayerLoggedIn(playerid) || IsPlayerPaused(playerid) || !Tryg3D::IsPlayerSpawned(playerid)) return 1;
+    if (!Tryg3D::IsPlayerSpawned(playerid)) return 1;
     GetPlayerPos(playerid, pInfo[playerid][LastPosX], pInfo[playerid][LastPosY], pInfo[playerid][LastPosZ]);
     GetPlayerFacingAngle(playerid, pInfo[playerid][LastPosAngle]);
     SetPlayerInteriorID(playerid, GetPlayerInterior(playerid));

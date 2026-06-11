@@ -219,7 +219,7 @@ stock StaticVehicle:Create(playerid, modelid, color1 = -1, color2 = -1, respawnD
         // tp player
         GetVehiclePos(vehicleid, NewPos[0], NewPos[1], NewPos[2]);
         GetVehicleZAngle(vehicleid, NewPos[3]);
-        GetXYInFrontOfVehicle(GetPlayerVehicleID(playerid), NewPos[1], NewPos[2], 10.0);
+        GetXYInFrontOfVehicle(vehicleid, NewPos[0], NewPos[1], 10.0);
         SetVehicleZAngle(vehicleid, NewPos[3] - 180);
         SetVehiclePosEx(vehicleid, NewPos[0], NewPos[1], NewPos[2]);
     } else {
@@ -229,7 +229,7 @@ stock StaticVehicle:Create(playerid, modelid, color1 = -1, color2 = -1, respawnD
         // tp player
         GetPlayerPos(playerid, NewPos[0], NewPos[1], NewPos[2]);
         GetPlayerFacingAngle(playerid, NewPos[3]);
-        GetXYInFrontOfPlayer(playerid, NewPos[1], NewPos[2], 10.0);
+        GetXYInFrontOfPlayer(playerid, NewPos[0], NewPos[1], 10.0);
         SetPlayerPosEx(playerid, NewPos[0], NewPos[1], NewPos[2]);
         SetPlayerFacingAngle(playerid, NewPos[3] - 180);
     }
@@ -307,7 +307,7 @@ FlexDialog:StaticVehicleAdminPanel(playerid, response, listitem, const inputtext
     if (!response) return 1;
     if (IsStringSame(inputtext, "Create Static Vehicle")) return StaticVehicle:MenuCreateNew(playerid);
     if (IsStringSame(inputtext, "Manage Static Vehicle")) return StaticVehicle:MenuManageInput(playerid);
-    if (IsStringSame(inputtext, "Manage Static Vehicle by Vehicle ID")) return StaticVehicle:MenuManageInput(playerid);
+    if (IsStringSame(inputtext, "Manage Static Vehicle by Vehicle ID")) return StaticVehicle:ManageInputByVehID(playerid);
     if (IsStringSame(inputtext, "Manage this Static Vehicle") && StaticVehicle:IsValidID(StaticVehicle:GetID(GetPlayerVehicleID(playerid))))
         return StaticVehicle:Manage(playerid, StaticVehicle:GetID(GetPlayerVehicleID(playerid)));
     return 1;

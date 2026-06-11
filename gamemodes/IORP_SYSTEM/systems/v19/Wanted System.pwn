@@ -271,11 +271,6 @@ public RemoveLastWantedLevelStart(playerid) {
 
 forward RemoveLastWantedLevel(playerid);
 public RemoveLastWantedLevel(playerid) {
-    if (IsPlayerPaused(playerid)) {
-        SendClientMessageEx(playerid, -1, "{4286f4}[SAPD]:{0000CD} please unpause your game, your wanted level won't decrease if you pause your game.");
-        RemoveLastWantedLevelStart(playerid);
-        return 1;
-    }
     new query[256], Cache:mysql_cache, cID;
     mysql_format(Database, query, sizeof(query), "SELECT ID, Levels, Resolved, Reason, FROM_UNIXTIME(Date, '%%d/%%m/%%Y %%H:%%i:%%s') AS Created from wantedRecords where Username=\"%s\" and Resolved = 0 ORDER BY Date ASC limit 1", GetPlayerNameEx(playerid));
     mysql_cache = mysql_query(Database, query);
@@ -354,54 +349,30 @@ public OnCopBodySearch(playerid, suspectid) {
 
 QuickActions:OnInit(playerid, targetid, page) {
     if (page != 0) return 1;
-    new allow_faction[] = { 0, 1, 2, 3 };
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid) &&
-        GetPlayerRPMode(playerid) &&
-        GetPlayerRPMode(targetid) &&
-        !WantedDatabase:IsInJail(targetid)
-    ) QuickActions:AddCommand(playerid, "Jail Player");
-    else if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid) &&
+
+    new bool:isCop =
+        IsArrayContainNumber({ 0, 1, 2, 3 }, Faction:GetPlayerFID(playerid)) &&
+        Faction:IsPlayerSigned(playerid);
+
+    new bool:isAtJail =
         IsPlayerInRangeOfPoint(playerid, 25, 1833, -1722.1720, 5202) &&
-        GetPlayerInterior(playerid) == 6 &&
-        GetPlayerInterior(targetid) == 6 &&
         IsPlayerInRangeOfPoint(targetid, 25, 1833, -1722.1720, 5202) &&
-        !WantedDatabase:IsInJail(targetid)
-    ) QuickActions:AddCommand(playerid, "Jail Player");
-    else if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid) &&
-        IsPlayerInRangeOfPoint(playerid, 25, 1833, -1722.1720, 5202) &&
         GetPlayerInterior(playerid) == 6 &&
-        GetPlayerInterior(targetid) == 6 &&
-        IsPlayerInRangeOfPoint(targetid, 25, 1833, -1722.1720, 5202) &&
-        WantedDatabase:IsInJail(targetid)
-    ) QuickActions:AddCommand(playerid, "UnJail Player");
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid) &&
-        !WantedDatabase:IsInJail(targetid)
-    ) QuickActions:AddCommand(playerid, "Give Ticket");
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid) &&
-        !WantedDatabase:IsInJail(targetid)
-    ) QuickActions:AddCommand(playerid, "Player Fines");
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid)
-    ) QuickActions:AddCommand(playerid, "View Wanted Records for player");
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid)
-    ) QuickActions:AddCommand(playerid, "Show Wanted Records to player");
-    if (
-        IsArrayContainNumber(allow_faction, Faction:GetPlayerFID(playerid)) &&
-        Faction:IsPlayerSigned(playerid)
-    ) QuickActions:AddCommand(playerid, "Search the body of the suspect");
+        GetPlayerInterior(targetid) == 6;
+
+    new targetInJail = WantedDatabase:IsInJail(targetid);
+
+    if (isCop) {
+        if (GetPlayerRPMode(playerid) && GetPlayerRPMode(targetid) && !targetInJail) QuickActions:AddCommand(playerid, "Jail Player");
+        else if (isAtJail && !targetInJail) QuickActions:AddCommand(playerid, "Jail Player");
+        else if (isAtJail && targetInJail) QuickActions:AddCommand(playerid, "UnJail Player");
+        QuickActions:AddCommand(playerid, "Give Ticket");
+        QuickActions:AddCommand(playerid, "Player Fines");
+        QuickActions:AddCommand(playerid, "View Wanted Records for player");
+        QuickActions:AddCommand(playerid, "Show Wanted Records to player");
+        QuickActions:AddCommand(playerid, "Search the body of the suspect");
+    }
+
     return 1;
 }
 

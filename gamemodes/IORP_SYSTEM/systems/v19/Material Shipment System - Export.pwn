@@ -15,16 +15,7 @@ new MaterialReselling:data[Max_Material_Shipment][MaterialReselling:enumdata];
 
 //#region hooks
 hook GlobalOneMinuteInterval() {
-    MaterialReselling:exchangeRate = RandomEx(20, 30);
-    return 1;
-}
-
-stock CanUseResellingMenu(playerid) {
-    return IsTimePassedForPlayer(playerid, "IntervalForResellingUsage", 10 * 60);
-}
-
-hook OnPlayerConnect(playerid) {
-    CanUseResellingMenu(playerid);
+    MaterialReselling:exchangeRate = RandomEx(70, 90);
     return 1;
 }
 
@@ -127,17 +118,10 @@ FlexDialog:ResellingPointUnload(playerid, response, listitem, const inputtext[],
     new materialid = MaterialReselling:data[shipmentID][MaterialReselling:MaterialID];
     new inTrailer = TrailerStorage:GetResourceByShopId(trailerid, materialid);
 
-    if (sscanf(inputtext, "d", quantity) || quantity < 1 || quantity > inTrailer)
+    if (sscanf(inputtext, "d", quantity) || quantity < 1 || quantity > inTrailer) {
         return ResellingPointUnload(playerid, page, trailerid, shipmentID);
-
-    if (!CanUseResellingMenu(playerid)) {
-        AlexaMsg(playerid, "{4286f4}your export request has been declined, our ship is not returned yet on dock.", "Shipment Dock");
-        AlexaMsg(playerid, sprintf(
-            "{4286f4}please try after %s",
-            UnixToHumanEx(GetLastTimeForPlayer(playerid, "IntervalForResellingUsage") + 10 * 60)
-        ));
-        return 1;
     }
+
     return CallRemoteFunction("OnRequestResourceExport", "ddddd", playerid, shipmentID, trailerid, quantity, page);
 }
 

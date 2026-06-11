@@ -157,13 +157,15 @@ stock Shop:AdminViewAll(playerid, page = 0) {
     new skip = page * perpage;
 
     new string[2000], count;
-    strcat(string, "#\tRequest ID\n");
+    strcat(string, "#\tRequest ID\tDistance\n");
     foreach(new shopid:ShopIds) {
         if (skip > 0) {
             skip--;
             continue;
         }
-        strcat(string, sprintf("%d\t%d\n", shopid, Shop:GetRequestID(shopid)));
+
+        new Float:distance = GetPlayerDistanceFromPoint(playerid, Shop:Data[shopid][SS_Pos][0], Shop:Data[shopid][SS_Pos][1], Shop:Data[shopid][SS_Pos][2]);
+        strcat(string, sprintf("%d\t%d\t%.1fm\n", shopid, Shop:GetRequestID(shopid), distance));
         count++;
         if (count == perpage) break;
     }

@@ -200,8 +200,9 @@ stock UpdateVehicleParams(playerid, param) {
     return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if ((newkeys & KEY_LOOK_BEHIND) && (newkeys & KEY_HANDBRAKE) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER && GetPlayerVIPLevel(playerid) > 0) ShowTextDrawsPanel(playerid);
+cmd:v(playerid, const params[]) {
+    if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return AlexaMsg(playerid, "This command only works when you are the driver");
+    ShowTextDrawsPanel(playerid);
     return 1;
 }
 

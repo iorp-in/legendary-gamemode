@@ -19,7 +19,6 @@ new PlayerText:textVelocimetro[6][MAX_PLAYERS];
 new PlayerText:textPlayerVelocimetro[5][MAX_PLAYERS];
 forward VSASUpdate(playerid);
 public VSASUpdate(playerid) {
-    if (IsPlayerPaused(playerid)) return 1;
     if (IsPlayerInAnyVehicle(playerid)) {
         new vehicleid = GetPlayerVehicleID(playerid);
         if (IsValidVehicle(vehicleid)) {

@@ -1,3 +1,8 @@
+#define MAFIA_ZONE_REVENUE_GEN_MIN 10
+#define MAFIA_ZONE_REVENUE_GEN_MAX 30
+#define MAFIA_ZONE_MAX_REVENUE 50000
+#define MAFIA_ZONE_AUTO_RESET 48 * 3600
+
 new AllowedMafia[] = { 0, 1, 2, 3, 5, 7, 8, 9, 10 };
 
 stock MafiaZoneSystem:IsFromMafiaFaction(playerid) {
@@ -179,7 +184,7 @@ public MafiaMasterNodeUpdate() {
         }
 
         if (MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:OccupiedBy] != -1) {
-            if (gettime() - MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:LastMemberVisited] > 24 * 60 * 60) {
+            if (gettime() - MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:LastMemberVisited] > MAFIA_ZONE_AUTO_RESET) {
                 MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:OccupiedBy] = -1;
                 MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:LastOccupiedTime] = 0;
                 MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:LastMemberVisited] = gettime();
@@ -213,8 +218,8 @@ forward MafiaGenerateRevenue();
 public MafiaGenerateRevenue() {
     foreach(new propid:mafiazoneprops) {
         if (MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:pHealth] > 0.0 && MafiaZoneSystem:IsPropOccupied(propid)) {
-            if (MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue] < 2000) {
-                MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue] += Random(3, 6);
+            if (MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue] < MAFIA_ZONE_MAX_REVENUE) {
+                MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue] += Random(MAFIA_ZONE_REVENUE_GEN_MIN, MAFIA_ZONE_REVENUE_GEN_MAX);
                 MafiaZoneSystem:UpdateSubNode(propid);
             }
         }
@@ -311,7 +316,7 @@ hook OnPlayerShootDynObj(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float
                     MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:IsFlashing] = false;
                     ZoneStopFlashForAll(MafiaZoneSystem:zonedata[zoneid][MafiaZoneSystem:zoneObjectID]);
                     MafiaZoneSystem:UpdateMasterNode(zoneid);
-                    SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} your team have captured this zone, for next 1:40 hour there will be no fight.");
+                    SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} your team have captured this zone, for next 30 minutes there will be no fight.");
                 }
             } else {
                 if (timep) SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} destroy all properties to capture this zone.");
@@ -353,16 +358,15 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
                         return ~1;
                     } else {
                         new factionid = MafiaZoneSystem:getPropFactionID(propid);
-                        // new vaultid = Faction:GetVaultID(factionid);
-                        new cash = MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue];
-                        MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue] -= cash;
-                        GivePlayerCash(playerid, cash, sprintf("taken from zone property [%d] [f - %d]", propid, factionid));
-                        // if (vault:isValidID(vaultid)) {
-                        // vault:addcash(vaultid, cash, Vault_Transaction_Cash_To_Vault, sprintf("deposited in vault %d by %s from zone property [%d]", vaultid, GetPlayerNameEx(playerid), propid));
-                        // SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} money has been transfered to your faction vault.");
-                        // } else {
-                        // SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} your faction does not have vault, you can not collect money.");
-                        // }
+                        new vaultid = Faction:GetVaultID(factionid);
+                        if (vault:isValidID(vaultid)) {
+                            new cash = MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue];
+                            MafiaZoneSystem:zonepropdata[propid][MafiaZoneSystem:Revenue] -= cash;
+                            vault:addcash(vaultid, cash, Vault_Transaction_Cash_To_Vault, sprintf("deposited in vault %d by %s from zone property [%d]", vaultid, GetPlayerNameEx(playerid), propid));
+                            SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} money has been transfered to your faction vault.");
+                        } else {
+                            SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} your faction does not have vault, you can not collect money.");
+                        }
                         return ~1;
                     }
                 }

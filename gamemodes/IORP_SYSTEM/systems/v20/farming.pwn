@@ -7,6 +7,7 @@
 #define Crop_Type_Tomato 6
 #define Crop_Type_Rice 7
 
+#define PER_PLANT_RESOURCE 50
 #define FARM_RESET_SECS 36 * 60 * 60
 #define MAX_FARMS 10
 #define MAX_FARM_PLANTS 4000
@@ -208,10 +209,10 @@ stock OnFarmingCpSeuance(playerid) {
                 Farm:SetFarmStage(farmid, Farm:GetFarmStageID(farmid) + 1);
             }
             case 1 :  {
-                new requiredSeed = Farm:GetTotalFarmPlants(farmid);
+                new totalFarmPlants = Farm:GetTotalFarmPlants(farmid);
                 new storageid = Farm:GetStorageIdofFarm(farmid);
                 new cropType = Farm:FarmData[farmid][Farm:CropType];
-                Farm:DeductSeed(storageid, cropType, requiredSeed);
+                Farm:DeductSeed(storageid, cropType, totalFarmPlants);
                 SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}your farm has been seeded");
                 Farm:SetFarmStage(farmid, Farm:GetFarmStageID(farmid) + 1);
             }
@@ -220,11 +221,11 @@ stock OnFarmingCpSeuance(playerid) {
                 Farm:SetFarmStage(farmid, Farm:GetFarmStageID(farmid) + 1);
             }
             case 9 :  {
-                new requiredSeed = Farm:GetTotalFarmPlants(farmid);
+                new totalFarmPlants = Farm:GetTotalFarmPlants(farmid);
                 new storageid = Farm:GetStorageIdofFarm(farmid);
                 new cropType = Farm:FarmData[farmid][Farm:CropType];
                 Farm:FarmData[farmid][Farm:CropType] = -1;
-                Farm:AddResource(storageid, cropType, 5 * requiredSeed);
+                Farm:AddResource(storageid, cropType, PER_PLANT_RESOURCE * totalFarmPlants);
                 SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE}your farm has been harvested");
                 Farm:SetFarmStage(farmid, Farm:GetFarmStageID(farmid) + 1);
             }
@@ -514,7 +515,7 @@ stock Farm:GetFarmStage(farmid) {
             format(string, 50, "Required Seed Sowing");
         case 2 :  {
             new currentTime = gettime();
-            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 10 * 60;
+            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 2 * 60;
             if (next_stage_time > currentTime) {
                 format(string, 50, "Crop Growing (wait until %s)", secondsToHms(next_stage_time - currentTime));
             } else {
@@ -525,7 +526,7 @@ stock Farm:GetFarmStage(farmid) {
             format(string, 50, "Required Irrigation");
         case 4 :  {
             new currentTime = gettime();
-            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 10 * 60;
+            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 4 * 60;
             if (next_stage_time > currentTime) {
                 format(string, 50, "Crop Growing (wait until %s)", secondsToHms(next_stage_time - currentTime));
             } else {
@@ -536,7 +537,7 @@ stock Farm:GetFarmStage(farmid) {
             format(string, 50, "Required Irrigation");
         case 6 :  {
             new currentTime = gettime();
-            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 10 * 60;
+            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 6 * 60;
             if (next_stage_time > currentTime) {
                 format(string, 50, "Crop Growing (wait until %s)", secondsToHms(next_stage_time - currentTime));
             } else {
@@ -547,7 +548,7 @@ stock Farm:GetFarmStage(farmid) {
             format(string, 50, "Required Irrigation");
         case 8 :  {
             new currentTime = gettime();
-            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 10 * 60;
+            new next_stage_time = Farm:FarmData[farmid][Farm:StageInitiatedAt] + 8 * 60;
             if (next_stage_time > currentTime) {
                 format(string, 50, "Crop Growing (wait until %s)", secondsToHms(next_stage_time - currentTime));
             } else {
@@ -677,7 +678,7 @@ stock Farm:GetCropName(cropType) {
 }
 
 stock Farm:AccessFarmStorage(playerid, storageid) {
-    if (!Farm:IsPlayerFarmOwner(playerid, Farm:GetStorageFarmID(storageid))) {
+    if (!Farm:IsPlayerFarmOwner(playerid, Farm:GetStorageFarmID(storageid)) && !IsPlayerMasterAdmin(playerid)) {
         SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}nah sorry, only owner can access :(");
         return 1;
     }
@@ -940,12 +941,22 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
+ASCP:OnInit(playerid, page) {
+    if (page != 0) return 1;
+    ASCP:AddCommand(playerid, "Farming");
+    return 1;
+}
+
+ASCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0 || !IsStringSame("Farming", inputtext)) return 1;
+    Farm:FarmAdminMenu(playerid);
+    return ~1;
+}
+
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (BetaTester:IsPlayer(playerid) || IsPlayerMasterAdmin(playerid)) {
-        if (IsStringSame(text, "farming system")) {
-            Farm:FarmAdminMenu(playerid);
-            return ~1;
-        }
+    if ((IsPlayerMasterAdmin(playerid) || BetaTester:IsPlayer(playerid)) && IsStringSame(text, "farming system")) {
+        Farm:FarmAdminMenu(playerid);
+        return ~1;
     }
     return 1;
 }
@@ -978,7 +989,7 @@ FlexDialog:FarmPurchaseOffer(playerid, response, listitem, const inputtext[], fa
 
 stock Farm:AccessFarm(playerid, farmid) {
     if (!Farm:IsFarmPurchased(farmid)) return Farm:PurchaseOffer(playerid, farmid);
-    if (!Farm:IsPlayerFarmOwner(playerid, farmid)) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}nah sorry, only owner can access :(");
+    if (!Farm:IsPlayerFarmOwner(playerid, farmid) && !IsPlayerMasterAdmin(playerid)) return SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}nah sorry, only owner can access :(");
     new string[1024];
     if (Farm:PlayerData[playerid][Farm:isStartedWork]) strcat(string, "Cancel Current Job\n");
     else {
@@ -1020,7 +1031,7 @@ FlexDialog:FarmAccessFarm(playerid, response, listitem, const inputtext[], farmi
     if (IsStringSame(inputtext, "Start Land Preparation")) return StartFarmingCpSequance(playerid, farmid);
     if (IsStringSame(inputtext, "Start Seed Sowing")) {
         new string[512];
-        strcat(string, "ID\tCrop\n");
+        strcat(string, "#\tCrop\n");
         strcat(string, "1\tCorn\n");
         strcat(string, "2\tWheat\n");
         strcat(string, "3\tOnion\n");
@@ -1530,10 +1541,12 @@ FlexDialog:FarmTruckingMenu(playerid, response, listitem, const inputtext[], sto
     return 1;
 }
 
+// Load crop
+
 stock Farm:TruckingMenuLoad(playerid, storageid, trailerid) {
     new string[1024];
-    strcat(string, "Crop\tIn Storage\n");
-    for (new i; i < 8; i++) strcat(string, sprintf("%s\t%d/1000 KG\n", Farm:GetTypeName(i), Farm:GetCropResource(storageid, i)));
+    strcat(string, "#\tCrop\tIn Storage\n");
+    for (new i; i < 8; i++) strcat(string, sprintf("%d\t%s\t%d/1000 KG\n", i, Farm:GetTypeName(i), Farm:GetCropResource(storageid, i)));
     return FlexPlayerDialog(
         playerid, "FarmTruckingMenuLoad", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Farm Storage]:{FFFFEE} Truck Loading", string,
         "Select", "Cancel", storageid, sprintf("%d", trailerid)
@@ -1548,8 +1561,13 @@ FlexDialog:FarmTruckingMenuLoad(playerid, response, listitem, const inputtext[],
 }
 
 stock Farm:MenuLoadInTruck(playerid, storageid, trailerid, cropType) {
+    new available = Farm:GetCropResource(storageid, cropType);
+    new current = TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(cropType));
+    new freeSpace = TrailerStorage:GetResourceLimitByName(Farm:GetTypeName(cropType)) - current;
     return FlexPlayerDialog(
-        playerid, "FarmMenuLoadInTruck", DIALOG_STYLE_INPUT, "Load from storage", "Enter amount of resource need to load in trailer",
+        playerid, "FarmMenuLoadInTruck", DIALOG_STYLE_INPUT,
+        sprintf("Load %s from storage", Farm:GetTypeName(cropType)),
+        sprintf("Available in Storage: %d KG\nIn Trailer: %d/1000 KG\nFree Space: %d KG\n\nEnter amount to load:", available, current, freeSpace),
         "Load", "Cancel", storageid, sprintf("%d %d", trailerid, cropType)
     );
 }
@@ -1558,18 +1576,29 @@ FlexDialog:FarmMenuLoadInTruck(playerid, response, listitem, const inputtext[], 
     new trailerid, cropType;
     sscanf(payload, "dd", trailerid, cropType);
     if (!response) return Farm:TruckingMenu(playerid, storageid, trailerid);
+
+    new available = Farm:GetCropResource(storageid, cropType);
+    new current = TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(cropType));
+    new freeSpace = TrailerStorage:GetResourceLimitByName(Farm:GetTypeName(cropType)) - current;
+
     new amount;
-    if (sscanf(inputtext, "d", amount) || amount < 1 || TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(cropType)) + amount > 1000) return Farm:MenuLoadInTruck(playerid, storageid, trailerid, cropType);
+    if (sscanf(inputtext, "d", amount) || amount < 1 || amount > available || amount > freeSpace) {
+        return Farm:MenuLoadInTruck(playerid, storageid, trailerid, cropType);
+    }
+
     Farm:DeductResource(storageid, cropType, amount);
     TrailerStorage:IncreaseResourceByName(trailerid, Farm:GetTypeName(cropType), amount);
-    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}loaded %dkg resource in trailer", amount));
+
+    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}Loaded %d KG of %s into the trailer.", amount, Farm:GetTypeName(cropType)));
     return Farm:TruckingMenu(playerid, storageid, trailerid);
 }
 
+// Load seed
+
 stock Farm:TruckingMenuLoadSeed(playerid, storageid, trailerid) {
     new string[1024];
-    strcat(string, "Crop\tIn Storage\n");
-    for (new i; i < 8; i++) strcat(string, sprintf("%s\t%d/1000 KG\n", Farm:GetTypeName(i), Farm:GetCropResource(storageid, i)));
+    strcat(string, "#\tCrop\tIn Storage\n");
+    for (new i; i < 8; i++) strcat(string, sprintf("%d\t%s\t%d/1000 KG\n", i, Farm:GetTypeName(i), Farm:GetCropSeed(storageid, i)));
     return FlexPlayerDialog(
         playerid, "FarmTruckingMenuLoadSeed", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Farm Storage]:{FFFFEE} Truck Loading", string,
         "Select", "Cancel", storageid, sprintf("%d", trailerid)
@@ -1584,8 +1613,17 @@ FlexDialog:FarmTruckingMenuLoadSeed(playerid, response, listitem, const inputtex
 }
 
 stock Farm:MenuLoadInTruckSeed(playerid, storageid, trailerid, cropType) {
+    new seedName[32];
+    format(seedName, sizeof(seedName), "%s_Seed", Farm:GetTypeName(cropType));
+
+    new available = Farm:GetCropSeed(storageid, cropType);
+    new current = TrailerStorage:GetResourceByName(trailerid, seedName);
+    new freeSpace = TrailerStorage:GetResourceLimitByName(seedName) - current;
+
     return FlexPlayerDialog(
-        playerid, "FarmMenuLoadInTruckSeed", DIALOG_STYLE_INPUT, "Load from storage", "Enter amount of seed need to load in trailer",
+        playerid, "FarmMenuLoadInTruckSeed", DIALOG_STYLE_INPUT,
+        sprintf("Load %s seed from storage", Farm:GetTypeName(cropType)),
+        sprintf("Available in Storage: %d KG\nIn Trailer: %d KG\nFree Space: %d KG\n\nEnter amount to load:", available, current, freeSpace),
         "Load", "Cancel", storageid, sprintf("%d %d", trailerid, cropType)
     );
 }
@@ -1594,21 +1632,34 @@ FlexDialog:FarmMenuLoadInTruckSeed(playerid, response, listitem, const inputtext
     new trailerid, cropType;
     sscanf(payload, "dd", trailerid, cropType);
     if (!response) return Farm:TruckingMenu(playerid, storageid, trailerid);
+
+    new seedName[32];
+    format(seedName, sizeof(seedName), "%s_Seed", Farm:GetTypeName(cropType));
+
+    new available = Farm:GetCropSeed(storageid, cropType);
+    new current = TrailerStorage:GetResourceByName(trailerid, seedName);
+    new freeSpace = TrailerStorage:GetResourceLimitByName(seedName) - current;
+
     new amount;
-    if (sscanf(inputtext, "d", amount) || amount < 1 || TrailerStorage:GetResourceByName(trailerid, sprintf("%s_Seed", Farm:GetTypeName(cropType))) + amount > 1000)
+    if (sscanf(inputtext, "d", amount) || amount < 1 || amount > available || amount > freeSpace) {
         return Farm:MenuLoadInTruckSeed(playerid, storageid, trailerid, cropType);
+    }
+
     Farm:DeductSeed(storageid, cropType, amount);
-    TrailerStorage:IncreaseResourceByName(trailerid, sprintf("%s_Seed", Farm:GetTypeName(cropType)), amount);
-    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}loaded %dkg resource seed in trailer", amount));
+    TrailerStorage:IncreaseResourceByName(trailerid, seedName, amount);
+
+    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}Loaded %d KG of %s seed into the trailer.", amount, Farm:GetTypeName(cropType)));
     return Farm:TruckingMenu(playerid, storageid, trailerid);
 }
 
+// Unload crop
+
 stock Farm:TruckingMenuUnload(playerid, storageid, trailerid) {
     new string[1024];
-    strcat(string, "Crop\tIn Trailer\n");
-    for (new i; i < 8; i++) strcat(string, sprintf("%s\t%d/1000 KG\n", Farm:GetTypeName(i), TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(i))));
+    strcat(string, "#\tCrop\tIn Trailer\n");
+    for (new i; i < 8; i++) strcat(string, sprintf("%d\t%s\t%d/1000 KG\n", i, Farm:GetTypeName(i), TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(i))));
     return FlexPlayerDialog(
-        playerid, "FarmTruckingMenuUnload", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Farm Storage]:{FFFFEE} Truck Loading", string,
+        playerid, "FarmTruckingMenuUnload", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Farm Storage]:{FFFFEE} Truck Unloading", string,
         "Select", "Cancel", storageid, sprintf("%d", trailerid)
     );
 }
@@ -1621,8 +1672,14 @@ FlexDialog:FarmTruckingMenuUnload(playerid, response, listitem, const inputtext[
 }
 
 stock Farm:MenuUnloadInTruck(playerid, storageid, trailerid, cropType) {
+    new available = TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(cropType));
+    new storageAmount = Farm:GetCropResource(storageid, cropType);
+    new freeSpace = 1000 - storageAmount;
+
     return FlexPlayerDialog(
-        playerid, "FarmMenuUnloadInTruck", DIALOG_STYLE_INPUT, "Load from storage", "Enter amount of resource need to unload from trailer",
+        playerid, "FarmMenuUnloadInTruck", DIALOG_STYLE_INPUT,
+        sprintf("Unload %s from trailer", Farm:GetTypeName(cropType)),
+        sprintf("In Trailer: %d KG\nStorage: %d/1000 KG\nFree Storage Space: %d KG\n\nEnter amount to unload:", available, storageAmount, freeSpace),
         "Load", "Cancel", storageid, sprintf("%d %d", trailerid, cropType)
     );
 }
@@ -1631,23 +1688,31 @@ FlexDialog:FarmMenuUnloadInTruck(playerid, response, listitem, const inputtext[]
     new trailerid, cropType;
     sscanf(payload, "dd", trailerid, cropType);
     if (!response) return Farm:TruckingMenu(playerid, storageid, trailerid);
+
+    new available = TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(cropType));
+    new storageAmount = Farm:GetCropResource(storageid, cropType);
+    new freeSpace = 1000 - storageAmount;
+
     new amount;
-    if (
-        sscanf(inputtext, "d", amount) || amount < 1 || amount > TrailerStorage:GetResourceByName(trailerid, Farm:GetTypeName(cropType)) ||
-        Farm:GetCropResource(storageid, cropType) + amount > 1000
-    ) return Farm:MenuLoadInTruckSeed(playerid, storageid, trailerid, cropType);
+    if (sscanf(inputtext, "d", amount) || amount < 1 || amount > available || amount > freeSpace) {
+        return Farm:MenuUnloadInTruck(playerid, storageid, trailerid, cropType);
+    }
+
     Farm:AddResource(storageid, cropType, amount);
     TrailerStorage:IncreaseResourceByName(trailerid, Farm:GetTypeName(cropType), -amount);
-    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}unloaded %dkg resource from trailer", amount));
+
+    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}Unloaded %d KG of %s from the trailer.", amount, Farm:GetTypeName(cropType)));
     return Farm:TruckingMenu(playerid, storageid, trailerid);
 }
 
+// Unload seed
+
 stock Farm:TruckingMenuUnloadSeed(playerid, storageid, trailerid) {
     new string[1024];
-    strcat(string, "Crop\tIn Trailer\n");
-    for (new i; i < 8; i++) strcat(string, sprintf("%s\t%d/1000 KG\n", Farm:GetTypeName(i), TrailerStorage:GetResourceByName(trailerid, sprintf("%s_Seed", Farm:GetTypeName(i)))));
+    strcat(string, "#\tCrop\tIn Trailer\n");
+    for (new i; i < 8; i++) strcat(string, sprintf("%d\t%s\t%d/1000 KG\n", i, Farm:GetTypeName(i), TrailerStorage:GetResourceByName(trailerid, sprintf("%s_Seed", Farm:GetTypeName(i)))));
     return FlexPlayerDialog(
-        playerid, "FarmTruckingMenuUnloadSeed", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Farm Storage]:{FFFFEE} Truck Loading", string,
+        playerid, "FarmTruckingMenuUnloadSeed", DIALOG_STYLE_TABLIST_HEADERS, "{4286f4}[Farm Storage]:{FFFFEE} Truck Unloading", string,
         "Select", "Cancel", storageid, sprintf("%d", trailerid)
     );
 }
@@ -1660,8 +1725,17 @@ FlexDialog:FarmTruckingMenuUnloadSeed(playerid, response, listitem, const inputt
 }
 
 stock Farm:MenuUnloadInTruckSeed(playerid, storageid, trailerid, cropType) {
+    new seedName[32];
+    format(seedName, sizeof(seedName), "%s_Seed", Farm:GetTypeName(cropType));
+
+    new available = TrailerStorage:GetResourceByName(trailerid, seedName);
+    new storageAmount = Farm:GetCropSeed(storageid, cropType);
+    new freeSpace = 1000 - storageAmount;
+
     return FlexPlayerDialog(
-        playerid, "FarmMenuUnloadInTruckSeed", DIALOG_STYLE_INPUT, "Load from storage", "Enter amount of resource seed need to unload from trailer",
+        playerid, "FarmMenuUnloadInTruckSeed", DIALOG_STYLE_INPUT,
+        sprintf("Unload %s seed from trailer", Farm:GetTypeName(cropType)),
+        sprintf("In Trailer: %d KG\nStorage: %d/1000 KG\nFree Storage Space: %d KG\n\nEnter amount to unload:", available, storageAmount, freeSpace),
         "Load", "Cancel", storageid, sprintf("%d %d", trailerid, cropType)
     );
 }
@@ -1670,14 +1744,22 @@ FlexDialog:FarmMenuUnloadInTruckSeed(playerid, response, listitem, const inputte
     new trailerid, cropType;
     sscanf(payload, "dd", trailerid, cropType);
     if (!response) return Farm:TruckingMenu(playerid, storageid, trailerid);
+
+    new seedName[32];
+    format(seedName, sizeof(seedName), "%s_Seed", Farm:GetTypeName(cropType));
+
+    new available = TrailerStorage:GetResourceByName(trailerid, seedName);
+    new storageAmount = Farm:GetCropSeed(storageid, cropType);
+    new freeSpace = 1000 - storageAmount;
+
     new amount;
-    if (
-        sscanf(inputtext, "d", amount) || amount < 1 ||
-        amount > TrailerStorage:GetResourceByName(trailerid, sprintf("%s_Seed", Farm:GetTypeName(cropType))) ||
-        Farm:GetCropSeed(storageid, cropType) + amount > 1000
-    ) return Farm:MenuLoadInTruckSeed(playerid, storageid, trailerid, cropType);
+    if (sscanf(inputtext, "d", amount) || amount < 1 || amount > available || amount > freeSpace) {
+        return Farm:MenuUnloadInTruckSeed(playerid, storageid, trailerid, cropType);
+    }
+
     Farm:AddSeed(storageid, cropType, amount);
     TrailerStorage:IncreaseResourceByName(trailerid, sprintf("%s_Seed", Farm:GetTypeName(cropType)), -amount);
-    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}unloaded %dkg resource seed from trailer", amount));
+
+    SendClientMessage(playerid, -1, sprintf("{4286f4}[Alexa]: {FFFFEE}Unloaded %d KG of %s seed from the trailer.", amount, Farm:GetTypeName(cropType)));
     return Farm:TruckingMenu(playerid, storageid, trailerid);
 }

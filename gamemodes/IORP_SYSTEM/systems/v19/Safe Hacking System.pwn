@@ -1,9 +1,9 @@
 #define     MAX_SAFES       (25)
 #define     MAX_NUMBER      (15)
 
-#define     SAFE_TIME       (60*60)
-#define     SAFE_MONEY_MIN  (1500)
-#define     SAFE_MONEY_MAX  (5500)
+#define     SAFE_TIME       (3600)
+#define     SAFE_MONEY_MIN  (50000)
+#define     SAFE_MONEY_MAX  (90000)
 
 enum E_SAFE {
     // from db

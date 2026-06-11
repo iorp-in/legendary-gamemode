@@ -16,17 +16,18 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (IsStringSame("General Commands", inputtext)) {
         new info[2000];
         strcat(info, "{db6600}-----------------------------------------------------------------------------------------------n");
-        strcat(info, "{db6600}/discord: {FFFFEE}link to: https://discord.gg/Xq9k3hr\n");
-        strcat(info, "{db6600}/report: {FFFFEE}report player to administrators.\n");
-        strcat(info, "{db6600}/eject: {FFFFEE}eject other player from vehicle.\n");
-        strcat(info, "{db6600}/alexa: {FFFFEE}to talk with Alexa, your personal assistant who obeys your command.\n");
-        strcat(info, "{db6600}/pocket or /p or H+SPACE: {FFFFEE}to open your pocket, all in one solution for commands\n");
-        strcat(info, "{db6600}/anim: {FFFFEE}to perform animations\n");
-        strcat(info, "{db6600}/gc: {FFFFEE}to talk in global chat\n");
         strcat(info, "{db6600}/admins: {FFFFEE}check online management staff\n");
-        strcat(info, "{db6600}/s: {FFFFEE}to talk with nearest player using TTS\n");
-        strcat(info, "{db6600}/pm, /rpm, /nopm: {FFFFEE}personal message commands\n");
+        strcat(info, "{db6600}/alexa: {FFFFEE}to talk with Alexa, your personal assistant who obeys your command.\n");
+        strcat(info, "{db6600}/anim: {FFFFEE}to perform animations\n");
         strcat(info, "{db6600}/bitcoin: {FFFFEE}open premium player shop\n");
+        strcat(info, "{db6600}/discord: {FFFFEE}link to: https://discord.gg/Xq9k3hr\n");
+        strcat(info, "{db6600}/eject: {FFFFEE}eject other player from vehicle.\n");
+        strcat(info, "{db6600}/gc: {FFFFEE}to talk in global chat\n");
+        strcat(info, "{db6600}/pm, /rpm, /nopm: {FFFFEE}personal message commands\n");
+        strcat(info, "{db6600}/pocket or /p or H+SPACE: {FFFFEE}to open your pocket, all in one solution for commands\n");
+        strcat(info, "{db6600}/report: {FFFFEE}report player to administrators.\n");
+        strcat(info, "{db6600}/s: {FFFFEE}to talk with nearest player using TTS\n");
+        strcat(info, "{db6600}/v: {FFFFEE}vehicle gui controls.\n");
         strcat(info, "{db6600}-----------------------------------------------------------------------------------------------n");
         ShowInfo(playerid, "General Commands", info);
         return ~1;
@@ -36,21 +37,21 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         new info[2000];
         format(info, sizeof info, "");
         strcat(info, "{db6600}-------------------------------------------------------------------------------------------------------------------------------\n");
-        strcat(info, "{db6600}/me: {FFFFEE}Displays an action or emote your character is performing.\n");
-        strcat(info, "{db6600}/my: {FFFFEE}Same as /me, except instead of the `Name` prefix, you get `name's`.\n");
+        strcat(info, "{db6600}/ad: {FFFFEE}Used to send an advertisement to the server, the fee for posting an advertisement is $500.\n");
+        strcat(info, "{db6600}/call: {FFFFEE}A cmd for IC chat on call.\n");
         strcat(info, "{db6600}/do: {FFFFEE}IC emote . Used if you want to ask something roleplay wise or something what can't begin with your character name.\n");
         strcat(info, "{db6600}/em : {FFFFEE}A suggested use could be to announce a sort of atmosphere.\n");
-        strcat(info, "{db6600}/say: {FFFFEE}A cmd for IC chat while Roleplay.\n");
-        strcat(info, "{db6600}/ad: {FFFFEE}Used to send an advertisement to the server, the fee for posting an advertisement is $500.\n");
-        strcat(info, "{db6600}/shout: {FFFFEE}A cmd for IC shout while Roleplay.\n");
-        strcat(info, "{db6600}/w: {FFFFEE}Whisper to a specific player while Roleplay.\n");
-        strcat(info, "{db6600}/t: {FFFFEE}Express your thought while in character in RolePlay.\n");
-        strcat(info, "{db6600}/fr: {FFFFEE}Fake Roleplay is used for represent a person or authority.\n");
-        strcat(info, "{db6600}/call: {FFFFEE}A cmd for IC chat on call.\n");
-        strcat(info, "{db6600}/fightmode: {FFFFEE}While roleplaying, to engage in extreme combat that involves shooting and killing.\n");
-        strcat(info, "{db6600}/radio: {FFFFEE}Radio for law factions only.\n");
-        strcat(info, "{db6600}/pu: {FFFFEE}Pull Over.\n");
         strcat(info, "{db6600}/fchat: {FFFFEE}Faction chat.\n");
+        strcat(info, "{db6600}/fightmode: {FFFFEE}While roleplaying, to engage in extreme combat that involves shooting and killing.\n");
+        strcat(info, "{db6600}/fr: {FFFFEE}Fake Roleplay is used for represent a person or authority.\n");
+        strcat(info, "{db6600}/me: {FFFFEE}Displays an action or emote your character is performing.\n");
+        strcat(info, "{db6600}/my: {FFFFEE}Same as /me, except instead of the `Name` prefix, you get `name's`.\n");
+        strcat(info, "{db6600}/pu: {FFFFEE}Pull Over.\n");
+        strcat(info, "{db6600}/radio: {FFFFEE}Radio for law factions only.\n");
+        strcat(info, "{db6600}/say: {FFFFEE}A cmd for IC chat while Roleplay.\n");
+        strcat(info, "{db6600}/shout: {FFFFEE}A cmd for IC shout while Roleplay.\n");
+        strcat(info, "{db6600}/t: {FFFFEE}Express your thought while in character in RolePlay.\n");
+        strcat(info, "{db6600}/w: {FFFFEE}Whisper to a specific player while Roleplay.\n");
         strcat(info, "{db6600}-------------------------------------------------------------------------------------------------------------------------------\n");
         ShowInfo(playerid, "Roleplay Commands", info);
         return ~1;
@@ -84,7 +85,8 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}>> Alexa Commands - {FFFFEE}use {db6600}/alexa [command]\n");
         strcat(info, "{db6600}General:{FFFFEE} help, unbug me, chat animation, achievements, race system\n");
         strcat(info, "{db6600}General:{FFFFEE} hide/show motives, sleep/awake mode\n");
-        strcat(info, "{db6600}Utilities:{FFFFEE} pocket, gps, patch status, clean/fix screen\n");
+        strcat(info, "{db6600}Utilities:{FFFFEE} pocket, gps, patch status, clean/fix screen, chat mode\n");
+        strcat(info, "{db6600}Sucide:{FFFFEE} i want to suicide, please kill me\n");
 
         if (GetPlayerVIPLevel(playerid) > 0) {
             strcat(info, "\n");
@@ -172,4 +174,12 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     }
 
     return 1;
+}
+
+stock ShowInfo(playerid, const caption[], const info[]) {
+    return FlexPlayerDialog(playerid, "ShowInfo", DIALOG_STYLE_MSGBOX, caption, info, "Okay", "");
+}
+
+FlexDialog:ShowInfo(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
+    return HCP:Init(playerid);
 }

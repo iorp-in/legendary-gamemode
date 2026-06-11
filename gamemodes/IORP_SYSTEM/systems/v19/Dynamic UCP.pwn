@@ -76,16 +76,12 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     // if(newkeys == KEY_NO && Pump_Closest(playerid) == -1 && GetPlayerNearestDropGun(playerid) == -1) SelectTextDraw(playerid, 0x00FF00FF);
-    if (IsPlayerInAnyVehicle(playerid)) {
-        if ((newkeys & KEY_CROUCH) && (newkeys & KEY_HANDBRAKE)) {
-            UCP:PocketMenu(playerid);
-            return ~1;
-        }
-    } else {
-        if ((newkeys & KEY_CTRL_BACK) && (newkeys & KEY_SPRINT)) {
-            UCP:PocketMenu(playerid);
-            return ~1;
-        }
+    if (IsPlayerInAnyVehicle(playerid) && (newkeys & KEY_CROUCH) && (newkeys & KEY_HANDBRAKE)) {
+        UCP:PocketMenu(playerid);
+        return ~1;
+    } else if ((newkeys & KEY_CTRL_BACK) && (newkeys & KEY_SPRINT)) {
+        UCP:PocketMenu(playerid);
+        return ~1;
     }
     return 1;
 }

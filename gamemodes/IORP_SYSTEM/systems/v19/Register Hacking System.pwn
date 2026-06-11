@@ -1,6 +1,6 @@
 #define     MAX_CREGISTER   (50) 	// limit of cash registers
-#define     CREG_MIN_MONEY  (1000)   // min. amount of money stolen from a cash register (Default:250)
-#define     CREG_MAX_MONEY  (5000)  // max. amount of money stolen from a cash register (Default:1000)
+#define     CREG_MIN_MONEY  (50000)   // min. amount of money stolen from a cash register (Default:250)
+#define     CREG_MAX_MONEY  (90000)  // max. amount of money stolen from a cash register (Default:1000)
 #define     CREG_RESPAWN    (3600)   // time required for a cash register to become robbable again, in seconds (Default:180)
 #define     CREG_ROBTIME    (30)     // time required to rob a cash register, in seconds (Default:5)
 

@@ -231,7 +231,7 @@ stock HideMotives(playerid) {
 }
 
 hook OnPlayerUpdateEx(playerid) {
-    if (!IsTimePassedForPlayer(playerid, "HungerReduceHealth", 120) || IsPlayerPaused(playerid)) return 1;
+    if (!IsTimePassedForPlayer(playerid, "HungerReduceHealth", 120)) return 1;
     if (GetPlayerHealthEx(playerid) > 5) SetPlayerHealthEx(playerid, GetPlayerHealthEx(playerid) - 1);
     return 1;
 }
@@ -273,7 +273,7 @@ stock GetPlayerSleepTime(playerid) {
 
 hook GlobalOneMinuteInterval() {
     foreach(new playerid:Player) {
-        if (IsPlayerPaused(playerid) || !IsPlayerLoggedIn(playerid) || Event:IsInEvent(playerid)) continue;
+        if (!IsPlayerLoggedIn(playerid) || Event:IsInEvent(playerid)) continue;
         new bool:time_passed = IsTimePassedForPlayer(playerid, "last_health_warn", 3 * 60);
         if (time_passed && GetNeedStatePercent(playerid, ThirstCode) < 20) SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} you are thirsty, drink water asap.");
         if (time_passed && GetNeedStatePercent(playerid, HygieneCode) < 20) SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFEE} you are stinky, take shower asap.");
@@ -608,8 +608,9 @@ stock Motive:ViewMotives(playerid) {
 
 FlexDialog:MotiveSelfView(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
     if (!response) return 1;
-    if (IsStringSame(inputtext, "Show")) return ShowMotives(playerid);
-    if (IsStringSame(inputtext, "Hide")) return HideMotives(playerid);
+    if (IsStringSame(inputtext, "Show")) ShowMotives(playerid);
+    if (IsStringSame(inputtext, "Hide")) HideMotives(playerid);
+    Motive:ViewMotives(playerid);
     return 1;
 }
 
@@ -770,7 +771,7 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
 hook OnPlayerRequestShop(playerid, shopid) {
     if (shopid == SHOP_ID_PLAYER_BATH) {
         Motive:PlayerData[playerid][freezedForBath] = true;
-        new seconds = GetNeedStatePercent(playerid, HygieneCode) > 50 ? Random(15, 60) : Random(30, 100);
+        new seconds = Random(5, 15);
         freezeEx(playerid, seconds * 1000);
         SetTimerEx("OnPlayerBathComplete", seconds * 1000, false, "d", playerid);
         StopScreenTimer(playerid, 1);
@@ -781,7 +782,7 @@ hook OnPlayerRequestShop(playerid, shopid) {
         return ~1;
     }
     if (shopid == SHOP_ID_PLAYER_PEE) {
-        new seconds = Random(15, 60);
+        new seconds = Random(5, 15);
         SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}your player doing pee, rest yourself meanwhile he/she is done.");
         SendClientMessage(playerid, -1, "{4286f4}[Alexa]: {FFFFEE}you can interupt this by pressing enter, which is not recommanded");
         freezeEx(playerid, seconds * 1000);

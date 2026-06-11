@@ -11,8 +11,8 @@
 
 #define     ATM_HEALTH              (350.0)     // health of an atm (Default:350.0)
 #define     ATM_REGEN               (120)       // a robbed atm will start working after x seconds (Default:120)
-#define     ATM_ROB_MIN  			(1500)   	// min. amount of money stolen from an atm (Default:1500)
-#define     ATM_ROB_MAX  			(3500)  	// max. amount of money stolen from an atm (Default:3500)
+#define     ATM_ROB_MIN  			(10000)   	// min. amount of money stolen from an atm (Default:1500)
+#define     ATM_ROB_MAX  			(30000)  	// max. amount of money stolen from an atm (Default:3500)
 
 enum _:E_BANK_LOGTYPE {
     TYPE_NONE,
@@ -181,7 +181,7 @@ stock Bank:GetOwner(accountid) {
 }
 
 stock Bank:AtmDmgText(id) {
-    new Float:health = ATMData[id][atmHealth], color, string[16];
+    new Float:health = ATMData[id][atmHealth], color, string[32];
     if (health < (ATM_HEALTH / 4)) color = -1;
     else if (health < (ATM_HEALTH / 2)) color = 0xF39C12FF;
     else color = 0x2ECC71FF;
@@ -434,7 +434,7 @@ hook OPPickUpDynPickup(playerid, pickupid) {
             format(string, sizeof(string), "ATM: {FFFFFF}You stole {2ECC71}%s {FFFFFF}from the ATM.", FormatCurrencyEx(money));
             SendClientMessageEx(playerid, 0x3498DBFF, string);
             vault:PlayerVault(playerid, money, "stole from atm", Vault_ID_Government, -money, sprintf("%s stoll from atm", GetPlayerNameEx(playerid)));
-            Debt:GiveOrTake(playerid, GetPercentageOf(RandomEx(50, 70), money), "Robbed from ATM", 0);
+            Debt:GiveOrTake(playerid, GetPercentageOf(RandomEx(30, 50), money), "Robbed from ATM", 0);
             ATMData[dataArray[refID]][atmPickup] = -1;
             DestroyDynamicPickup(pickupid);
             format(string, sizeof(string), "stole %s from the ATM", FormatCurrencyEx(money));
@@ -580,7 +580,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 ASCP:OnInit(playerid, page) {
-    if(page != 0) return 1;
+    if (page != 0) return 1;
     ASCP:AddCommand(playerid, "Bank");
     return 1;
 }

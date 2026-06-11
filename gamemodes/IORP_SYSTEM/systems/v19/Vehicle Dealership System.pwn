@@ -204,8 +204,8 @@ stock SetXVehiclePos(xid, Float:x, Float:y, Float:z, Float:a) {
 
 forward PersonalVehicleRemove(xid);
 public PersonalVehicleRemove(xid) {
+    if (!PersonalVehicle:IsInGarage(xid)) DestroyVehicleEx(PersonalVehicle:Data[xid][xv_Veh]);
     Iter_Remove(xVehicles, xid);
-    DestroyVehicleEx(PersonalVehicle:Data[xid][xv_Veh]);
     mysql_tquery(Database, sprintf("delete from xVehicleKeys where VehicleID=%d", xid));
     mysql_tquery(Database, sprintf("delete from xVehicle where id = %d", xid));
     return 1;
@@ -622,13 +622,15 @@ stock PersonalVehicle:VehicleMenu(playerid, xid) {
     if (PersonalVehicle:IsPurchased(xid) && IsArrayContainNumber(allowedFaction, Faction:GetPlayerFID(playerid)) && Faction:IsPlayerSigned(playerid)) {
         strcat(string, "{FFA500}> {CACACA} Seize Vehicle\n");
     }
+    if (!PersonalVehicle:IsInGarage(xid) && (IsPlayerMasterAdmin(playerid) || GetPlayerVIPLevel(playerid) > 0)) {
+        strcat(string, "{FFA500}> {CACACA} Teleport to vehicle\n");
+        strcat(string, "{FFA500}> {CACACA} Teleport vehicle to you\n");
+    }
     if (IsPlayerMasterAdmin(playerid)) {
         strcat(string, "{FFA500}> {CACACA} Set Price\n");
         strcat(string, "{FFA500}> {CACACA} Remove Mods\n");
+        strcat(string, "{FFA500}> {CACACA} Remove from server\n");
         strcat(string, "{FFA500}> {CACACA} Seize Vehicle Admin\n");
-        if (!PersonalVehicle:IsInGarage(xid)) strcat(string, "{FFA500}> {CACACA} Remove from server\n");
-        if (!PersonalVehicle:IsInGarage(xid)) strcat(string, "{FFA500}> {CACACA} Teleport to vehicle\n");
-        if (!PersonalVehicle:IsInGarage(xid)) strcat(string, "{FFA500}> {CACACA} Teleport vehicle to you\n");
         if (PersonalVehicle:AutoResetState(xid)) strcat(string, "{FFA500}> {CACACA} Disable Auto Reset\n");
         else strcat(string, "{FFA500}> {CACACA} Enabled Auto Reset\n");
     }
@@ -1126,6 +1128,7 @@ stock PersonalVehicle:ShowVehicleInfo(playerid, xid) {
     strcat(string, "{FFFFFF}----------[ Vehicle Information ]----------\n\n");
     strcat(string, sprintf("{F0AE0F}  > {ECE913}Owner: {FFFFFF}%s\n", PersonalVehicle:GetOwner(xid)));
     strcat(string, sprintf("{F0AE0F}  > {ECE913}Vehicle Name: {FFFFFF}%s\n", PersonalVehicle:GetName(xid)));
+    if (!PersonalVehicle:IsInGarage(xid)) strcat(string, sprintf("{F0AE0F}  > {ECE913}Vehicle Id: {FFFFFF}%d\n", PersonalVehicle:GetVehicleID(xid)));
     strcat(string, sprintf("{F0AE0F}  > {ECE913}Plate Number: {FFFFFF}%s\n", PersonalVehicle:GetPlate(xid)));
     strcat(string, sprintf("{F0AE0F}  > {ECE913}Driven: {FFFFFF}%.2f Kilometers\n", PersonalVehicle:GetKilometers(xid)));
     strcat(string, sprintf("{F0AE0F}  > {ECE913}Registation Date: {FFFFFF}%s\n", UnixToHumanEx(PersonalVehicle:GetRegistrationTime(xid))));

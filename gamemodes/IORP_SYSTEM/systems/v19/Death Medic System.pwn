@@ -133,7 +133,6 @@ QuickActions:OnInit(playerid, patientid, page) {
     if (
         GetPlayerHealthEx(patientid) < 40 &&
         GetPlayerScore(patientid) > 10 &&
-        !IsPlayerPaused(patientid) &&
         GetPlayerRPMode(playerid) &&
         GetPlayerRPMode(patientid)
     ) QuickActions:AddCommand(playerid, "Rob him/her");
@@ -200,7 +199,7 @@ stock StartCPR(doctorid, patientid, fee = 0) {
     ApplyAnimation(doctorid, "MEDIC", "CPR", 4.1, 1, 0, 0, 1, 0, 1);
     SendClientMessage(doctorid, -1, "{4286f4}[Alexa]: {FFFFEE}Patient health is critical, please wait");
     SetCameraBehindPlayer(doctorid);
-    new seconds = Random(20, 60);
+    new seconds = Random(10, 30);
     StartScreenTimer(patientid, seconds);
     StartScreenTimer(doctorid, seconds);
     SetPreciseTimer("CRPFinished", seconds * 1000, false, "ddd", patientid, doctorid, fee);

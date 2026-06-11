@@ -3,15 +3,15 @@
 
 #define     USE_DRUNKLEVEL              // remove this line if you don't want SetPlayerDrunkLevel to be used while on Drug:pDrugs
 #define     PLAYER_LIMIT    	(5)     // a player can plant up to x drug plants (Default:5)
-#define     PLANT_MAX_GROWTH	(10)    // a plant will grow up to x grams of Drug:pDrugs (Default:75)
-#define     GROWTH_INTERVAL 	(45)    // a plant will grow up every x seconds (Default:45)
+#define     PLANT_MAX_GROWTH	(20)    // a plant will grow up to x grams of Drug:pDrugs (Default:75)
+#define     GROWTH_INTERVAL 	(30)    // a plant will grow up every x seconds (Default:45)
 #define     ROT_INTERVAL        (300)   // a plant will rot after x seconds of fully growing (Default:300)
-#define     DRUG_CARRY_LIMIT    (150)   // a player can carry up to x grams of Drug:pDrugs (Default:150)
-#define     DEALER_CARRY_LIMIT  (300)   // a player can carry up to x grams of Drug:pDrugs (Default:150)
-#define     SEED_LIMIT         	(25)   	// a player can carry up to x drug plant seeds (Default:25)
-#define     SEED_PRICE      	(80)    // price players will pay for a drug plant seed (Default:50)
-#define     DRUG_BUY_PRICE      (20)    // price players will pay a dealer for a gram of Drug:pDrugs (Default:20)
-#define     DRUG_SELL_PRICE     (16)    // price dealers will pay a player for a gram of Drug:pDrugs (Default:16)
+#define     DRUG_CARRY_LIMIT    (500)   // a player can carry up to x grams of Drug:pDrugs (Default:150)
+#define     DEALER_CARRY_LIMIT  (5000)   // a player can carry up to x grams of Drug:pDrugs (Default:150)
+#define     SEED_LIMIT         	(30)   	// a player can carry up to x drug plant seeds (Default:25)
+#define     SEED_PRICE      	(250)    // price players will pay for a drug plant seed (Default:50)
+#define     DRUG_BUY_PRICE      (50)    // price players will pay a dealer for a gram of Drug:pDrugs (Default:20)
+#define     DRUG_SELL_PRICE     (35)    // price dealers will pay a player for a gram of Drug:pDrugs (Default:16)
 
 enum Drug:EnumPlant {
     Float:Drug:PlantX,

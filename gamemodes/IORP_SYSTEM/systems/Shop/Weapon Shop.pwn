@@ -126,7 +126,7 @@ hook OnPurchaseFromShop(playerid, shopid, shopItemId) {
 
 stock WeaponPurchaseFromBuss(playerid, shopid, shopItemId) {
     return FlexPlayerDialog(
-        playerid, "WeaponPurchaseFromBuss", DIALOG_STYLE_INPUT, "Purchase Weapon", "Enter ammo, you need",
+        playerid, "WeaponPurchaseFromBuss", DIALOG_STYLE_INPUT, "Purchase Weapon", "Enter ammo, you need [1-3000]",
         "Purchase", "Cancel", shopid, sprintf("%d", shopItemId)
     );
 }
@@ -138,7 +138,7 @@ FlexDialog:WeaponPurchaseFromBuss(playerid, response, listitem, const inputtext[
     new stockPrice = DynamicShopBusinessItem:GetShopPrice(shopid, shopItemId);
     new ammoStock = DynamicShopBusinessItem:GetShopStock(shopid, shopItemId);
     if (sscanf(inputtext, "d", ammo)) return WeaponPurchaseFromBuss(playerid, shopid, shopItemId);
-    if (ammo < 1 || ammo > 500 || ammo > ammoStock) return WeaponPurchaseFromBuss(playerid, shopid, shopItemId);
+    if (ammo < 1 || ammo > 3000 || ammo > ammoStock) return WeaponPurchaseFromBuss(playerid, shopid, shopItemId);
     new requiredCash = stockPrice * ammo;
     if (GetPlayerCash(playerid) < requiredCash) return WeaponPurchaseFromBuss(playerid, shopid, shopItemId);
     DynamicShopBusinessItem:UpdateShopStock(shopid, shopItemId, ammoStock - ammo);

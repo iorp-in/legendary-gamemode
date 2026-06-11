@@ -1,4 +1,3 @@
-new bool:ScoreTimerStatus[MAX_PLAYERS];
 new ExperiencePoint[MAX_PLAYERS];
 
 new PlayerBar:scoreBar[MAX_PLAYERS], PlayerText:scoreTextdraw[MAX_PLAYERS][3];
@@ -104,32 +103,11 @@ hook OnGameModeInit() {
     return 1;
 }
 
-hook OnPlayerConnect(playerid) {
-    if (IsPlayerNPC(playerid)) return 1;
-    ScoreTimerStatus[playerid] = false;
-    return 1;
-}
-
 forward scoresystem(playerid);
 public scoresystem(playerid) {
-    if (GetScoreTimerStatus(playerid) && IsPlayerLoggedIn(playerid)) SetPlayerPlayedTime(playerid, GetPlayerPlayedTime(playerid) + 1);
-    // SetPlayerScoreEx(playerid, getLevel(GetExperiencePoint(playerid)));
+    if (IsPlayerLoggedIn(playerid)) SetPlayerPlayedTime(playerid, GetPlayerPlayedTime(playerid) + 1);
     SetPlayerScoreEx(playerid, CalculateScore(GetPlayerPlayedTime(playerid)));
     UpdateGUIScore(playerid);
-    return 1;
-}
-
-stock GetScoreTimerStatus(playerid) {
-    return ScoreTimerStatus[playerid];
-}
-
-stock ScoreTimerDisable(playerid) {
-    ScoreTimerStatus[playerid] = false;
-    return 1;
-}
-
-stock ScoreTimerEnable(playerid) {
-    ScoreTimerStatus[playerid] = true;
     return 1;
 }
 

@@ -1,20 +1,4 @@
-forward OnServerReboot();
-public OnServerReboot() {
-    return 1;
-}
-
-stock RebootServer() {
-    CallRemoteFunction("OnServerReboot", "");
-    return SendRconCommand("gmx");
-}
-
 stock HardRebootServer() {
-    CallRemoteFunction("OnServerReboot", "");
-    CrashServer();
-    return 1;
-}
-
-stock CrashServer() {
     SetPreciseTimer("FuncCrashServer", 2000, false);
     return 1;
 }

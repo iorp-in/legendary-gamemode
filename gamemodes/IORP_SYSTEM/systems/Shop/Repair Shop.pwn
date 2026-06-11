@@ -90,7 +90,7 @@ FlexDialog:RepairShopMenuBill(playerid, response, listitem, const inputtext[], e
         return AlexaMsg(playerid, "repair cancelled", "Garage");
     }
     AlexaMsg(playerid, "Repairing your vehilce, Please wait...", "Garage");
-    new seconds = Random(10, 60);
+    new seconds = Random(5, 15);
     StartScreenTimer(playerid, seconds);
     SetPreciseTimer("FinishRepairVehicle", seconds * 1000, false, "d", playerid);
     return 1;

@@ -15,7 +15,7 @@ defaults:
 new DTruck:string_top[MAX_PLAYERS][2000];
 new DTruck:string[MAX_PLAYERS][2000];
 stock DTruck:Init(playerid, trailerid, page = 0) {
-    format(DTruck:string_top[playerid], 500, "");
+    format(DTruck:string_top[playerid], 2000, "");
     format(DTruck:string[playerid], 2000, "");
     CallRemoteFunction("DTruckOnInit", "ddd", playerid, trailerid, page);
     return 1;
@@ -37,12 +37,13 @@ public DTruckOnInit(playerid, trailerid, page) {
     return FlexPlayerDialog(playerid, "DTruckOnInit", DIALOG_STYLE_LIST, "{4286f4}[Alexa]:{FFFFEE}Access Trailer", DTruck:string[playerid], "Select", "Close", page, sprintf("%d", trailerid));
 }
 
-FlexDialog:DTruckOnInit(playerid, response, listitem, const inputtext[], extraid, const payload[]) {
-    if (!response) return 1;
-    if (IsStringSame("Nothing On This Page.", inputtext) && response) DTruck:Init(playerid, extraid);
-    else if (IsStringSame("Next Page", inputtext) && response) DTruck:Init(playerid, extraid + 1);
-    else if (IsStringSame("Back Page", inputtext) && response) DTruck:Init(playerid, extraid - 1);
-    else CallRemoteFunction("DTruckOnResponse", "ddddds", playerid, strval(payload), extraid, response, listitem, inputtext);
+FlexDialog:DTruckOnInit(playerid, response, listitem, const inputtext[], page, const payload[]) {
+    if (!response) return UCP:Init(playerid);
+    new trailerid = strval(payload);
+    if (IsStringSame("Nothing On This Page.", inputtext)) return DTruck:Init(playerid, trailerid, page);
+    if (IsStringSame("Next Page", inputtext)) return DTruck:Init(playerid, trailerid, page + 1);
+    if (IsStringSame("Back Page", inputtext)) return DTruck:Init(playerid, trailerid, page - 1);
+    CallRemoteFunction("DTruckOnResponse", "ddddds", playerid, strval(payload), page, response, listitem, inputtext);
     return 1;
 }
 
@@ -50,12 +51,6 @@ stock DTruck:AddCommand(playerid, const command[], bool:top = false) {
     if (!strlen(DTruck:string[playerid])) format(DTruck:string[playerid], 2000, "%s\n", command);
     else if (top) format(DTruck:string_top[playerid], 2000, "%s\n%s\n", command, DTruck:string_top[playerid]);
     else format(DTruck:string[playerid], 2000, "%s\n%s\n", DTruck:string[playerid], command);
-    return 1;
-}
-
-forward OnTrailerCheckInit(playerid, trailerid);
-public OnTrailerCheckInit(playerid, trailerid) {
-    SendClientMessage(playerid, -1, "{4286f4}[Alexa]:{FFFFFF} trailer checkup complete.");
     return 1;
 }
 
@@ -98,7 +93,6 @@ UCP:OnInit(playerid, page) {
     new trailerid = GetPlayerTrailerID(playerid);
     if (page != 0 || trailerid == -1) return 1;
     UCP:AddCommand(playerid, "Access Trailer", true);
-    UCP:AddCommand(playerid, "Check Trailer", true);
     return 1;
 }
 
@@ -106,17 +100,11 @@ UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
     if (!response || page != 0) return 1;
     new trailerid = GetPlayerTrailerID(playerid);
     if (trailerid == -1) return 1;
-
     if (IsStringSame("Access Trailer", inputtext)) {
         DTruck:Init(playerid, trailerid);
-        return ~1;
-    }
-
-    if (IsStringSame("Check Trailer", inputtext)) {
-        CallRemoteFunction("OnTrailerCheckInit", "dd", playerid, trailerid);
         return ~1;
     }
     return 1;
 }
 
-//#snippet init_dtruck hook DTruckOnInit(playerid, trailerid, page) {\n\tif(page != 0) return 1;\n\tDTruck:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nhook DTruckOnResponse(playerid, trailerid, page, response, listitem, const inputtext[]) {\n\tif(!response) return 1;\n\tif(IsStringSame("Command", inputtext)) {\n\t\treturn ~1;\n\t}\n\treturn 1;\n}
+//#snippet init_dtruck DTruck:OnInit(playerid, trailerid, page) {\n\tif (page != 0) return 1;\n\tDTruck:AddCommand(playerid, "Command");\n\treturn 1;\n}\n\nDTruck:OnResponse(playerid, trailerid, page, response, listitem, const inputtext[]) {\n\tif (!response || page != 0 || !IsStringSame("Command", inputtext)) return 1;\n\treturn ~1;\n}

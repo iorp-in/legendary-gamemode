@@ -24,8 +24,6 @@
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Dynamic Dialog System.pwn" /////===== Dynamic Dialog System =====/////
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems/v19/Pause System.pwn" /////===== Game Pause System =====/////
-#include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Login System.pwn" /////===== Login/Register System =====/////
 #include <YSI_Coding\y_hooks>
 #include "IORP_SYSTEM/systems/v19/Profile Management System.pwn" /////===== Profile Management System =====/////

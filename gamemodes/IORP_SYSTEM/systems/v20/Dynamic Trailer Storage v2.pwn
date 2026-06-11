@@ -904,46 +904,107 @@ stock TrailerStorage:IncreaseResourceByName(vehicleid, const resource[], amount 
     return TrailerStorage:IncreaseResource(vehicleid, TrailerStorage:GetID(resource), amount);
 }
 
-hook OnTrailerCheckInit(playerid, vehicleid) {
-    new staticid = StaticVehicle:GetID(vehicleid);
-    if (!StaticVehicle:IsValidID(staticid) || !IsVehicleAllowedForStorage(vehicleid)) return 0;
+stock TrailerStorageMenu(playerid, trailerid, page = 0) {
+    new staticid = StaticVehicle:GetID(trailerid);
+    if (!StaticVehicle:IsValidID(staticid) || !IsVehicleAllowedForStorage(trailerid)) return 0;
+
+    new string[2000];
+    strcat(string, "ID\tMaterial\tQuantity\n");
+
+    new total = MAXTRAILERITEMS;
+    new perPage = 25;
+    new paged = (page + 1) * perPage;
+    new remaining = total - paged;
+    new skip = page * perPage;
+    new count = 0;
+
     for (new i; i < MAXTRAILERITEMS; i++) {
         new inTrailer = StaticVehicle:Data[staticid][StaticVehicle:Storage][i];
-        if (inTrailer > 0) {
-            AlexaMsg(playerid, sprintf("your truck has %d quantity of %s", inTrailer, TrailerStorage:Data[i][TrailerStorage:Name]));
+        if (inTrailer <= 0) continue;
+
+        if (skip > 0) {
+            skip--;
+            continue;
         }
+
+        if (count >= perPage) break;
+
+        strcat(string, sprintf(
+            "%d\t%s\t%d\n",
+            i,
+            TrailerStorage:Data[i][TrailerStorage:Name],
+            inTrailer
+        ));
+
+        count++;
     }
-    StaticVehicle:UpdateTrailerDB(staticid);
+
+    if (count == 0) {
+        AlexaMsg(playerid, "your truck is empty.");
+        DTruck:Init(playerid, trailerid);
+        return 1;
+    }
+
+    if (remaining > 0) strcat(string, "Next Page\n");
+    if (page > 0) strcat(string, "Back Page\n");
+
+    FlexPlayerDialog(
+        playerid,
+        "TrailerStorageList",
+        DIALOG_STYLE_TABLIST_HEADERS,
+        "Trailer Storage",
+        string,
+        "Select",
+        "Close",
+        page,
+        sprintf("%d", trailerid)
+    );
+
     return 1;
 }
 
-UCP:OnInit(playerid, page) {
-    if (!IsPlayerMasterAdmin(playerid)) return 1;
-    new trailerid = GetPlayerTrailerID(playerid);
-    if (page != 0 || trailerid == -1) return 1;
-    UCP:AddCommand(playerid, "Refill Trailer", true);
-    UCP:AddCommand(playerid, "Reset Trailer", true);
+FlexDialog:TrailerStorageList(playerid, response, listitem, const inputtext[], page, const payload[]) {
+    new trailerid = strval(payload);
+    if (!response) return DTruck:Init(playerid, trailerid);
+
+    if (IsStringSame(inputtext, "Next Page")) return TrailerStorageMenu(playerid, trailerid, page + 1);
+    if (IsStringSame(inputtext, "Back Page")) return TrailerStorageMenu(playerid, trailerid, page - 1);
+
+    new itemid = strval(inputtext);
+    AlexaMsg(playerid, sprintf("you have %d quantity of %s", TrailerStorage:GetResourceByShopId(trailerid, itemid), TrailerStorage:Data[itemid][TrailerStorage:Name]));
     return 1;
 }
 
-UCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
-    if (!response || page != 0 || !IsPlayerMasterAdmin(playerid)) return 1;
-    new trailerid = GetPlayerTrailerID(playerid);
-    if (trailerid == -1) return 1;
+DTruck:OnInit(playerid, trailerid, page) {
+    if (page != 0) return 1;
+    DTruck:AddCommand(playerid, "Inspect Trailer");
+    if (IsPlayerMasterAdmin(playerid)) {
+        DTruck:AddCommand(playerid, "Refill (Admin)");
+        DTruck:AddCommand(playerid, "Reset (Admin)");
+    }
+    return 1;
+}
 
-    if (IsStringSame("Refill Trailer", inputtext)) {
+DTruck:OnResponse(playerid, trailerid, page, response, listitem, const inputtext[]) {
+    if (!response || page != 0) return 1;
+    if (IsStringSame("Inspect Trailer", inputtext)) {
+        TrailerStorageMenu(playerid, trailerid);
+        return ~1;
+    }
+    if (IsStringSame("Refill (Admin)", inputtext)) {
         for (new trailerItemId; trailerItemId < MAXTRAILERITEMS; trailerItemId++) {
             TrailerStorage:SetResource(trailerid, trailerItemId, TrailerStorage:GetResourceLimit(trailerItemId));
         }
-        AlexaMsg(playerid, "trailer refilled");
+        AlexaMsg(playerid, "All resource set to full in trailer");
+        DTruck:Init(playerid, trailerid, page);
         return ~1;
     }
-
-    if (IsStringSame("Reset Trailer", inputtext)) {
+    if (IsStringSame("Reset (Admin)", inputtext)) {
         for (new trailerItemId; trailerItemId < MAXTRAILERITEMS; trailerItemId++) {
             TrailerStorage:SetResource(trailerid, trailerItemId, 0);
         }
-        AlexaMsg(playerid, "trailer reseted");
+        AlexaMsg(playerid, "All resource set to zero in trailer");
+        DTruck:Init(playerid, trailerid, page);
         return ~1;
     }
     return 1;

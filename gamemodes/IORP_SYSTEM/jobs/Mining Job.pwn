@@ -7,7 +7,7 @@
 #define     ORE_VEHICLE_LIMIT   (30)			// how many ores someone can store in their vehicle (default:8)
 #define     ORE_ATTACH_INDEX    (7)			// setplayerattachedobject index
 
-#define     ORE_REGEN_TIME    	(45)        // how many minutes before respawning veins (default:45)
+#define     ORE_REGEN_TIME    	(60)        // how many minutes before respawning veins (default:45)
 #define     ORE_ORE_TIME        (5)         // how many minutes before destroying a dropped ore (default:5)
 
 enum e_ores {
@@ -38,12 +38,12 @@ enum e_droppedores {
 
 new OreData[MAX_ORE_TYPES][e_ores] = {
     // name, color, modifier, spawn amount, value, mining rate
-    { "Copper", 0xB87333FF, 0.75, 8, 80, 25 },
-    { "Amethyst", 0x9B59B6FF, 0.60, 6, 80, 26 },
-    { "Emerald", 0x2ECC71FF, 0.40, 4, 80, 27 },
-    { "Ruby", 0xD10056FF, 0.35, 3, 80, 28 },
-    { "Sapphire", 0x0F52BAFF, 0.30, 3, 80, 29 },
-    { "Gold", 0xFFD700FF, 0.25, 4, 80, 30 }
+    { "Copper", 0xB87333FF, 0.75, 24, 80, 25 },
+    { "Amethyst", 0x9B59B6FF, 0.60, 18, 80, 26 },
+    { "Emerald", 0x2ECC71FF, 0.40, 12, 80, 27 },
+    { "Ruby", 0xD10056FF, 0.35, 10, 80, 28 },
+    { "Sapphire", 0x0F52BAFF, 0.30, 15, 80, 29 },
+    { "Gold", 0xFFD700FF, 0.25, 12, 80, 30 }
 };
 
 new VeinData[MAX_VEINS][e_veins], DroppedOres[MAX_ORES][e_droppedores];

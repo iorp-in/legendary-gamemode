@@ -280,7 +280,9 @@ public OnPlayerUpdate(playerid) {
 forward OnPlayerUpdateExTimer();
 public OnPlayerUpdateExTimer() {
     foreach(new i:Player) {
-        if (!IsPlayerPaused(i) && IsPlayerConnected(i) && IsPlayerLoggedIn(i)) CallRemoteFunction("OnPlayerUpdateEx", "d", i);
+        if (IsPlayerConnected(i) && IsPlayerLoggedIn(i)) {
+            CallRemoteFunction("OnPlayerUpdateEx", "d", i);
+        }
     }
     return 1;
 }
@@ -527,7 +529,7 @@ hook OnPlayerLogin(playerid) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "chatmode, chat mode")) return 1;
+    if (!IsStringSame(text, "chat mode")) return 1;
     if (!chatmod_config[playerid]) {
         chatmod_config[playerid] = true;
         Database:UpdateBool(true, GetPlayerNameEx(playerid), "username", "chatmode");

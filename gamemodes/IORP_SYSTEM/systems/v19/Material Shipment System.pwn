@@ -108,11 +108,7 @@ stock Shipment:Menu(playerid) {
     new string[512];
     strcat(string, "Order Shipment\n");
     strcat(string, "Check Order Status\n");
-    return FlexPlayerDialog(
-        playerid, "ShipmentOrderMenu", DIALOG_STYLE_LIST,
-        "Material Shipment: Menu", "Order Shipment\nCheck Order Status",
-        "Select", "Close"
-    );
+    return FlexPlayerDialog(playerid, "ShipmentOrderMenu", DIALOG_STYLE_LIST, "Material Shipment: Menu", string, "Select", "Close");
 }
 
 FlexDialog:ShipmentOrderMenu(playerid, response, listitem, const inputtext[], extraid, const payload[]) {

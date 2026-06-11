@@ -533,7 +533,7 @@ stock HouseStartCooking(playerid, foodid) {
     new houseid = House:GetPlayerHouseID(playerid);
     if (!House:IsValidID(houseid)) return 0;
 
-    new seconds = RandomEx(30, 80);
+    new seconds = RandomEx(15, 35);
     CreateCookingFlameInFront(playerid, seconds);
     freezeEx(playerid, seconds * 1000);
     GameTextForPlayer(playerid, "~r~cooking ~y~food~n~~w~wait...", seconds * 1000, 3);

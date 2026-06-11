@@ -16,14 +16,14 @@ stock Float:GetVehicleHealthEx(vehicleid) {
 forward CheckVehicleHealthHack();
 public CheckVehicleHealthHack() {
     foreach(new playerid:Player) {
-        if(IsPlayerInAnyVehicle(playerid)) {
+        if (IsPlayerInAnyVehicle(playerid)) {
             new vehicleid;
             vehicleid = GetPlayerVehicleID(playerid);
-            if(GetVehicleHealthEx(vehicleid) > GetVehicleAntiHealthEx(vehicleid) || GetVehicleHealthEx(vehicleid) > 1001) {
+            if (GetVehicleHealthEx(vehicleid) > GetVehicleAntiHealthEx(vehicleid) || GetVehicleHealthEx(vehicleid) > 1001) {
                 SetVehicleHealth(vehicleid, GetVehicleAntiHealthEx(vehicleid));
                 OnPlayerVehicleRepair(playerid);
             }
-            if(GetVehicleHealthEx(vehicleid) <= GetVehicleAntiHealthEx(vehicleid)) {
+            if (GetVehicleHealthEx(vehicleid) <= GetVehicleAntiHealthEx(vehicleid)) {
                 SetVehicleHealthEx(vehicleid, GetVehicleHealthEx(vehicleid));
             }
         }
@@ -32,7 +32,7 @@ public CheckVehicleHealthHack() {
 }
 forward ResetVehicleEx(vehicleid);
 public ResetVehicleEx(vehicleid) {
-    if(vehicleid < 0 || vehicleid > 2000) return 0;
+    if (vehicleid < 0 || vehicleid > 2000) return 0;
     new Float:angle;
     GetVehicleZAngle(vehicleid, angle);
     SetVehicleZAngle(vehicleid, angle);
@@ -46,7 +46,7 @@ public OnVehicleReset(vehicleid) {
     return 1;
 }
 stock SetVehicleHealthEx(vehicleid, Float:vhealth) {
-    if(vehicleid < 0 || vehicleid > 2000) return 0;
+    if (vehicleid < 0 || vehicleid > 2000) return 0;
     AntiVehicleHealth[vehicleid] = vhealth;
     SetVehicleHealth(vehicleid, vhealth);
     return 1;
@@ -87,7 +87,7 @@ public freezeEx(playerid, time) {
 }
 forward freeze(playerid);
 public freeze(playerid) {
-    if(IsPlayerFreezed(playerid)) return 0;
+    if (IsPlayerFreezed(playerid)) return 0;
     Controllable[playerid] = false;
     TogglePlayerControllable(playerid, false);
     GetPlayerPos(playerid, FPlayerPos[playerid][0], FPlayerPos[playerid][1], FPlayerPos[playerid][2]);
@@ -96,7 +96,7 @@ public freeze(playerid) {
 }
 forward unfreeze(playerid);
 public unfreeze(playerid) {
-    if(!IsPlayerFreezed(playerid)) return 1;
+    if (!IsPlayerFreezed(playerid)) return 1;
     Controllable[playerid] = true;
     TogglePlayerControllable(playerid, true);
     CallRemoteFunction("OnPlayerUnfreezed", "d", playerid);
@@ -113,7 +113,7 @@ public OnPlayerUnfreezed(playerid) {
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerConnect(playerid) {
-    if(IsPlayerNPC(playerid)) return 1;
+    if (IsPlayerNPC(playerid)) return 1;
     Controllable[playerid] = true;
     fz_timer[playerid] = -1;
     return 1;
@@ -121,7 +121,7 @@ hook OnPlayerConnect(playerid) {
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerUpdateEx(playerid) {
-    if(IsPlayerFreezed(playerid) && !IsPlayerInRangeOfPoint(playerid, 10.0, FPlayerPos[playerid][0], FPlayerPos[playerid][1], FPlayerPos[playerid][2])) {
+    if (IsPlayerFreezed(playerid) && !IsPlayerInRangeOfPoint(playerid, 10.0, FPlayerPos[playerid][0], FPlayerPos[playerid][1], FPlayerPos[playerid][2])) {
         GetPlayerPos(playerid, FPlayerPos[playerid][0], FPlayerPos[playerid][1], FPlayerPos[playerid][2]);
         TogglePlayerControllable(playerid, false);
     }
@@ -145,28 +145,28 @@ stock RemovePlayerWeapon(playerid, weapon) {
     for (new i = 0; i <= 12; i++) GetPlayerWeaponData(playerid, i, Weapon_Data[i][0], Weapon_Data[i][1]);
     ResetPlayerWeaponsEx(playerid);
     for (new i = 0; i <= 12; i++) {
-        if(Weapon_Data[i][0] != weapon) GivePlayerWeaponEx(playerid, Weapon_Data[i][0], Weapon_Data[i][1]);
+        if (Weapon_Data[i][0] != weapon) GivePlayerWeaponEx(playerid, Weapon_Data[i][0], Weapon_Data[i][1]);
     }
     return 1;
 }
 
 stock IsPlayerHaveWeapon(playerid, weaponid) {
-    if(!IsPlayerConnected(playerid)) return false;
-    else if(weaponid < 0 || weaponid > 47) return false;
-    else if(weaponid == 0 || weaponid == 46 || weaponid == 40) return true;
+    if (!IsPlayerConnected(playerid)) return false;
+    else if (weaponid < 0 || weaponid > 47) return false;
+    else if (weaponid == 0 || weaponid == 46 || weaponid == 40) return true;
     else return Weapon[playerid][weaponid];
 }
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerConnect(playerid) {
-    if(IsPlayerNPC(playerid)) return 1;
+    if (IsPlayerNPC(playerid)) return 1;
     ResetPlayerWeaponsEx(playerid);
     return 1;
 }
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerDisconnect(playerid, reason) {
-    if(IsPlayerNPC(playerid)) return 1;
+    if (IsPlayerNPC(playerid)) return 1;
     ResetPlayerWeaponsEx(playerid);
     return 1;
 }
@@ -174,11 +174,9 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerUpdateEx(playerid) {
-    if(IsPlayerConnected(playerid)) {
-        if(GetPlayerCash(playerid) != GetPlayerMoney(playerid) && Tryg3D::IsPlayerSpawned(playerid)) {
-            ResetMoneyBar(playerid); //Resets the money in the original moneybar, Do not remove!
-            UpdateMoneyBar(playerid, GetPlayerCash(playerid)); //Sets the money in the moneybar to the serverside cash, Do not remove!
-        }
+    if (GetPlayerCash(playerid) != GetPlayerMoney(playerid)) {
+        ResetMoneyBar(playerid); //Resets the money in the original moneybar, Do not remove!
+        UpdateMoneyBar(playerid, GetPlayerCash(playerid)); //Sets the money in the moneybar to the serverside cash, Do not remove!
     }
     return 1;
 }
@@ -189,13 +187,13 @@ new ResetHealthBitTimer[MAX_PLAYERS];
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerUpdate(playerid) {
-    if(Bit_Get(AT_SafeHealth, playerid) || InvicableAuth:GetPlayer(playerid)) return 1;
+    if (Bit_Get(AT_SafeHealth, playerid) || InvicableAuth:GetPlayer(playerid)) return 1;
     new Float:Health, Float:SHealth;
     GetPlayerHealth(playerid, Health);
     SHealth = GetPlayerLastHealth(playerid);
-    if(Health != SHealth) {
-        if(Health < SHealth) SetPlayerHealthEx(playerid, Health);
-        if(Health > SHealth) SetPlayerHealthEx(playerid, SHealth);
+    if (Health != SHealth) {
+        if (Health < SHealth) SetPlayerHealthEx(playerid, Health);
+        if (Health > SHealth) SetPlayerHealthEx(playerid, SHealth);
     }
     return 1;
 }
@@ -230,13 +228,13 @@ new BitArray:AT_SafeArmour < MAX_PLAYERS > ;
 
 #include <YSI_Coding\y_hooks>
 hook OnPlayerUpdate(playerid) {
-    if(Bit_Get(AT_SafeArmour, playerid)) return 1;
+    if (Bit_Get(AT_SafeArmour, playerid)) return 1;
     new Float:Armour, Float:SArmour;
     GetPlayerArmour(playerid, Float:Armour);
     SArmour = GetPlayerLastArmour(playerid);
-    if(Armour != SArmour) {
-        if(Armour < SArmour) SetPlayerArmourEx(playerid, Armour);
-        if(Armour > SArmour) {
+    if (Armour != SArmour) {
+        if (Armour < SArmour) SetPlayerArmourEx(playerid, Armour);
+        if (Armour > SArmour) {
             SetPlayerArmourEx(playerid, SArmour);
         }
     }

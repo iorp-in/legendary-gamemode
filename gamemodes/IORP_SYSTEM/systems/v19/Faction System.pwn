@@ -181,7 +181,7 @@ public LoadFactionVehicleData() {
 
 hook GlobalOneMinuteInterval() {
     foreach(new playerid:Player) {
-        if (Faction:IsPlayerSigned(playerid) && !IsPlayerPaused(playerid)) Faction:PlayerData[playerid][SingInTime]++;
+        if (Faction:IsPlayerSigned(playerid)) Faction:PlayerData[playerid][SingInTime]++;
     }
     return 1;
 }
