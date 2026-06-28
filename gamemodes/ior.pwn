@@ -1,27 +1,14 @@
-#include "IORP_SYSTEM/core/prefix.pwn"
-#include "IORP_SYSTEM/core/includes.pwn"
-#include "IORP_SYSTEM/core/forwards.pwn"
-#include "IORP_SYSTEM/utils/Mod Shop Funcs.pwn"
+#include "constants.pwn"
+#include "includes.pwn"
+#include "runtime/index.pwn"
+#include "iorp-system/index.pwn"
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/mysql_config.pwn"
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/color_definations.pwn"
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/Useful Functions.pwn" /////===== Useful Functions Locator =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/Server Side Functions.pwn" /////===== Server Side Functions =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/Server Side Native.pwn" /////===== Server Side Native =====/////
 
 main() {
     new year, month, day;
     getdate(year, month, day);
     printf("\n-----------------------------------------------------------------\n\tRunning Indian Ocean Roleplay - by Harry Potter\n\tVersion: v%d.%d.%d\n-----------------------------------------------------------------", year, month, day);
 }
-
-
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems.pwn" /////===== Systems. =====/////
 
 public OnGameModeInit() {
     Database:AddColumn("playerdata", "chatmode", "boolean", "0");
@@ -600,6 +587,3 @@ stock SendAdminLogMessage(const message[]) {
     foreach(new i:Player) if (GetPlayerAdminLevel(i) > 0) SendClientMessage(i, -1, sprintf("{4286f4}[Admin Log]:{FFCC66}%s", message));
     return 1;
 }
-
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/utils/001.pwn"

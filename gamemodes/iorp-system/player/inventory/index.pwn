@@ -1,0 +1,14 @@
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/cash.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/guns.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/medicines.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/food-resource.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/fuel.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/player/inventory/drug.pwn"

@@ -1,0 +1,12 @@
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/world/trailer/vehicle-trunk.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/world/trailer/vehicle-trunk-items.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/world/trailer/dynamic-trucking-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/world/trailer/personal-vehicle-crate-trucker.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/world/trailer/trailer-dump-yard.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/world/trailer/trucking-share-resource.pwn"

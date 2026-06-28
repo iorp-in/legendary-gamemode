@@ -1,0 +1,12 @@
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/core/anti-hacks/chat-spam.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/core/anti-hacks/teleport.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/core/anti-hacks/server-side-protection.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/core/anti-hacks/vehicle-spawn.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/core/anti-hacks/speed.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/core/anti-hacks/nex-coded-anti-hacks.pwn"

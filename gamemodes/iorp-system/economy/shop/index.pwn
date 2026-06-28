@@ -1,0 +1,14 @@
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/clothe-shop.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/firework-shop.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/repair-shop.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/weapon-shop.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/vehicle-dealership-shop.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/clothe-shop-extended.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/economy/shop/garage-shop.pwn"
