@@ -23,6 +23,7 @@ HCP:OnResponse(playerid, page, response, listitem, const inputtext[]) {
         strcat(info, "{db6600}/discord: {FFFFEE}link to: https://discord.gg/Xq9k3hr\n");
         strcat(info, "{db6600}/eject: {FFFFEE}eject other player from vehicle.\n");
         strcat(info, "{db6600}/gc: {FFFFEE}to talk in global chat\n");
+        strcat(info, "{db6600}/gchat: {FFFFEE}to talk in group chat\n");
         strcat(info, "{db6600}/pm, /rpm, /nopm: {FFFFEE}personal message commands\n");
         strcat(info, "{db6600}/pocket or /p or H+SPACE: {FFFFEE}to open your pocket, all in one solution for commands\n");
         strcat(info, "{db6600}/report: {FFFFEE}report player to administrators.\n");

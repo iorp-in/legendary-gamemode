@@ -61,6 +61,8 @@
 #include <YSI_Coding\y_hooks>
 #include "iorp-system/player/whatsapp-system.pwn"
 #include <YSI_Coding\y_hooks>
+#include "iorp-system/player/group-chat.pwn"
+#include <YSI_Coding\y_hooks>
 #include "iorp-system/player/gps-system.pwn"
 #include <YSI_Coding\y_hooks>
 #include "iorp-system/player/spectate-system.pwn"
