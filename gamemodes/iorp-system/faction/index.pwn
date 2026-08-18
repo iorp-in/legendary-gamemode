@@ -1,0 +1,16 @@
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/faction-id-card-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/faction-object-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/faction-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/government-seize-powers.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/mechanical-faction.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/mine-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/mine-control-saaf.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/faction/radar-system.pwn"

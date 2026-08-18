@@ -1,0 +1,16 @@
+#include "iorp-system/vehicle/mods/index.pwn"
+#include "iorp-system/vehicle/speedometer.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/static-vehicle-rent-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/autodrive-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/gear-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/gui-vehicle-control.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/vehicle-lights.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/vehicle-mods.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/vehicle/seatbelt-helmet-system.pwn"

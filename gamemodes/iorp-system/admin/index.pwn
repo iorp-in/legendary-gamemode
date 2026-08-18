@@ -1,0 +1,10 @@
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/admin/reset-in-hand-cash.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/admin/reset-bank-accounts.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/admin/acp-manage-electron-items.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/admin/automatic-repair-system.pwn"
+#include <YSI_Coding\y_hooks>
+#include "iorp-system/admin/fuel-auth-system.pwn"

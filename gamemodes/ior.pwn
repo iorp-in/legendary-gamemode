@@ -1,27 +1,14 @@
-#include "IORP_SYSTEM/core/prefix.pwn"
-#include "IORP_SYSTEM/core/includes.pwn"
-#include "IORP_SYSTEM/core/forwards.pwn"
-#include "IORP_SYSTEM/utils/Mod Shop Funcs.pwn"
+#include "constants.pwn"
+#include "includes.pwn"
+#include "runtime/index.pwn"
+#include "iorp-system/index.pwn"
 #include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/mysql_config.pwn"
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/color_definations.pwn"
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/utils/Useful Funcitons.pwn" /////===== Useful Functions Locator =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/Server Side Functions.pwn" /////===== Server Side Functions =====/////
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/core/Server Side Native.pwn" /////===== Server Side Native =====/////
 
 main() {
     new year, month, day;
     getdate(year, month, day);
     printf("\n-----------------------------------------------------------------\n\tRunning Indian Ocean Roleplay - by Harry Potter\n\tVersion: v%d.%d.%d\n-----------------------------------------------------------------", year, month, day);
 }
-
-
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/systems.pwn" /////===== Systems. =====/////
 
 public OnGameModeInit() {
     Database:AddColumn("playerdata", "chatmode", "boolean", "0");
@@ -57,7 +44,6 @@ stock OnGameModeInitEx() {
 forward RemovePassword();
 public RemovePassword() {
     SendRconCommand("password 0");
-    Discord:SendGeneral("all set, you can join server now...");
     return 1;
 }
 
@@ -146,7 +132,6 @@ public OnGameModeExit() {
     DestroyAllDynamic3DTextLabels();
     DestroyAllDynamicAreas();
     mysql_close(Database); // Closing the database.
-    Discord:SendManagement("Server Shutdown");
     return 1;
 }
 
@@ -282,7 +267,9 @@ public OnPlayerUpdate(playerid) {
 forward OnPlayerUpdateExTimer();
 public OnPlayerUpdateExTimer() {
     foreach(new i:Player) {
-        if (!IsPlayerPaused(i) && IsPlayerConnected(i) && IsPlayerLoggedIn(i)) CallRemoteFunction("OnPlayerUpdateEx", "d", i);
+        if (IsPlayerConnected(i) && IsPlayerLoggedIn(i)) {
+            CallRemoteFunction("OnPlayerUpdateEx", "d", i);
+        }
     }
     return 1;
 }
@@ -498,7 +485,7 @@ public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
 }
 
 public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags) {
-    LogNormal(sprintf("[CMD] [%s][%s]: %s", GetPlayerNameEx(playerid), cmd, FormatMention(params)));
+    LogEx(sprintf("[CMD] [%s][%s]: %s", GetPlayerNameEx(playerid), cmd, FormatMention(params)));
 
     if (result != 1) {
         UnknownCommand:Show(playerid);
@@ -529,7 +516,7 @@ hook OnPlayerLogin(playerid) {
 }
 
 hook OnAlexaResponse(playerid, const cmd[], const text[]) {
-    if (!IsStringContainWords(text, "chatmode, chat mode")) return 1;
+    if (!IsStringSame(text, "chat mode")) return 1;
     if (!chatmod_config[playerid]) {
         chatmod_config[playerid] = true;
         Database:UpdateBool(true, GetPlayerNameEx(playerid), "username", "chatmode");
@@ -559,7 +546,7 @@ public OnPlayerText(playerid, text[]) {
         callcmd::alexa(playerid, text);
     }
 
-    LogNormal(sprintf("[Text] [%s]: %s", GetPlayerNameEx(playerid), FormatMention(text)));
+    LogEx(sprintf("[Text] [%s]: %s", GetPlayerNameEx(playerid), FormatMention(text)));
     return 0;
 }
 
@@ -582,7 +569,6 @@ public OnRconCommand(cmd[]) {
 public OnRconLoginAttempt(ip[], password[], success) {
     if (!success) //If the password was incorrect
     {
-        Discord:SendManagement(sprintf("FAILED RCON LOGIN BY IP %s USING PASSWORD %s", ip, password));
         new pip[16];
         foreach(new i:Player) //Loop through all players
         {
@@ -597,11 +583,7 @@ public OnRconLoginAttempt(ip[], password[], success) {
     return 1;
 }
 
-stock SendAdminLogMessage(const message[], bool:discord = true) {
+stock SendAdminLogMessage(const message[]) {
     foreach(new i:Player) if (GetPlayerAdminLevel(i) > 0) SendClientMessage(i, -1, sprintf("{4286f4}[Admin Log]:{FFCC66}%s", message));
-    if (discord) Discord:LogAdmin(sprintf("[Admin Log]: %s", message));
     return 1;
 }
-
-#include <YSI_Coding\y_hooks>
-#include "IORP_SYSTEM/utils/001.pwn"
