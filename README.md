@@ -7,8 +7,10 @@ As promised, the game mode has been released to the public under the Apache Lice
 # Related repositories
 
 - [core-plugin](https://github.com/iorp-in/core-plugin)
-- [iorp-music](https://github.com/iorp-in/iorp-music)
-- [samp-logger](https://github.com/iorp-in/samp-logger)
+
+# Download mods - verified by iorp team
+
+- <a href="https://drive.google.com/drive/folders/1OmawJcu_oWL87vl3rlCm4spxBhnaXI1n?usp=sharing">Download from Google Drive</a>
 
 # Social accounts
 
